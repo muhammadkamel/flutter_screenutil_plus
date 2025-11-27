@@ -27,6 +27,10 @@ class _HomePageState extends State<HomePage> {
             20.verticalSpace,
             _buildWidgetsDemo(),
             20.verticalSpace,
+            _buildRContainerDemo(),
+            20.verticalSpace,
+            _buildRTextDemo(),
+            20.verticalSpace,
             _buildTextScalingDemo(),
             20.verticalSpace,
             _buildScreenInfo(),
@@ -125,7 +129,7 @@ class _HomePageState extends State<HomePage> {
         ),
         10.verticalSpace,
         Text(
-          'RPadding and RSizedBox widgets',
+          'RPadding, RSizedBox, and RContainer widgets',
           style: TextStyle(fontSize: 14.sp, color: Colors.grey.shade600),
         ),
         15.verticalSpace,
@@ -166,6 +170,157 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
               ),
             ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRContainerDemo() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'RContainer Widget',
+          style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
+        ),
+        10.verticalSpace,
+        Text(
+          'Automatically adapts width, height, padding, margin, and constraints',
+          style: TextStyle(fontSize: 14.sp, color: Colors.grey.shade600),
+        ),
+        15.verticalSpace,
+        RContainer(
+          width: double.infinity,
+          padding: const EdgeInsets.all(20),
+          margin: const EdgeInsets.symmetric(vertical: 8),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.purple.shade400, Colors.blue.shade400],
+            ),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              RText(
+                'RContainer with Auto-Scaled Dimensions',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              5.verticalSpace,
+              RText(
+                'Width, height, padding, and margin are all responsive!',
+                style: const TextStyle(fontSize: 14, color: Colors.white70),
+              ),
+            ],
+          ),
+        ),
+        15.verticalSpace,
+        Row(
+          children: [
+            Expanded(
+              child: RContainer(
+                height: 80,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.teal.shade100,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Center(
+                  child: RText(
+                    'RContainer 1',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.teal.shade900,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            10.horizontalSpace,
+            Expanded(
+              child: RContainer(
+                height: 80,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.pink.shade100,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Center(
+                  child: RText(
+                    'RContainer 2',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.pink.shade900,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRTextDemo() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'RText Widget',
+          style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
+        ),
+        10.verticalSpace,
+        Text(
+          'Automatically scales font sizes - no need for .sp extension!',
+          style: TextStyle(fontSize: 14.sp, color: Colors.grey.shade600),
+        ),
+        15.verticalSpace,
+        Container(
+          width: double.infinity,
+          padding: REdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.amber.shade50,
+            borderRadius: BorderRadius.circular(12.r),
+            border: Border.all(color: Colors.amber.shade200, width: 2.w),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const RText(
+                'Heading Text (fontSize: 24)',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              10.verticalSpace,
+              const RText(
+                'Body Text (fontSize: 16)',
+                style: TextStyle(fontSize: 16),
+              ),
+              10.verticalSpace,
+              RText(
+                'Small Text (fontSize: 12)',
+                style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+              ),
+              15.verticalSpace,
+              Container(
+                padding: EdgeInsets.all(12.w),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
+                child: const RText(
+                  'All font sizes are automatically responsive without using .sp!',
+                  style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
+                ),
+              ),
+            ],
           ),
         ),
       ],
