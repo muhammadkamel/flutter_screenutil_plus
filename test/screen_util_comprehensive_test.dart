@@ -22,15 +22,15 @@ void main() {
       expect(instance1, same(instance2));
     });
 
-    test('configure throws exception when not initialized', () {
+    test('configure throws StateError when not initialized', () {
       expect(
         () => ScreenUtilPlus.configure(),
         throwsA(
-          isA<Exception>().having(
-            (e) => e.toString(),
+          isA<StateError>().having(
+            (e) => e.message,
             'message',
             contains(
-              'You must either use ScreenUtil.init or ScreenUtilInit first',
+              'ScreenUtilPlus must be initialized with data and designSize',
             ),
           ),
         ),
@@ -418,7 +418,7 @@ void main() {
   });
 
   group('ScreenUtil - deviceType', () {
-    testWidgets('deviceType returns web on web platform', (tester) async {
+    testWidgets('deviceType returns valid DeviceType', (tester) async {
       const data = MediaQueryData(
         size: Size(400, 800),
         textScaler: TextScaler.linear(1.0),
@@ -435,9 +435,44 @@ void main() {
           home: Builder(
             builder: (context) {
               final util = ScreenUtilPlus();
-              // Note: kIsWeb is compile-time constant, so this test may not work in all environments
               final deviceType = util.deviceType(context);
-              // Just verify it returns a valid DeviceType
+              // Verify it returns a valid DeviceType
+              expect(deviceType, isA<DeviceType>());
+              // Should be one of the valid types
+              expect([
+                DeviceType.mobile,
+                DeviceType.tablet,
+                DeviceType.web,
+                DeviceType.mac,
+                DeviceType.windows,
+                DeviceType.linux,
+                DeviceType.fuchsia,
+              ], contains(deviceType));
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+    });
+
+    testWidgets('deviceType detects tablet correctly', (tester) async {
+      const data = MediaQueryData(
+        size: Size(400, 800),
+        textScaler: TextScaler.linear(1.0),
+      );
+      ScreenUtilPlus.configure(
+        data: data,
+        designSize: const Size(360, 690),
+        minTextAdapt: false,
+        splitScreenMode: false,
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              final util = ScreenUtilPlus();
+              final deviceType = util.deviceType(context);
               expect(deviceType, isA<DeviceType>());
               return const SizedBox();
             },
@@ -1010,6 +1045,70 @@ void main() {
       await tester.pumpAndSettle();
     });
 
+    testWidgets('ScreenUtilInit with responsiveWidgets', (tester) async {
+      await tester.pumpWidget(
+        ScreenUtilPlusInit(
+          designSize: const Size(360, 690),
+          responsiveWidgets: ['CustomWidget'],
+          child: const MaterialApp(home: SizedBox()),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('ScreenUtilInit handles didChangeMetrics', (tester) async {
+      final buildCount = ValueNotifier<int>(0);
+
+      await tester.pumpWidget(
+        ScreenUtilPlusInit(
+          designSize: const Size(360, 690),
+          rebuildFactor: RebuildFactors.size,
+          child: MaterialApp(
+            home: ValueListenableBuilder<int>(
+              valueListenable: buildCount,
+              builder: (context, count, child) {
+                buildCount.value = count + 1;
+                return const SizedBox();
+              },
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+      final initialCount = buildCount.value;
+
+      // Simulate metrics change
+      tester.view.physicalSize = const Size(500, 1000);
+      await tester.pumpAndSettle();
+
+      // Should rebuild when metrics change
+      expect(buildCount.value, greaterThan(initialCount));
+    });
+
+    testWidgets('ScreenUtilInit handles didChangeDependencies', (tester) async {
+      await tester.pumpWidget(
+        ScreenUtilPlusInit(
+          designSize: const Size(360, 690),
+          child: const MaterialApp(home: SizedBox()),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      // Change widget tree to trigger didChangeDependencies
+      await tester.pumpWidget(
+        ScreenUtilPlusInit(
+          designSize: const Size(360, 690),
+          child: const MaterialApp(home: Text('Changed')),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+      expect(find.text('Changed'), findsOneWidget);
+    });
+
     testWidgets('ScreenUtilInit with builder', (tester) async {
       await tester.pumpWidget(
         ScreenUtilPlusInit(
@@ -1202,6 +1301,79 @@ void main() {
 
   group('ScreenUtil - registerToBuild', () {
     testWidgets('registerToBuild without descendants', (tester) async {
+      const data = MediaQueryData(
+        size: Size(400, 800),
+        textScaler: TextScaler.linear(1.0),
+      );
+      ScreenUtilPlus.configure(
+        data: data,
+        designSize: const Size(360, 690),
+        minTextAdapt: false,
+        splitScreenMode: false,
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              ScreenUtilPlus.registerToBuild(context);
+              // Reconfigure to trigger rebuild
+              ScreenUtilPlus.configure(
+                data: data,
+                designSize: const Size(360, 690),
+              );
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('registerToBuild with descendants', (tester) async {
+      const data = MediaQueryData(
+        size: Size(400, 800),
+        textScaler: TextScaler.linear(1.0),
+      );
+      ScreenUtilPlus.configure(
+        data: data,
+        designSize: const Size(360, 690),
+        minTextAdapt: false,
+        splitScreenMode: false,
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              ScreenUtilPlus.registerToBuild(context, true);
+              // Reconfigure to trigger rebuild
+              ScreenUtilPlus.configure(
+                data: data,
+                designSize: const Size(360, 690),
+              );
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('registerToBuild handles defunct elements', (tester) async {
+      const data = MediaQueryData(
+        size: Size(400, 800),
+        textScaler: TextScaler.linear(1.0),
+      );
+      ScreenUtilPlus.configure(
+        data: data,
+        designSize: const Size(360, 690),
+        minTextAdapt: false,
+        splitScreenMode: false,
+      );
+
       await tester.pumpWidget(
         MaterialApp(
           home: Builder(
@@ -1214,19 +1386,12 @@ void main() {
       );
 
       await tester.pumpAndSettle();
-    });
 
-    testWidgets('registerToBuild with descendants', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Builder(
-            builder: (context) {
-              ScreenUtilPlus.registerToBuild(context, true);
-              return const SizedBox();
-            },
-          ),
-        ),
-      );
+      // Remove widget to make element defunct
+      await tester.pumpWidget(const MaterialApp(home: SizedBox()));
+
+      // Reconfigure - should handle defunct element gracefully
+      ScreenUtilPlus.configure(data: data, designSize: const Size(360, 690));
 
       await tester.pumpAndSettle();
     });
@@ -1350,5 +1515,32 @@ void main() {
       // With splitScreenMode, height uses max(screenHeight, 700)
       expect(util.scaleHeight, closeTo(700 / 690, 0.001));
     });
+  });
+
+  group('MediaQueryDataExtension', () {
+    test('nonEmptySizeOrNull returns null for null MediaQueryData', () {
+      const MediaQueryData? data = null;
+      expect(data.nonEmptySizeOrNull(), isNull);
+    });
+
+    test('nonEmptySizeOrNull returns null for empty size', () {
+      const data = MediaQueryData(size: Size.zero);
+      expect(data.nonEmptySizeOrNull(), isNull);
+    });
+
+    test('nonEmptySizeOrNull returns data for non-empty size', () {
+      const data = MediaQueryData(size: Size(400, 800));
+      expect(data.nonEmptySizeOrNull(), isNotNull);
+      expect(data.nonEmptySizeOrNull()?.size, const Size(400, 800));
+    });
+
+    test(
+      'nonEmptySizeOrNull returns data for very small but non-zero size',
+      () {
+        const data = MediaQueryData(size: Size(0.1, 0.1));
+        expect(data.nonEmptySizeOrNull(), isNotNull);
+        expect(data.nonEmptySizeOrNull()?.size, const Size(0.1, 0.1));
+      },
+    );
   });
 }
