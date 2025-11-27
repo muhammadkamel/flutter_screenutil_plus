@@ -94,8 +94,21 @@ extension EdgeInsetsExtension on EdgeInsets {
       copyWith(top: top.h, bottom: bottom.h, right: right.h, left: left.h);
 }
 
+/// Extension on [BorderRadius] to create responsive border radius values.
+///
+/// This extension provides methods to adapt border radius values based on
+/// screen size, ensuring consistent appearance across different devices.
 extension BorderRadiusExtension on BorderRadius {
-  /// Creates adapt BorderRadius using r [SizeExtension].
+  /// Creates a responsive [BorderRadius] using the `.r` extension.
+  ///
+  /// The `.r` extension adapts values based on the smaller of width or height,
+  /// which is ideal for creating circular or square shapes that maintain their
+  /// aspect ratio across different screen sizes.
+  ///
+  /// Example:
+  /// ```dart
+  /// BorderRadius.circular(16).r
+  /// ```
   BorderRadius get r => copyWith(
     bottomLeft: bottomLeft.r,
     bottomRight: bottomRight.r,
@@ -103,6 +116,15 @@ extension BorderRadiusExtension on BorderRadius {
     topRight: topRight.r,
   );
 
+  /// Creates a responsive [BorderRadius] using the `.w` extension.
+  ///
+  /// The `.w` extension adapts values based on screen width, ensuring
+  /// consistent horizontal scaling across different devices.
+  ///
+  /// Example:
+  /// ```dart
+  /// BorderRadius.circular(16).w
+  /// ```
   BorderRadius get w => copyWith(
     bottomLeft: bottomLeft.w,
     bottomRight: bottomRight.w,
@@ -110,6 +132,15 @@ extension BorderRadiusExtension on BorderRadius {
     topRight: topRight.w,
   );
 
+  /// Creates a responsive [BorderRadius] using the `.h` extension.
+  ///
+  /// The `.h` extension adapts values based on screen height, ensuring
+  /// consistent vertical scaling across different devices.
+  ///
+  /// Example:
+  /// ```dart
+  /// BorderRadius.circular(16).h
+  /// ```
   BorderRadius get h => copyWith(
     bottomLeft: bottomLeft.h,
     bottomRight: bottomRight.h,
@@ -131,8 +162,20 @@ extension RadiusExtension on Radius {
   Radius get h => Radius.elliptical(x.h, y.h);
 }
 
+/// Extension on [BoxConstraints] to create responsive constraint values.
+///
+/// This extension provides methods to adapt box constraints based on screen size,
+/// ensuring consistent layout behavior across different devices.
 extension BoxConstraintsExtension on BoxConstraints {
-  /// Creates adapt BoxConstraints using r [SizeExtension].
+  /// Creates responsive [BoxConstraints] using the `.r` extension.
+  ///
+  /// The `.r` extension adapts values based on the smaller of width or height,
+  /// which is ideal for maintaining aspect ratios.
+  ///
+  /// Example:
+  /// ```dart
+  /// BoxConstraints(maxWidth: 100, minHeight: 50).r
+  /// ```
   BoxConstraints get r => copyWith(
     maxHeight: maxHeight.r,
     maxWidth: maxWidth.r,
@@ -140,7 +183,15 @@ extension BoxConstraintsExtension on BoxConstraints {
     minWidth: minWidth.r,
   );
 
-  /// Creates adapt BoxConstraints using h-w [SizeExtension].
+  /// Creates responsive [BoxConstraints] using height-width adaptation.
+  ///
+  /// Height values use `.h` extension and width values use `.w` extension,
+  /// providing independent scaling for vertical and horizontal dimensions.
+  ///
+  /// Example:
+  /// ```dart
+  /// BoxConstraints(maxWidth: 100, minHeight: 50).hw
+  /// ```
   BoxConstraints get hw => copyWith(
     maxHeight: maxHeight.h,
     maxWidth: maxWidth.w,
@@ -148,6 +199,14 @@ extension BoxConstraintsExtension on BoxConstraints {
     minWidth: minWidth.w,
   );
 
+  /// Creates responsive [BoxConstraints] using the `.w` extension.
+  ///
+  /// All constraint values are adapted based on screen width.
+  ///
+  /// Example:
+  /// ```dart
+  /// BoxConstraints(maxWidth: 100, minHeight: 50).w
+  /// ```
   BoxConstraints get w => copyWith(
     maxHeight: maxHeight.w,
     maxWidth: maxWidth.w,
@@ -155,6 +214,14 @@ extension BoxConstraintsExtension on BoxConstraints {
     minWidth: minWidth.w,
   );
 
+  /// Creates responsive [BoxConstraints] using the `.h` extension.
+  ///
+  /// All constraint values are adapted based on screen height.
+  ///
+  /// Example:
+  /// ```dart
+  /// BoxConstraints(maxWidth: 100, minHeight: 50).h
+  /// ```
   BoxConstraints get h => copyWith(
     maxHeight: maxHeight.h,
     maxWidth: maxWidth.h,
