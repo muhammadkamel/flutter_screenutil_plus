@@ -1,0 +1,16 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+## [1.0.0] - 2025
+
+### Added
+
+- Comprehensive unit test coverage (114+ tests)
+- Fixed deprecation warning: replaced `textScaleFactor` with `textScaler.scale(1.0)`
+- Improved error handling for defunct elements in `configure` method
+
+### Fixed
+
+- Fixed assertion error when trying to rebuild defunct elements
+- Fixed `sp` extension test by properly handling fontSizeResolver
