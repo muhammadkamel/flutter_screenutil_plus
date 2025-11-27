@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-import 'size_extension.dart';
+import '../extensions/size_extension.dart';
 
 class RSizedBox extends SizedBox {
   const RSizedBox({super.key, super.height, super.width, super.child})

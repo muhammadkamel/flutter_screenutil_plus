@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil_plus/flutter_screenutil.dart';
+import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'home.test.dart';
@@ -15,7 +15,7 @@ void main() {
 
   group('[Test calculations]', () {
     test('Test smaller size', () {
-      ScreenUtil.configure(
+      ScreenUtilPlus.configure(
         data: smallerDeviceData,
         designSize: uiSize,
         minTextAdapt: true,
@@ -29,7 +29,7 @@ void main() {
     });
 
     test('Test bigger size', () {
-      ScreenUtil.configure(
+      ScreenUtilPlus.configure(
         data: biggerDeviceData,
         designSize: uiSize,
         minTextAdapt: true,
@@ -46,7 +46,7 @@ void main() {
   group('[Test overflow]', () {
     testWidgets('Test overflow width', (tester) async {
       await tester.pumpWidget(
-        ScreenUtilInit(
+        ScreenUtilPlusInit(
           designSize: uiSize,
           child: MaterialApp(home: WidgetTest(width: () => uiSize.width.w)),
         ),
@@ -61,7 +61,7 @@ void main() {
 
     testWidgets('Test overflow height', (tester) async {
       await tester.pumpWidget(
-        ScreenUtilInit(
+        ScreenUtilPlusInit(
           designSize: uiSize,
           child: MaterialApp(home: WidgetTest(height: () => uiSize.height.h)),
         ),
@@ -83,7 +83,7 @@ void main() {
     Finder textField() => find.byKey(textFieldKey);
 
     await tester.pumpWidget(
-      ScreenUtilInit(
+      ScreenUtilPlusInit(
         designSize: uiSize,
         rebuildFactor: RebuildFactors.always,
         child: MaterialApp(

@@ -2,72 +2,23 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil_plus/src/utils/font_size_resolvers.dart';
+import 'package:flutter_screenutil_plus/src/utils/rebuild_factor.dart';
+import 'package:flutter_screenutil_plus/src/utils/rebuild_factors.dart';
+import 'package:flutter_screenutil_plus/src/utils/screen_util_init_builder.dart';
 
-import './_flutter_widgets.dart';
-import 'screen_util.dart';
-import 'screenutil_mixin.dart';
+import '../internal/_flutter_widgets.dart';
+import '../mixins/screenutil_mixin.dart';
+import 'screen_util_plus.dart';
 
-typedef RebuildFactor = bool Function(MediaQueryData old, MediaQueryData data);
-
-typedef ScreenUtilInitBuilder =
-    Widget Function(BuildContext context, Widget? child);
-
-abstract class RebuildFactors {
-  static bool size(MediaQueryData old, MediaQueryData data) {
-    return old.size != data.size;
-  }
-
-  static bool orientation(MediaQueryData old, MediaQueryData data) {
-    return old.orientation != data.orientation;
-  }
-
-  static bool sizeAndViewInsets(MediaQueryData old, MediaQueryData data) {
-    return old.viewInsets != data.viewInsets;
-  }
-
-  static bool change(MediaQueryData old, MediaQueryData data) {
-    return old != data;
-  }
-
-  static bool always(MediaQueryData _, MediaQueryData _) {
-    return true;
-  }
-
-  static bool none(MediaQueryData _, MediaQueryData _) {
-    return false;
-  }
-}
-
-abstract class FontSizeResolvers {
-  static double width(num fontSize, ScreenUtil instance) {
-    return instance.setWidth(fontSize);
-  }
-
-  static double height(num fontSize, ScreenUtil instance) {
-    return instance.setHeight(fontSize);
-  }
-
-  static double radius(num fontSize, ScreenUtil instance) {
-    return instance.radius(fontSize);
-  }
-
-  static double diameter(num fontSize, ScreenUtil instance) {
-    return instance.diameter(fontSize);
-  }
-
-  static double diagonal(num fontSize, ScreenUtil instance) {
-    return instance.diagonal(fontSize);
-  }
-}
-
-class ScreenUtilInit extends StatefulWidget {
-  /// A helper widget that initializes [ScreenUtil]
-  const ScreenUtilInit({
+class ScreenUtilPlusInit extends StatefulWidget {
+  /// A helper widget that initializes [ScreenUtilPlus]
+  const ScreenUtilPlusInit({
     super.key,
     this.builder,
     this.child,
     this.rebuildFactor = RebuildFactors.size,
-    this.designSize = ScreenUtil.defaultSize,
+    this.designSize = ScreenUtilPlus.defaultSize,
     this.splitScreenMode = false,
     this.minTextAdapt = false,
     this.useInheritedMediaQuery = false,
@@ -96,10 +47,10 @@ class ScreenUtilInit extends StatefulWidget {
   final Iterable<String>? excludeWidgets;
 
   @override
-  State<ScreenUtilInit> createState() => _ScreenUtilInitState();
+  State<ScreenUtilPlusInit> createState() => _ScreenUtilPlusInitState();
 }
 
-class _ScreenUtilInitState extends State<ScreenUtilInit>
+class _ScreenUtilPlusInitState extends State<ScreenUtilPlusInit>
     with WidgetsBindingObserver {
   final _canMarkedToBuild = HashSet<String>();
   final _excludedWidgets = HashSet<String>();
@@ -113,7 +64,7 @@ class _ScreenUtilInitState extends State<ScreenUtilInit>
       _canMarkedToBuild.addAll(widget.responsiveWidgets!);
     }
 
-    ScreenUtil.enableScale(
+    ScreenUtilPlus.enableScale(
       enableWH: widget.enableScaleWH,
       enableText: widget.enableScaleText,
     );
@@ -143,7 +94,7 @@ class _ScreenUtilInitState extends State<ScreenUtilInit>
   }
 
   Future<void> _validateSize() async {
-    if (widget.ensureScreenSize) return ScreenUtil.ensureScreenSize();
+    if (widget.ensureScreenSize) return ScreenUtilPlus.ensureScreenSize();
   }
 
   void _markNeedsBuildIfAllowed(Element el) {
@@ -184,7 +135,7 @@ class _ScreenUtilInitState extends State<ScreenUtilInit>
     if (mq == null) return const SizedBox.shrink();
 
     if (!widget.ensureScreenSize) {
-      ScreenUtil.configure(
+      ScreenUtilPlus.configure(
         data: mq,
         designSize: widget.designSize,
         splitScreenMode: widget.splitScreenMode,
@@ -198,7 +149,7 @@ class _ScreenUtilInitState extends State<ScreenUtilInit>
     return FutureBuilder<void>(
       future: _screenSizeCompleter.future,
       builder: (c, snapshot) {
-        ScreenUtil.configure(
+        ScreenUtilPlus.configure(
           data: mq,
           designSize: widget.designSize,
           splitScreenMode: widget.splitScreenMode,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-import 'size_extension.dart';
+import '../extensions/size_extension.dart';
 
 class RPadding extends SingleChildRenderObjectWidget {
   /// Creates an adapt widget that insets its child.

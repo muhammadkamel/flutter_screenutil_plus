@@ -1,19 +1,15 @@
-/*
- * Created by 李卓原 on 2018/9/29.
- * email: zhuoyuan93@gmail.com
- */
-
 import 'dart:math' show min, max;
 import 'dart:ui' as ui show FlutterView;
 
 import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform;
 import 'package:flutter/widgets.dart';
 
-typedef FontSizeResolver = double Function(num fontSize, ScreenUtil instance);
+typedef FontSizeResolver =
+    double Function(num fontSize, ScreenUtilPlus instance);
 
-class ScreenUtil {
+class ScreenUtilPlus {
   static const Size defaultSize = Size(360, 690);
-  static final ScreenUtil _instance = ScreenUtil._();
+  static final ScreenUtilPlus _instance = ScreenUtilPlus._();
 
   static bool Function() _enableScaleWH = () => true;
   static bool Function() _enableScaleText = () => true;
@@ -30,9 +26,9 @@ class ScreenUtil {
   late bool _splitScreenMode;
   FontSizeResolver? fontSizeResolver;
 
-  ScreenUtil._();
+  ScreenUtilPlus._();
 
-  factory ScreenUtil() => _instance;
+  factory ScreenUtilPlus() => _instance;
 
   /// Enable scale
   ///
@@ -182,7 +178,7 @@ class ScreenUtil {
     bool minTextAdapt = false,
     FontSizeResolver? fontSizeResolver,
   }) {
-    return ScreenUtil.ensureScreenSize().then((_) {
+    return ScreenUtilPlus.ensureScreenSize().then((_) {
       if (!context.mounted) return;
       return init(
         context,
