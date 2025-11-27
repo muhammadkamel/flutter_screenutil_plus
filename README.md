@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="https://raw.githubusercontent.com/muhammadkamel/flutter_screenutil_plus/master/assets/logo.png" alt="flutter_screenutil_plus" width="200"/>
+</div>
+
 # flutter_screenutil_plus
 
 [![Flutter Package](https://img.shields.io/pub/v/flutter_screenutil_plus.svg)](https://pub.dev/packages/flutter_screenutil_plus)
@@ -376,5 +380,5 @@ To use second method run: `flutter run --dart-define=method=2`
 
 ### Effect
 
-![effect](demo_en.png)
-![tablet effect](demo_tablet_en.png)
+![effect](https://raw.githubusercontent.com/muhammadkamel/flutter_screenutil_plus/master/assets/demo_en.png)
+![tablet effect](https://raw.githubusercontent.com/muhammadkamel/flutter_screenutil_plus/master/assets/demo_tablet_en.png)
