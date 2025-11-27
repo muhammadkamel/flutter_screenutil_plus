@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.0.1] - 2025
+## [1.0.2] - 2025
 
 ### Added
 
@@ -14,9 +14,14 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- Improved pub.dev score with complete API documentation
+
+## [1.0.1] - 2025
+
+### Changed
+
 - Reorganized package structure for better maintainability
 - Improved folder organization with logical subdirectories (core, widgets, extensions, mixins, utils, internal)
-- Improved pub.dev score with complete API documentation
 
 ## [1.0.0] - 2025
 
