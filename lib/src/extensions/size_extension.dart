@@ -5,27 +5,27 @@ import 'package:flutter/material.dart';
 import '../core/screen_util_plus.dart';
 
 extension SizeExtension on num {
-  ///[ScreenUtilPlus.setWidth]
+  /// [ScreenUtilPlus.setWidth]
   double get w => ScreenUtilPlus().setWidth(this);
 
-  ///[ScreenUtilPlus.setHeight]
+  /// [ScreenUtilPlus.setHeight]
   double get h => ScreenUtilPlus().setHeight(this);
 
-  ///[ScreenUtilPlus.radius]
+  /// [ScreenUtilPlus.radius]
   double get r => ScreenUtilPlus().radius(this);
 
-  ///[ScreenUtilPlus.diagonal]
+  /// [ScreenUtilPlus.diagonal]
   double get dg => ScreenUtilPlus().diagonal(this);
 
-  ///[ScreenUtilPlus.diameter]
+  /// [ScreenUtilPlus.diameter]
   double get dm => ScreenUtilPlus().diameter(this);
 
-  ///[ScreenUtilPlus.setSp]
+  /// [ScreenUtilPlus.setSp]
   double get sp => ScreenUtilPlus().setSp(this);
 
-  ///smart size :  it check your value - if it is bigger than your value it will set your value
-  ///for example, you have set 16.sm() , if for your screen 16.sp() is bigger than 16 , then it will set 16 not 16.sp()
-  ///I think that it is good for save size balance on big sizes of screen
+  /// Smart size: it checks your value - if it is bigger than your value it will set your value.
+  /// For example, if you have set 16.sm, if for your screen 16.sp is bigger than 16, then it will set 16, not 16.sp.
+  /// I think that it is good for saving size balance on big sizes of screen.
   double get spMin => min(toDouble(), sp);
 
   @Deprecated('use spMin instead')
@@ -33,45 +33,43 @@ extension SizeExtension on num {
 
   double get spMax => max(toDouble(), sp);
 
-  ///屏幕宽度的倍数
-  ///Multiple of screen width
+  /// Multiple of screen width.
   double get sw => ScreenUtilPlus().screenWidth * this;
 
-  ///屏幕高度的倍数
-  ///Multiple of screen height
+  /// Multiple of screen height.
   double get sh => ScreenUtilPlus().screenHeight * this;
 
-  ///[ScreenUtilPlus.setHeight]
+  /// [ScreenUtilPlus.setHeight]
   SizedBox get verticalSpace => ScreenUtilPlus().setVerticalSpacing(this);
 
-  ///[ScreenUtilPlus.setVerticalSpacingFromWidth]
+  /// [ScreenUtilPlus.setVerticalSpacingFromWidth]
   SizedBox get verticalSpaceFromWidth =>
       ScreenUtilPlus().setVerticalSpacingFromWidth(this);
 
-  ///[ScreenUtilPlus.setWidth]
+  /// [ScreenUtilPlus.setWidth]
   SizedBox get horizontalSpace => ScreenUtilPlus().setHorizontalSpacing(this);
 
-  ///[ScreenUtilPlus.radius]
+  /// [ScreenUtilPlus.radius]
   SizedBox get horizontalSpaceRadius =>
       ScreenUtilPlus().setHorizontalSpacingRadius(this);
 
-  ///[ScreenUtilPlus.radius]
+  /// [ScreenUtilPlus.radius]
   SizedBox get verticalSpacingRadius =>
       ScreenUtilPlus().setVerticalSpacingRadius(this);
 
-  ///[ScreenUtilPlus.diameter]
+  /// [ScreenUtilPlus.diameter]
   SizedBox get horizontalSpaceDiameter =>
       ScreenUtilPlus().setHorizontalSpacingDiameter(this);
 
-  ///[ScreenUtilPlus.diameter]
+  /// [ScreenUtilPlus.diameter]
   SizedBox get verticalSpacingDiameter =>
       ScreenUtilPlus().setVerticalSpacingDiameter(this);
 
-  ///[ScreenUtilPlus.diagonal]
+  /// [ScreenUtilPlus.diagonal]
   SizedBox get horizontalSpaceDiagonal =>
       ScreenUtilPlus().setHorizontalSpacingDiagonal(this);
 
-  ///[ScreenUtilPlus.diagonal]
+  /// [ScreenUtilPlus.diagonal]
   SizedBox get verticalSpacingDiagonal =>
       ScreenUtilPlus().setVerticalSpacingDiagonal(this);
 }

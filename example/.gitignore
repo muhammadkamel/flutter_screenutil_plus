@@ -5,9 +5,11 @@
 *.swp
 .DS_Store
 .atom/
+.build/
 .buildlog/
 .history
 .svn/
+.swiftpm/
 migrate_working_dir/
 
 # IntelliJ related
@@ -29,7 +31,7 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
-package-lock.json
+pubspec.lock
 
 # Symbolication related
 app.*.symbols

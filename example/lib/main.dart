@@ -22,11 +22,9 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Flutter ScreenUtil Plus Example',
-          // You can use the library anywhere in the app even in theme
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-            textTheme: Typography.englishLike2018.apply(fontSizeFactor: 1.sp),
-            useMaterial3: true,
+          // Use ResponsiveTheme to automatically scale all text styles
+          theme: ResponsiveTheme.fromTheme(
+            ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
           ),
           home: child,
         );

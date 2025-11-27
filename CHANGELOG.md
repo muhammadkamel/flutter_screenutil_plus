@@ -1,6 +1,20 @@
+<!-- markdownlint-disable MD024 -->
 # Changelog
 
 All notable changes to this project will be documented in this file.
+
+## [1.1.0] - 2025
+
+### Added
+
+- New `ScreenUtilMode` behavior refactor with responsive rebuilding improvements
+- Additional unit tests covering new utilities, rebuild flow, and registerToBuild edge cases
+
+### Changed
+
+- Refactored `ScreenUtilPlusInit` to reduce duplication and improve responsiveness
+- Extracted `DeviceType` enum and `MediaQueryData` extension into dedicated utility files
+- Improved `ScreenUtilPlus.configure` error handling and rebuilt element management
 
 ## [1.0.2] - 2025
 

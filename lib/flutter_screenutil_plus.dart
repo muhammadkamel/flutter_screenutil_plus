@@ -33,7 +33,8 @@
 ///
 /// - Responsive width, height, and radius using `.w`, `.h`, `.r` extensions
 /// - Responsive font sizes using `.sp` extension
-/// - Responsive widgets: [RPadding], [RSizedBox]
+/// - Responsive widgets: [RPadding], [RSizedBox], [RContainer], [RText]
+/// - Responsive theme generation with [ResponsiveTheme]
 /// - Screen metrics and information
 /// - Support for different screen orientations
 library;
@@ -45,11 +46,17 @@ export 'src/core/screen_util_plus_init.dart';
 export 'src/extensions/size_extension.dart';
 // Mixins
 export 'src/mixins/screenutil_mixin.dart';
+// Theme
+export 'src/theme/responsive_theme.dart';
 // Utilities and types
+export 'src/utils/device_type.dart';
 export 'src/utils/font_size_resolvers.dart';
+export 'src/utils/media_query_extension.dart';
 export 'src/utils/rebuild_factor.dart';
 export 'src/utils/rebuild_factors.dart';
 export 'src/utils/screen_util_init_builder.dart';
 // Widgets
+export 'src/widgets/r_container.dart';
 export 'src/widgets/r_padding.dart';
 export 'src/widgets/r_sizedbox.dart';
+export 'src/widgets/r_text.dart';

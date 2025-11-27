@@ -12,7 +12,7 @@ import '../mixins/screenutil_mixin.dart';
 import 'screen_util_plus.dart';
 
 class ScreenUtilPlusInit extends StatefulWidget {
-  /// A helper widget that initializes [ScreenUtilPlus]
+  /// A helper widget that initializes [ScreenUtilPlus].
   const ScreenUtilPlusInit({
     super.key,
     this.builder,
@@ -21,12 +21,10 @@ class ScreenUtilPlusInit extends StatefulWidget {
     this.designSize = ScreenUtilPlus.defaultSize,
     this.splitScreenMode = false,
     this.minTextAdapt = false,
-    this.useInheritedMediaQuery = false,
     this.ensureScreenSize = false,
     this.enableScaleWH,
     this.enableScaleText,
     this.responsiveWidgets,
-    this.excludeWidgets,
     this.fontSizeResolver = FontSizeResolvers.width,
   });
 
@@ -34,17 +32,15 @@ class ScreenUtilPlusInit extends StatefulWidget {
   final Widget? child;
   final bool splitScreenMode;
   final bool minTextAdapt;
-  final bool useInheritedMediaQuery;
   final bool ensureScreenSize;
   final bool Function()? enableScaleWH;
   final bool Function()? enableScaleText;
   final RebuildFactor rebuildFactor;
   final FontSizeResolver fontSizeResolver;
 
-  /// The [Size] of the device in the design draft, in dp
+  /// The [Size] of the device in the design draft, in dp.
   final Size designSize;
   final Iterable<String>? responsiveWidgets;
-  final Iterable<String>? excludeWidgets;
 
   @override
   State<ScreenUtilPlusInit> createState() => _ScreenUtilPlusInitState();
@@ -53,13 +49,14 @@ class ScreenUtilPlusInit extends StatefulWidget {
 class _ScreenUtilPlusInitState extends State<ScreenUtilPlusInit>
     with WidgetsBindingObserver {
   final _canMarkedToBuild = HashSet<String>();
-  final _excludedWidgets = HashSet<String>();
   MediaQueryData? _mediaQueryData;
   final _binding = WidgetsBinding.instance;
   final _screenSizeCompleter = Completer<void>();
 
   @override
   void initState() {
+    super.initState();
+
     if (widget.responsiveWidgets != null) {
       _canMarkedToBuild.addAll(widget.responsiveWidgets!);
     }
@@ -69,9 +66,12 @@ class _ScreenUtilPlusInitState extends State<ScreenUtilPlusInit>
       enableText: widget.enableScaleText,
     );
 
-    _validateSize().then(_screenSizeCompleter.complete);
+    if (widget.ensureScreenSize) {
+      ScreenUtilPlus.ensureScreenSize().then(_screenSizeCompleter.complete);
+    } else {
+      _screenSizeCompleter.complete();
+    }
 
-    super.initState();
     _binding.addObserver(this);
   }
 
@@ -87,25 +87,32 @@ class _ScreenUtilPlusInitState extends State<ScreenUtilPlusInit>
     _revalidate();
   }
 
-  MediaQueryData? _newData() {
+  MediaQueryData? _getMediaQueryData() {
     final view = View.maybeOf(context);
-    if (view != null) return MediaQueryData.fromView(view);
-    return null;
+    return view != null ? MediaQueryData.fromView(view) : null;
   }
 
-  Future<void> _validateSize() async {
-    if (widget.ensureScreenSize) return ScreenUtilPlus.ensureScreenSize();
+  bool _shouldMarkForBuild(Element element) {
+    final widgetName = element.widget.runtimeType.toString();
+
+    // Always rebuild if widget uses SU mixin
+    if (element.widget is SU) return true;
+
+    // Rebuild if explicitly in responsive widgets list
+    if (_canMarkedToBuild.contains(widgetName)) return true;
+
+    // Don't rebuild Flutter widgets or private widgets
+    if (widgetName.startsWith('_') || flutterWidgets.contains(widgetName)) {
+      return false;
+    }
+
+    return true;
   }
 
-  void _markNeedsBuildIfAllowed(Element el) {
-    final widgetName = el.widget.runtimeType.toString();
-    if (_excludedWidgets.contains(widgetName)) return;
-    final allowed =
-        widget is SU ||
-        _canMarkedToBuild.contains(widgetName) ||
-        !(widgetName.startsWith('_') || flutterWidgets.contains(widgetName));
-
-    if (allowed) el.markNeedsBuild();
+  void _markNeedsBuildIfAllowed(Element element) {
+    if (_shouldMarkForBuild(element)) {
+      element.markNeedsBuild();
+    }
   }
 
   void _updateTree(Element el) {
@@ -114,12 +121,14 @@ class _ScreenUtilPlusInitState extends State<ScreenUtilPlusInit>
   }
 
   void _revalidate([void Function()? callback]) {
-    final oldData = _mediaQueryData;
-    final newData = _newData();
-
+    final newData = _getMediaQueryData();
     if (newData == null) return;
 
-    if (oldData == null || widget.rebuildFactor(oldData, newData)) {
+    final oldData = _mediaQueryData;
+    final shouldUpdate =
+        oldData == null || widget.rebuildFactor(oldData, newData);
+
+    if (shouldUpdate) {
       setState(() {
         _mediaQueryData = newData;
         _updateTree(context as Element);
@@ -128,39 +137,35 @@ class _ScreenUtilPlusInitState extends State<ScreenUtilPlusInit>
     }
   }
 
+  void _configureScreenUtil(MediaQueryData mediaQueryData) {
+    ScreenUtilPlus.configure(
+      data: mediaQueryData,
+      designSize: widget.designSize,
+      splitScreenMode: widget.splitScreenMode,
+      minTextAdapt: widget.minTextAdapt,
+      fontSizeResolver: widget.fontSizeResolver,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final mq = _mediaQueryData;
+    final mediaQueryData = _mediaQueryData;
+    if (mediaQueryData == null) {
+      return const SizedBox.shrink();
+    }
 
-    if (mq == null) return const SizedBox.shrink();
+    _configureScreenUtil(mediaQueryData);
 
     if (!widget.ensureScreenSize) {
-      ScreenUtilPlus.configure(
-        data: mq,
-        designSize: widget.designSize,
-        splitScreenMode: widget.splitScreenMode,
-        minTextAdapt: widget.minTextAdapt,
-        fontSizeResolver: widget.fontSizeResolver,
-      );
-
       return widget.builder?.call(context, widget.child) ?? widget.child!;
     }
 
     return FutureBuilder<void>(
       future: _screenSizeCompleter.future,
-      builder: (c, snapshot) {
-        ScreenUtilPlus.configure(
-          data: mq,
-          designSize: widget.designSize,
-          splitScreenMode: widget.splitScreenMode,
-          minTextAdapt: widget.minTextAdapt,
-          fontSizeResolver: widget.fontSizeResolver,
-        );
-
+      builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return widget.builder?.call(context, widget.child) ?? widget.child!;
         }
-
         return const SizedBox.shrink();
       },
     );
