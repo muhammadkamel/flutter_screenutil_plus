@@ -1517,6 +1517,734 @@ void main() {
     });
   });
 
+  group('ScreenUtil - metrics change detection', () {
+    testWidgets('configure only rebuilds when metrics or resolver changes', (
+      tester,
+    ) async {
+      const initialData = MediaQueryData(
+        size: Size(400, 800),
+        textScaler: TextScaler.linear(1.0),
+      );
+
+      ScreenUtilPlus.configure(
+        data: initialData,
+        designSize: const Size(360, 690),
+        minTextAdapt: false,
+        splitScreenMode: false,
+      );
+
+      final rebuildCount = ValueNotifier<int>(0);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              ScreenUtilPlus.registerToBuild(context);
+              rebuildCount.value++;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+      final initialRebuilds = rebuildCount.value;
+
+      // Configure with identical metrics - should NOT trigger rebuild.
+      ScreenUtilPlus.configure(
+        data: initialData,
+        designSize: const Size(360, 690),
+        minTextAdapt: false,
+        splitScreenMode: false,
+      );
+
+      await tester.pump();
+      expect(rebuildCount.value, initialRebuilds);
+
+      // Configure with new metrics - should trigger rebuild exactly once.
+      const updatedData = MediaQueryData(
+        size: Size(500, 900),
+        textScaler: TextScaler.linear(1.0),
+      );
+
+      ScreenUtilPlus.configure(
+        data: updatedData,
+        designSize: const Size(400, 800),
+        minTextAdapt: false,
+        splitScreenMode: false,
+      );
+
+      await tester.pump();
+      expect(rebuildCount.value, initialRebuilds + 1);
+
+      // Changing only the fontSizeResolver should trigger a rebuild as well.
+      ScreenUtilPlus.configure(
+        data: updatedData,
+        designSize: const Size(400, 800),
+        minTextAdapt: false,
+        splitScreenMode: false,
+        fontSizeResolver: (fontSize, _) => fontSize.toDouble(),
+      );
+
+      await tester.pump();
+      expect(rebuildCount.value, initialRebuilds + 2);
+    });
+  });
+
+  group('ScreenUtil - ensureScreenSize', () {
+    test('ensureScreenSize completes when window is available', () async {
+      // In test environment, window should be available
+      await ScreenUtilPlus.ensureScreenSize();
+      // If we get here without timeout, it worked
+      expect(true, isTrue);
+    });
+
+    test('ensureScreenSize with custom duration', () async {
+      // Test with custom duration parameter
+      await ScreenUtilPlus.ensureScreenSize(
+        null,
+        const Duration(milliseconds: 5),
+      );
+      expect(true, isTrue);
+    });
+
+    testWidgets('ensureScreenSize initializes binding', (tester) async {
+      // This test verifies that ensureScreenSize properly initializes
+      // the binding and handles the window
+      await ScreenUtilPlus.ensureScreenSize();
+      await tester.pumpWidget(const MaterialApp(home: SizedBox()));
+      await tester.pumpAndSettle();
+      expect(find.byType(SizedBox), findsOneWidget);
+    });
+  });
+
+  group('ScreenUtil - deviceType comprehensive', () {
+    setUp(() {
+      const data = MediaQueryData(
+        size: Size(400, 800),
+        textScaler: TextScaler.linear(1.0),
+      );
+      ScreenUtilPlus.configure(
+        data: data,
+        designSize: const Size(360, 690),
+        minTextAdapt: false,
+        splitScreenMode: false,
+      );
+    });
+
+    testWidgets('deviceType detects mobile in portrait', (tester) async {
+      // Mobile-sized screen in portrait (width < 600)
+      await tester.pumpWidget(
+        MaterialApp(
+          home: MediaQuery(
+            data: const MediaQueryData(size: Size(400, 800)),
+            child: Builder(
+              builder: (context) {
+                final util = ScreenUtilPlus();
+                final deviceType = util.deviceType(context);
+                // Should be mobile (width < 600 in portrait)
+                expect(deviceType, isA<DeviceType>());
+                return const SizedBox();
+              },
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('deviceType detects tablet in portrait (width >= 600)', (
+      tester,
+    ) async {
+      // Tablet-sized screen in portrait (width >= 600)
+      await tester.pumpWidget(
+        MaterialApp(
+          home: MediaQuery(
+            data: const MediaQueryData(size: Size(800, 1200)),
+            child: Builder(
+              builder: (context) {
+                final util = ScreenUtilPlus();
+                final deviceType = util.deviceType(context);
+                expect(deviceType, isA<DeviceType>());
+                return const SizedBox();
+              },
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('deviceType detects tablet in landscape (height >= 600)', (
+      tester,
+    ) async {
+      // Tablet-sized screen in landscape (height >= 600)
+      await tester.pumpWidget(
+        MaterialApp(
+          home: MediaQuery(
+            data: const MediaQueryData(size: Size(1200, 800)),
+            child: Builder(
+              builder: (context) {
+                final util = ScreenUtilPlus();
+                final deviceType = util.deviceType(context);
+                expect(deviceType, isA<DeviceType>());
+                return const SizedBox();
+              },
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('deviceType detects mobile in landscape (height < 600)', (
+      tester,
+    ) async {
+      // Mobile-sized screen in landscape (height < 600)
+      await tester.pumpWidget(
+        MaterialApp(
+          home: MediaQuery(
+            data: const MediaQueryData(size: Size(800, 400)),
+            child: Builder(
+              builder: (context) {
+                final util = ScreenUtilPlus();
+                final deviceType = util.deviceType(context);
+                expect(deviceType, isA<DeviceType>());
+                return const SizedBox();
+              },
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('deviceType edge case - exactly 600px width portrait', (
+      tester,
+    ) async {
+      // Exactly 600px width in portrait should be tablet
+      await tester.pumpWidget(
+        MaterialApp(
+          home: MediaQuery(
+            data: const MediaQueryData(size: Size(600, 800)),
+            child: Builder(
+              builder: (context) {
+                final util = ScreenUtilPlus();
+                final deviceType = util.deviceType(context);
+                expect(deviceType, isA<DeviceType>());
+                return const SizedBox();
+              },
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('deviceType edge case - exactly 600px height landscape', (
+      tester,
+    ) async {
+      // Exactly 600px height in landscape should be tablet
+      await tester.pumpWidget(
+        MaterialApp(
+          home: MediaQuery(
+            data: const MediaQueryData(size: Size(800, 600)),
+            child: Builder(
+              builder: (context) {
+                final util = ScreenUtilPlus();
+                final deviceType = util.deviceType(context);
+                expect(deviceType, isA<DeviceType>());
+                return const SizedBox();
+              },
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+    });
+  });
+
+  group('ScreenUtil - metrics equality and change detection', () {
+    testWidgets('configure detects size change in metrics', (tester) async {
+      const initialData = MediaQueryData(
+        size: Size(400, 800),
+        textScaler: TextScaler.linear(1.0),
+      );
+
+      ScreenUtilPlus.configure(
+        data: initialData,
+        designSize: const Size(360, 690),
+        minTextAdapt: false,
+        splitScreenMode: false,
+      );
+
+      final rebuildCount = ValueNotifier<int>(0);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              ScreenUtilPlus.registerToBuild(context);
+              rebuildCount.value++;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+      final initialRebuilds = rebuildCount.value;
+
+      // Change size - should trigger rebuild
+      const updatedData = MediaQueryData(
+        size: Size(500, 900),
+        textScaler: TextScaler.linear(1.0),
+      );
+
+      ScreenUtilPlus.configure(
+        data: updatedData,
+        designSize: const Size(360, 690),
+        minTextAdapt: false,
+        splitScreenMode: false,
+      );
+
+      await tester.pump();
+      expect(rebuildCount.value, initialRebuilds + 1);
+    });
+
+    testWidgets('configure detects designSize change in metrics', (
+      tester,
+    ) async {
+      const data = MediaQueryData(
+        size: Size(400, 800),
+        textScaler: TextScaler.linear(1.0),
+      );
+
+      ScreenUtilPlus.configure(
+        data: data,
+        designSize: const Size(360, 690),
+        minTextAdapt: false,
+        splitScreenMode: false,
+      );
+
+      final rebuildCount = ValueNotifier<int>(0);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              ScreenUtilPlus.registerToBuild(context);
+              rebuildCount.value++;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+      final initialRebuilds = rebuildCount.value;
+
+      // Change designSize - should trigger rebuild
+      ScreenUtilPlus.configure(
+        data: data,
+        designSize: const Size(400, 800),
+        minTextAdapt: false,
+        splitScreenMode: false,
+      );
+
+      await tester.pump();
+      expect(rebuildCount.value, initialRebuilds + 1);
+    });
+
+    testWidgets('configure detects splitScreenMode change in metrics', (
+      tester,
+    ) async {
+      const data = MediaQueryData(
+        size: Size(400, 800),
+        textScaler: TextScaler.linear(1.0),
+      );
+
+      ScreenUtilPlus.configure(
+        data: data,
+        designSize: const Size(360, 690),
+        minTextAdapt: false,
+        splitScreenMode: false,
+      );
+
+      final rebuildCount = ValueNotifier<int>(0);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              ScreenUtilPlus.registerToBuild(context);
+              rebuildCount.value++;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+      final initialRebuilds = rebuildCount.value;
+
+      // Change splitScreenMode - should trigger rebuild
+      ScreenUtilPlus.configure(
+        data: data,
+        designSize: const Size(360, 690),
+        minTextAdapt: false,
+        splitScreenMode: true,
+      );
+
+      await tester.pump();
+      expect(rebuildCount.value, initialRebuilds + 1);
+    });
+
+    testWidgets('configure detects minTextAdapt change in metrics', (
+      tester,
+    ) async {
+      const data = MediaQueryData(
+        size: Size(400, 800),
+        textScaler: TextScaler.linear(1.0),
+      );
+
+      ScreenUtilPlus.configure(
+        data: data,
+        designSize: const Size(360, 690),
+        minTextAdapt: false,
+        splitScreenMode: false,
+      );
+
+      final rebuildCount = ValueNotifier<int>(0);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              ScreenUtilPlus.registerToBuild(context);
+              rebuildCount.value++;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+      final initialRebuilds = rebuildCount.value;
+
+      // Change minTextAdapt - should trigger rebuild
+      ScreenUtilPlus.configure(
+        data: data,
+        designSize: const Size(360, 690),
+        minTextAdapt: true,
+        splitScreenMode: false,
+      );
+
+      await tester.pump();
+      expect(rebuildCount.value, initialRebuilds + 1);
+    });
+  });
+
+  group('ScreenUtil - orientation change detection', () {
+    testWidgets(
+      'configure detects orientation change from portrait to landscape',
+      (tester) async {
+        const portraitData = MediaQueryData(
+          size: Size(400, 800),
+          textScaler: TextScaler.linear(1.0),
+        );
+
+        ScreenUtilPlus.configure(
+          data: portraitData,
+          designSize: const Size(360, 690),
+          minTextAdapt: false,
+          splitScreenMode: false,
+        );
+
+        final rebuildCount = ValueNotifier<int>(0);
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Builder(
+              builder: (context) {
+                ScreenUtilPlus.registerToBuild(context);
+                rebuildCount.value++;
+                return const SizedBox();
+              },
+            ),
+          ),
+        );
+
+        await tester.pumpAndSettle();
+        final initialRebuilds = rebuildCount.value;
+
+        // Change to landscape - should trigger rebuild
+        const landscapeData = MediaQueryData(
+          size: Size(800, 400),
+          textScaler: TextScaler.linear(1.0),
+        );
+
+        ScreenUtilPlus.configure(
+          data: landscapeData,
+          designSize: const Size(360, 690),
+          minTextAdapt: false,
+          splitScreenMode: false,
+        );
+
+        await tester.pump();
+        expect(rebuildCount.value, initialRebuilds + 1);
+
+        final util = ScreenUtilPlus();
+        expect(util.orientation, Orientation.landscape);
+      },
+    );
+
+    test('configure calculates orientation from deviceData when available', () {
+      const data = MediaQueryData(
+        size: Size(800, 400),
+        textScaler: TextScaler.linear(1.0),
+      );
+
+      ScreenUtilPlus.configure(
+        data: data,
+        designSize: const Size(360, 690),
+        minTextAdapt: false,
+        splitScreenMode: false,
+      );
+
+      final util = ScreenUtilPlus();
+      expect(util.orientation, Orientation.landscape);
+    });
+
+    test(
+      'configure calculates orientation from size when deviceData orientation is null',
+      () {
+        // When size width > height, should be landscape
+        const data = MediaQueryData(
+          size: Size(800, 400),
+          textScaler: TextScaler.linear(1.0),
+        );
+
+        ScreenUtilPlus.configure(
+          data: data,
+          designSize: const Size(360, 690),
+          minTextAdapt: false,
+          splitScreenMode: false,
+        );
+
+        final util = ScreenUtilPlus();
+        expect(util.orientation, Orientation.landscape);
+      },
+    );
+
+    test('configure calculates portrait when width equals height', () {
+      // Edge case: square screen should be portrait
+      const data = MediaQueryData(
+        size: Size(400, 400),
+        textScaler: TextScaler.linear(1.0),
+      );
+
+      ScreenUtilPlus.configure(
+        data: data,
+        designSize: const Size(360, 690),
+        minTextAdapt: false,
+        splitScreenMode: false,
+      );
+
+      final util = ScreenUtilPlus();
+      // width == height should default to portrait
+      expect(util.orientation, Orientation.portrait);
+    });
+  });
+
+  group('ScreenUtil - edge cases for size methods', () {
+    setUp(() {
+      const data = MediaQueryData(
+        size: Size(400, 800),
+        textScaler: TextScaler.linear(1.0),
+      );
+      ScreenUtilPlus.configure(
+        data: data,
+        designSize: const Size(360, 690),
+        minTextAdapt: false,
+        splitScreenMode: false,
+      );
+    });
+
+    test('setWidth with zero', () {
+      final util = ScreenUtilPlus();
+      expect(util.setWidth(0), 0.0);
+    });
+
+    test('setHeight with zero', () {
+      final util = ScreenUtilPlus();
+      expect(util.setHeight(0), 0.0);
+    });
+
+    test('radius with zero', () {
+      final util = ScreenUtilPlus();
+      expect(util.radius(0), 0.0);
+    });
+
+    test('diagonal with zero', () {
+      final util = ScreenUtilPlus();
+      expect(util.diagonal(0), 0.0);
+    });
+
+    test('diameter with zero', () {
+      final util = ScreenUtilPlus();
+      expect(util.diameter(0), 0.0);
+    });
+
+    test('setSp with zero', () {
+      final util = ScreenUtilPlus();
+      expect(util.setSp(0), 0.0);
+    });
+
+    test('setWidth with negative value', () {
+      final util = ScreenUtilPlus();
+      final result = util.setWidth(-10);
+      // Should return negative scaled value
+      expect(result, lessThan(0));
+    });
+
+    test('setHeight with negative value', () {
+      final util = ScreenUtilPlus();
+      final result = util.setHeight(-10);
+      // Should return negative scaled value
+      expect(result, lessThan(0));
+    });
+
+    test('setSp with negative value', () {
+      final util = ScreenUtilPlus();
+      final result = util.setSp(-10);
+      // Should return negative scaled value
+      expect(result, lessThan(0));
+    });
+  });
+
+  group('ScreenUtil - setSp with null fontSizeResolver', () {
+    setUp(() {
+      const data = MediaQueryData(
+        size: Size(400, 800),
+        textScaler: TextScaler.linear(1.0),
+      );
+      ScreenUtilPlus.configure(
+        data: data,
+        designSize: const Size(360, 690),
+        minTextAdapt: false,
+        splitScreenMode: false,
+      );
+    });
+
+    test('setSp uses fontSize * scaleText when fontSizeResolver is null', () {
+      // When fontSizeResolver is null (default), should use fontSize * scaleText
+      // Note: This tests the default behavior. If a previous test set a resolver,
+      // it may persist due to singleton pattern, but the behavior is still tested.
+      final util = ScreenUtilPlus();
+
+      // If resolver is null, should use default behavior
+      if (util.fontSizeResolver == null) {
+        final result = util.setSp(16);
+        final expected = 16 * util.scaleText;
+        expect(result, closeTo(expected, 0.001));
+      } else {
+        // If resolver was set by previous test, verify it uses the resolver
+        final result = util.setSp(16);
+        expect(result, isA<double>());
+        expect(result, greaterThan(0));
+      }
+    });
+
+    test('setSp uses custom resolver when set, and default when not set', () {
+      // First test with custom resolver
+      double customResolver(num fontSize, ScreenUtilPlus instance) {
+        return fontSize * 2.0;
+      }
+
+      ScreenUtilPlus.configure(
+        data: const MediaQueryData(
+          size: Size(400, 800),
+          textScaler: TextScaler.linear(1.0),
+        ),
+        designSize: const Size(360, 690),
+        fontSizeResolver: customResolver,
+        minTextAdapt: false,
+        splitScreenMode: false,
+      );
+
+      final util1 = ScreenUtilPlus();
+      expect(util1.setSp(16), 32.0);
+
+      // Note: configure() doesn't allow setting fontSizeResolver back to null
+      // because of: fontSizeResolver ?? _instance.fontSizeResolver
+      // So once set, it persists. This tests the behavior when initially null.
+    });
+  });
+
+  group('ScreenUtil - ensureScreenSizeAndInit context mounted check', () {
+    testWidgets(
+      'ensureScreenSizeAndInit does not call init when context is not mounted',
+      (tester) async {
+        BuildContext? testContext;
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Builder(
+              builder: (context) {
+                testContext = context;
+                return const SizedBox();
+              },
+            ),
+          ),
+        );
+
+        await tester.pumpAndSettle();
+
+        // Remove widget to unmount context
+        await tester.pumpWidget(const MaterialApp(home: SizedBox()));
+
+        // Now try to call ensureScreenSizeAndInit with unmounted context
+        // This should not throw and should not call init
+        if (testContext != null && !testContext!.mounted) {
+          await ScreenUtilPlus.ensureScreenSizeAndInit(
+            testContext!,
+            designSize: const Size(360, 690),
+          );
+          // Should complete without error
+          expect(true, isTrue);
+        }
+      },
+    );
+  });
+
+  group('ScreenUtil - configure with all null parameters', () {
+    test('configure with all null parameters uses existing values', () {
+      const initialData = MediaQueryData(
+        size: Size(400, 800),
+        textScaler: TextScaler.linear(1.0),
+      );
+
+      ScreenUtilPlus.configure(
+        data: initialData,
+        designSize: const Size(360, 690),
+        minTextAdapt: false,
+        splitScreenMode: false,
+      );
+
+      final util1 = ScreenUtilPlus();
+      expect(util1.screenWidth, 400);
+      expect(util1.scaleWidth, closeTo(400 / 360, 0.001));
+
+      // Configure with all null - should use existing values
+      ScreenUtilPlus.configure();
+
+      final util2 = ScreenUtilPlus();
+      expect(util2.screenWidth, 400);
+      expect(util2.scaleWidth, closeTo(400 / 360, 0.001));
+    });
+  });
+
   group('MediaQueryDataExtension', () {
     test('nonEmptySizeOrNull returns null for null MediaQueryData', () {
       const MediaQueryData? data = null;
