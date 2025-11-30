@@ -3,6 +3,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.1] - 2025
+
+### Added
+
+- Implemented change detection for screen metrics using Equatable to optimize rebuilds
+- Added `_ScreenMetrics` class with value-based equality comparison for efficient configuration change detection
+
+### Changed
+
+- Optimized rebuild behavior: registered elements now only rebuild when screen metrics or fontSizeResolver actually change
+- Improved performance by preventing unnecessary rebuilds when configuration remains functionally identical
+
 ## [1.1.0] - 2025
 
 ### Added
