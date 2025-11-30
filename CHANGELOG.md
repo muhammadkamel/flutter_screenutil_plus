@@ -3,6 +3,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.2] - 2025
+
+### Changed
+
+- Updated README.md with comprehensive documentation improvements
+
 ## [1.1.1] - 2025
 
 ### Added
