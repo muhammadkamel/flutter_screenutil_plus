@@ -1,6 +1,7 @@
 import 'dart:math' show min, max;
 import 'dart:ui' as ui show FlutterView;
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform;
 import 'package:flutter/widgets.dart';
 
@@ -89,6 +90,7 @@ class ScreenUtilPlus {
   }
 
   Set<Element>? _elementsToRebuild;
+  _ScreenMetrics? _metrics;
 
   /// ### Experimental
   /// Registers the current page and all its descendants to rebuild.
@@ -133,6 +135,10 @@ class ScreenUtilPlus {
       );
     }
 
+    // Capture previous state for change detection
+    final previousMetrics = _instance._metrics;
+    final previousResolver = _instance.fontSizeResolver;
+
     final deviceData = data.nonEmptySizeOrNull();
     final deviceSize = deviceData?.size ?? designSize;
 
@@ -149,8 +155,27 @@ class ScreenUtilPlus {
       .._splitScreenMode = splitScreenMode ?? _instance._splitScreenMode
       .._orientation = orientation;
 
-    // Rebuild registered elements
-    _instance._rebuildRegisteredElements();
+    // Create new metrics snapshot for change detection
+    final metrics = _ScreenMetrics(
+      size: deviceSize,
+      designSize: _instance._uiSize,
+      orientation: _instance._orientation,
+      splitScreenMode: _instance._splitScreenMode,
+      minTextAdapt: _instance._minTextAdapt,
+    );
+
+    _instance._metrics = metrics;
+
+    // Detect changes using Equatable's value equality
+    // Note: fontSizeResolver uses reference equality - a new function instance
+    // will trigger a rebuild even if functionally identical
+    final metricsChanged = metrics != previousMetrics;
+    final resolverChanged = _instance.fontSizeResolver != previousResolver;
+
+    if (metricsChanged || resolverChanged) {
+      // Rebuild registered elements only when underlying configuration changes.
+      _instance._rebuildRegisteredElements();
+    }
   }
 
   void _rebuildRegisteredElements() {
@@ -324,4 +349,44 @@ class ScreenUtilPlus {
 
   SizedBox setVerticalSpacingDiagonal(num height) =>
       SizedBox(height: diagonal(height));
+}
+
+/// Internal class to track screen configuration state for change detection.
+///
+/// Uses [Equatable] to enable value-based equality comparison, allowing
+/// efficient detection of configuration changes without unnecessary rebuilds.
+/// All properties are compared using their value equality (Flutter's [Size]
+/// and [Orientation] implement proper equality).
+class _ScreenMetrics extends Equatable {
+  const _ScreenMetrics({
+    required this.size,
+    required this.designSize,
+    required this.orientation,
+    required this.splitScreenMode,
+    required this.minTextAdapt,
+  });
+
+  /// Current device screen size
+  final Size size;
+
+  /// Design size used for scaling calculations
+  final Size designSize;
+
+  /// Current screen orientation
+  final Orientation orientation;
+
+  /// Whether split screen mode is enabled
+  final bool splitScreenMode;
+
+  /// Whether minimum text adaptation is enabled
+  final bool minTextAdapt;
+
+  @override
+  List<Object> get props => [
+    size,
+    designSize,
+    orientation,
+    splitScreenMode,
+    minTextAdapt,
+  ];
 }
