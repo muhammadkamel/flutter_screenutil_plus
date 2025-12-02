@@ -3,6 +3,52 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2025
+
+### Added
+
+- **CSS-like Breakpoints System**: Added comprehensive breakpoint system with predefined sets (Bootstrap, Tailwind, Material Design, Mobile-first)
+  - `Breakpoints` class with configurable breakpoint values
+  - `Breakpoint` enum (xs, sm, md, lg, xl, xxl)
+  - Context extensions for easy breakpoint checking (`context.breakpoint`, `context.isAtLeast()`, etc.)
+  
+- **SwiftUI-like Size Classes**: Added size class system for adaptive layouts
+  - `SizeClass` enum (compact, regular) for horizontal and vertical dimensions
+  - `SizeClasses` class with helper methods
+  - Context extensions (`context.sizeClasses`, `context.horizontalSizeClass`, etc.)
+
+- **Responsive Query Utilities**: Added utilities for responsive design queries
+  - `ResponsiveQuery` class for breakpoint-based value selection
+  - `AdaptiveValues` class for responsive sizing with breakpoints
+  - Context extensions for convenient access
+
+- **Adaptive Text Styles**: Added extensions for creating adaptive text styles
+  - `AdaptiveTextStyleExtension` on `BuildContext` for breakpoint-based text styles
+  - `TextStyleExtension` on `TextStyle` with responsive methods (`.r`, `withLineHeight()`, `withAutoLineHeight()`, `withLineHeightFromFigma()`)
+
+- **Adaptive Widgets**: Added new responsive widgets
+  - `AdaptiveContainer` and `SimpleAdaptiveContainer` - Containers that adapt properties based on breakpoints
+  - `AdaptiveText` - Text widget that adapts style properties based on breakpoints
+  - `ResponsiveBuilder` - Builder widget for different breakpoints
+  - `SizeClassBuilder` - Builder widget for size classes
+  - `ConditionalBuilder` - Conditional rendering based on breakpoint conditions
+
+- **Integration Tests**: Added comprehensive integration tests
+  - `adaptive_widgets_integration_test.dart` - Tests for adaptive widgets
+  - `breakpoints_integration_test.dart` - Tests for breakpoint system
+  - `extensions_integration_test.dart` - Tests for extensions
+  - `responsive_widgets_integration_test.dart` - Tests for responsive widgets
+  - `theme_integration_test.dart` - Tests for responsive theme
+
+- **Unit Tests**: Added unit tests for new features
+  - `adaptive_text_test.dart` - Tests for AdaptiveText widget
+  - `text_style_extension_test.dart` - Tests for TextStyle extensions
+
+### Changed
+
+- Updated `ResponsiveTheme` to use new `TextStyleExtension.r` for responsive text styles
+- Enhanced `RText` widget with improved responsive text handling
+
 ## [1.1.2] - 2025
 
 ### Changed

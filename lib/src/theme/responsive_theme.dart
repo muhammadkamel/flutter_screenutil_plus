@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../extensions/size_extension.dart';
+import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
 
 /// Utility class for creating responsive themes.
 ///
@@ -39,8 +38,10 @@ class ResponsiveTheme {
   }
 
   /// Scales the font size of a [TextStyle] using `.sp`.
+  ///
+  /// The height multiplier is preserved, ensuring line height scales
+  /// proportionally with the font size.
   static TextStyle? _scaleTextStyle(TextStyle? style) {
-    if (style == null || style.fontSize == null) return style;
-    return style.copyWith(fontSize: style.fontSize!.sp);
+    return style?.r;
   }
 }

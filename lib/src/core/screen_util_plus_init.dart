@@ -73,6 +73,14 @@ class _ScreenUtilPlusInitState extends State<ScreenUtilPlusInit>
     }
 
     _binding.addObserver(this);
+
+    // Ensure _revalidate() is called as soon as context is available
+    // Use scheduleMicrotask to call it after initState completes but before widget tree construction
+    scheduleMicrotask(() {
+      if (mounted) {
+        _revalidate();
+      }
+    });
   }
 
   @override

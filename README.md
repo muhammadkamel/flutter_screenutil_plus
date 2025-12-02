@@ -7,7 +7,7 @@
 [![Flutter Package](https://img.shields.io/pub/v/flutter_screenutil_plus.svg)](https://pub.dev/packages/flutter_screenutil_plus)
 [![Pub Points](https://img.shields.io/pub/points/flutter_screenutil_plus)](https://pub.dev/packages/flutter_screenutil_plus/score)
 
-**A flutter plugin for adapting screen and font size.Let your UI display a reasonable layout on different screen sizes!**
+**A flutter plugin for adapting screen and font size. Let your UI display a reasonable layout on different screen sizes!**
 
 ## Usage
 
