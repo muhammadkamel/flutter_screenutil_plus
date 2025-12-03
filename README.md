@@ -672,8 +672,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - 🐛 Issues: [GitHub Issues](https://github.com/muhammadkamel/flutter_screenutil_plus/issues)
 - 📖 Documentation: [Full Documentation](https://pub.dev/documentation/flutter_screenutil_plus/latest/)
-- 📧 Email: [Your Email]
+- 📧 Email: [mu7ammadkamel@hotmail.com](mailto:mu7ammadkamel@hotmail.com)
 
 ---
 
-Made with ❤️ by the Flutter community
+Made with ❤️ by Muhammad Kamel
