@@ -59,27 +59,14 @@ class ResponsiveBuilder extends StatelessWidget {
     final query = ResponsiveQuery.of(context, breakpoints: breakpoints);
     final breakpoint = query.breakpoint;
 
-    Widget Function(BuildContext)? builder;
-    switch (breakpoint) {
-      case Breakpoint.xs:
-        builder = xs ?? sm ?? md ?? lg ?? xl ?? xxl;
-        break;
-      case Breakpoint.sm:
-        builder = sm ?? md ?? lg ?? xl ?? xxl ?? xs;
-        break;
-      case Breakpoint.md:
-        builder = md ?? lg ?? xl ?? xxl ?? sm ?? xs;
-        break;
-      case Breakpoint.lg:
-        builder = lg ?? xl ?? xxl ?? md ?? sm ?? xs;
-        break;
-      case Breakpoint.xl:
-        builder = xl ?? xxl ?? lg ?? md ?? sm ?? xs;
-        break;
-      case Breakpoint.xxl:
-        builder = xxl ?? xl ?? lg ?? md ?? sm ?? xs;
-        break;
-    }
+    final builder = switch (breakpoint) {
+      Breakpoint.xs => xs ?? sm ?? md ?? lg ?? xl ?? xxl,
+      Breakpoint.sm => sm ?? md ?? lg ?? xl ?? xxl ?? xs,
+      Breakpoint.md => md ?? lg ?? xl ?? xxl ?? sm ?? xs,
+      Breakpoint.lg => lg ?? xl ?? xxl ?? md ?? sm ?? xs,
+      Breakpoint.xl => xl ?? xxl ?? lg ?? md ?? sm ?? xs,
+      Breakpoint.xxl => xxl ?? xl ?? lg ?? md ?? sm ?? xs,
+    };
 
     if (builder != null) {
       return builder(context);
