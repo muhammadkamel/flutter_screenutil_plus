@@ -1,5 +1,5 @@
 name: flutter_screenutil_plus
-description: A powerful Flutter plugin for adapting screen and font size with CSS-like breakpoints and SwiftUI-like size classes. Features responsive scaling, breakpoint-aware widgets, adaptive containers, and intelligent rebuild optimization. Guaranteed to look good on different screen sizes!
+description: A powerful Flutter plugin for adapting screen
 version: 1.2.1
 homepage: https://github.com/muhammadkamel/flutter_screenutil_plus
 repository: https://github.com/muhammadkamel/flutter_screenutil_plus
