@@ -21,10 +21,12 @@ extension TextStyleExtension on TextStyle {
   /// // Results in: fontSize: 16.sp, height: 1.5 (multiplier preserved)
   /// ```
   TextStyle get r {
-    if (fontSize == null) return this;
+    if (fontSize == null) {
+      return this;
+    }
 
     return copyWith(
-      fontSize: fontSize!.sp,
+      fontSize: fontSize?.sp ?? 0,
       // height is a multiplier, so we preserve it as-is
       // The absolute line height will scale proportionally with fontSize
     );
@@ -108,7 +110,7 @@ extension TextStyleExtension on TextStyle {
     }
 
     // Calculate height multiplier: height = lineHeight / fontSize
-    final calculatedHeight = figmaLineHeight / fontSize!;
+    final double calculatedHeight = figmaLineHeight / fontSize!;
 
     // If height is already set and we shouldn't override, preserve it
     if (height != null && !overrideExisting) {

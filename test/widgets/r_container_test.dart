@@ -10,7 +10,7 @@ void main() {
       ScreenUtilPlus.configure(
         data: const MediaQueryData(
           size: Size(400, 800),
-          textScaler: TextScaler.linear(1.0),
+          textScaler: TextScaler.noScaling,
         ),
         designSize: const Size(360, 690),
         minTextAdapt: false,
@@ -20,10 +20,12 @@ void main() {
 
     testWidgets('adapts width and height', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(home: RContainer(width: 100, height: 100)),
+        const MaterialApp(home: RContainer(width: 100, height: 100)),
       );
 
-      final container = tester.widget<Container>(find.byType(Container));
+      final Container container = tester.widget<Container>(
+        find.byType(Container),
+      );
       final util = ScreenUtilPlus();
 
       // 100 * (400 / 360)
@@ -40,41 +42,45 @@ void main() {
 
     testWidgets('adapts padding', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(home: RContainer(padding: const EdgeInsets.all(10))),
+        const MaterialApp(home: RContainer(padding: EdgeInsets.all(10))),
       );
 
-      final container = tester.widget<Container>(find.byType(Container));
+      final Container container = tester.widget<Container>(
+        find.byType(Container),
+      );
       final util = ScreenUtilPlus();
-      final expectedPadding = 10 * min(util.scaleWidth, util.scaleHeight);
+      final num expectedPadding = 10 * min(util.scaleWidth, util.scaleHeight);
 
       expect(container.padding, isA<EdgeInsets>());
       expect(
-        (container.padding as EdgeInsets).top,
+        (container.padding! as EdgeInsets).top,
         closeTo(expectedPadding, 0.001),
       );
     });
 
     testWidgets('adapts margin', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(home: RContainer(margin: const EdgeInsets.all(10))),
+        const MaterialApp(home: RContainer(margin: EdgeInsets.all(10))),
       );
 
-      final container = tester.widget<Container>(find.byType(Container));
+      final Container container = tester.widget<Container>(
+        find.byType(Container),
+      );
       final util = ScreenUtilPlus();
-      final expectedMargin = 10 * min(util.scaleWidth, util.scaleHeight);
+      final num expectedMargin = 10 * min(util.scaleWidth, util.scaleHeight);
 
       expect(container.margin, isA<EdgeInsets>());
       expect(
-        (container.margin as EdgeInsets).top,
+        (container.margin! as EdgeInsets).top,
         closeTo(expectedMargin, 0.001),
       );
     });
 
     testWidgets('adapts constraints', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: RContainer(
-            constraints: const BoxConstraints(
+            constraints: BoxConstraints(
               minWidth: 10,
               maxWidth: 100,
               minHeight: 10,
@@ -84,9 +90,11 @@ void main() {
         ),
       );
 
-      final container = tester.widget<Container>(find.byType(Container));
+      final Container container = tester.widget<Container>(
+        find.byType(Container),
+      );
       final util = ScreenUtilPlus();
-      final expectedScale = min(util.scaleWidth, util.scaleHeight);
+      final double expectedScale = min(util.scaleWidth, util.scaleHeight);
 
       expect(
         container.constraints?.minWidth,

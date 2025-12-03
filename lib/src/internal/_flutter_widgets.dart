@@ -1,5 +1,12 @@
 import 'dart:collection';
 
+/// A set of Flutter framework widget names used to identify framework widgets
+/// that should not be rebuilt when screen metrics change.
+///
+/// This set contains the names of all standard Flutter widgets and is used
+/// internally by [ScreenUtilPlusInit] to determine which widgets should be
+/// excluded from automatic rebuilding when screen size or orientation changes.
+/// Only custom widgets (not in this set) will be marked for rebuild.
 final flutterWidgets = HashSet<String>.from({
   'AbsorbPointer',
   'Accumulator',

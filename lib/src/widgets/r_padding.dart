@@ -3,6 +3,10 @@ import 'package:flutter/rendering.dart';
 
 import '../extensions/size_extension.dart';
 
+/// A responsive padding widget that automatically scales padding values.
+///
+/// [RPadding] is similar to [Padding] but automatically applies responsive
+/// scaling to the padding using the `.r` extension.
 class RPadding extends SingleChildRenderObjectWidget {
   /// Creates an adapt widget that insets its child.
   ///
@@ -25,6 +29,10 @@ class RPadding extends SingleChildRenderObjectWidget {
   }
 }
 
+/// A responsive [EdgeInsets] that automatically scales all values.
+///
+/// [REdgeInsets] is similar to [EdgeInsets] but automatically applies
+/// responsive scaling to all inset values using the `.r` extension.
 class REdgeInsets extends EdgeInsets {
   /// Creates adapt insets from offsets from the left, top, right, and bottom.
   REdgeInsets.fromLTRB(double left, double top, double right, double bottom)
@@ -73,6 +81,11 @@ class REdgeInsets extends EdgeInsets {
   }) : super.only(bottom: bottom.r, right: right.r, left: left.r, top: top.r);
 }
 
+/// A responsive [EdgeInsetsDirectional] that automatically scales all values.
+///
+/// [REdgeInsetsDirectional] is similar to [EdgeInsetsDirectional] but
+/// automatically applies responsive scaling to all inset values using
+/// the `.r` extension.
 class REdgeInsetsDirectional extends EdgeInsetsDirectional {
   /// Creates insets where all the offsets are `value`.
   ///

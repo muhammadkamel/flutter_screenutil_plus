@@ -8,7 +8,7 @@ void main() {
       ScreenUtilPlus.configure(
         data: const MediaQueryData(
           size: Size(400, 800),
-          textScaler: TextScaler.linear(1.0),
+          textScaler: TextScaler.noScaling,
         ),
         designSize: const Size(360, 690),
         minTextAdapt: false,
@@ -18,10 +18,10 @@ void main() {
 
     testWidgets('scales font size when style is provided', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(home: RText('Hello', style: const TextStyle(fontSize: 16))),
+        const MaterialApp(home: RText('Hello', style: TextStyle(fontSize: 16))),
       );
 
-      final text = tester.widget<Text>(find.byType(Text));
+      final Text text = tester.widget<Text>(find.byType(Text));
       final util = ScreenUtilPlus();
 
       expect(text.style?.fontSize, closeTo(16 * util.scaleText, 0.001));
@@ -39,7 +39,7 @@ void main() {
         ),
       );
 
-      final text = tester.widget<Text>(find.byType(Text));
+      final Text text = tester.widget<Text>(find.byType(Text));
       final util = ScreenUtilPlus();
 
       expect(text.style?.fontSize, closeTo(14 * util.scaleText, 0.001));
@@ -47,10 +47,10 @@ void main() {
 
     testWidgets('preserves other text properties', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: RText(
             'Hello',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 16,
               color: Colors.red,
               fontWeight: FontWeight.bold,
@@ -61,7 +61,7 @@ void main() {
         ),
       );
 
-      final text = tester.widget<Text>(find.byType(Text));
+      final Text text = tester.widget<Text>(find.byType(Text));
 
       expect(text.style?.color, Colors.red);
       expect(text.style?.fontWeight, FontWeight.bold);
@@ -76,10 +76,10 @@ void main() {
       const originalHeight = 1.5;
 
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: RText(
             'Test',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: originalFontSize,
               height: originalHeight,
             ),
@@ -87,9 +87,9 @@ void main() {
         ),
       );
 
-      final text = tester.widget<Text>(find.byType(Text));
+      final Text text = tester.widget<Text>(find.byType(Text));
       final util = ScreenUtilPlus();
-      final scaledFontSize = originalFontSize * util.scaleText;
+      final double scaledFontSize = originalFontSize * util.scaleText;
       // Height multiplier should be preserved
       const expectedHeight = originalHeight;
 
@@ -103,10 +103,10 @@ void main() {
         const fontSize = 20.0;
 
         await tester.pumpWidget(
-          MaterialApp(
+          const MaterialApp(
             home: RText(
               'Test',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: fontSize,
                 // No height specified - should use default
               ),
@@ -114,9 +114,9 @@ void main() {
           ),
         );
 
-        final text = tester.widget<Text>(find.byType(Text));
+        final Text text = tester.widget<Text>(find.byType(Text));
         final util = ScreenUtilPlus();
-        final scaledFontSize = fontSize * util.scaleText;
+        final double scaledFontSize = fontSize * util.scaleText;
 
         expect(text.style?.fontSize, closeTo(scaledFontSize, 0.001));
         expect(
@@ -145,9 +145,9 @@ void main() {
           ),
         );
 
-        final text = tester.widget<Text>(find.byType(Text));
+        final Text text = tester.widget<Text>(find.byType(Text));
         final util = ScreenUtilPlus();
-        final scaledFontSize = fontSize * util.scaleText;
+        final double scaledFontSize = fontSize * util.scaleText;
 
         expect(
           text.style?.fontSize,
@@ -166,10 +166,10 @@ void main() {
       tester,
     ) async {
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: RText(
             'Test',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 16,
               // No height specified
             ),
@@ -177,9 +177,9 @@ void main() {
         ),
       );
 
-      final text = tester.widget<Text>(find.byType(Text));
+      final Text text = tester.widget<Text>(find.byType(Text));
       final util = ScreenUtilPlus();
-      final scaledFontSize = 16 * util.scaleText;
+      final double scaledFontSize = 16 * util.scaleText;
 
       expect(text.style?.fontSize, closeTo(scaledFontSize, 0.001));
       // Should have default line height multiplier
@@ -195,7 +195,6 @@ void main() {
 
         await tester.pumpWidget(
           ScreenUtilPlusInit(
-            designSize: const Size(360, 690),
             child: MaterialApp(
               home: Scaffold(
                 body: Center(
@@ -204,10 +203,10 @@ void main() {
                     width: 200,
                     color: Colors.blue,
                     alignment: Alignment.center,
-                    child: RText(
+                    child: const RText(
                       'Centered Text',
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: fontSize,
                         height: lineHeight,
                         fontWeight: FontWeight.w600,
@@ -222,12 +221,12 @@ void main() {
 
         await tester.pumpAndSettle();
 
-        final textFinder = find.text('Centered Text');
+        final Finder textFinder = find.text('Centered Text');
         expect(textFinder, findsOneWidget);
 
-        final textWidget = tester.widget<Text>(textFinder);
+        final Text textWidget = tester.widget<Text>(textFinder);
         final util = ScreenUtilPlus();
-        final scaledFontSize = fontSize * util.scaleText;
+        final double scaledFontSize = fontSize * util.scaleText;
         // Height multiplier should be preserved, not scaled
         const expectedHeight = lineHeight;
 
@@ -253,8 +252,8 @@ void main() {
       ];
 
       for (final testCase in testCases) {
-        final originalFontSize = testCase['fontSize'] as double;
-        final originalHeight = testCase['height'] as double;
+        final double originalFontSize = testCase['fontSize']!;
+        final double originalHeight = testCase['height']!;
 
         await tester.pumpWidget(
           MaterialApp(
@@ -268,9 +267,9 @@ void main() {
           ),
         );
 
-        final text = tester.widget<Text>(find.byType(Text));
+        final Text text = tester.widget<Text>(find.byType(Text));
         final util = ScreenUtilPlus();
-        final scaledFontSize = originalFontSize * util.scaleText;
+        final double scaledFontSize = originalFontSize * util.scaleText;
         // Height multiplier should be preserved
         final expectedHeight = originalHeight;
 
@@ -297,7 +296,6 @@ void main() {
 
         await tester.pumpWidget(
           ScreenUtilPlusInit(
-            designSize: const Size(360, 690),
             child: MaterialApp(
               home: Scaffold(
                 body: Center(
@@ -306,13 +304,10 @@ void main() {
                     width: 200,
                     color: Colors.grey.shade200,
                     alignment: Alignment.center,
-                    child: RText(
+                    child: const RText(
                       'Fitting Text',
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: fontSize,
-                        height: lineHeight,
-                      ),
+                      style: TextStyle(fontSize: fontSize, height: lineHeight),
                     ),
                   ),
                 ),
@@ -323,12 +318,12 @@ void main() {
 
         await tester.pumpAndSettle();
 
-        final textFinder = find.text('Fitting Text');
+        final Finder textFinder = find.text('Fitting Text');
         expect(textFinder, findsOneWidget);
 
-        final textWidget = tester.widget<Text>(textFinder);
+        final Text textWidget = tester.widget<Text>(textFinder);
         final util = ScreenUtilPlus();
-        final scaledFontSize = fontSize * util.scaleText;
+        final double scaledFontSize = fontSize * util.scaleText;
         // Height multiplier should be preserved
         const scaledHeight = lineHeight;
 
@@ -340,7 +335,7 @@ void main() {
 
         // Verify the absolute line height scales with font size
         // (absolute line height = fontSize * height multiplier)
-        final absoluteLineHeight = scaledFontSize * scaledHeight;
+        final double absoluteLineHeight = scaledFontSize * scaledHeight;
         expect(absoluteLineHeight, closeTo(scaledFontSize * lineHeight, 0.001));
       },
     );
@@ -352,29 +347,31 @@ void main() {
         const height = 1.5;
 
         await tester.pumpWidget(
-          MaterialApp(
+          const MaterialApp(
             home: Column(
               children: [
                 RText(
                   'Text 1',
-                  style: const TextStyle(fontSize: fontSize, height: height),
+                  style: TextStyle(fontSize: fontSize, height: height),
                 ),
                 RText(
                   'Text 2',
-                  style: const TextStyle(fontSize: fontSize, height: height),
+                  style: TextStyle(fontSize: fontSize, height: height),
                 ),
                 RText(
                   'Text 3',
-                  style: const TextStyle(fontSize: fontSize, height: height),
+                  style: TextStyle(fontSize: fontSize, height: height),
                 ),
               ],
             ),
           ),
         );
 
-        final textWidgets = tester.widgetList<Text>(find.byType(Text));
+        final Iterable<Text> textWidgets = tester.widgetList<Text>(
+          find.byType(Text),
+        );
         final util = ScreenUtilPlus();
-        final expectedFontSize = fontSize * util.scaleText;
+        final double expectedFontSize = fontSize * util.scaleText;
         // Height multiplier should be preserved
         const expectedHeight = height;
 
@@ -393,7 +390,6 @@ void main() {
 
         await tester.pumpWidget(
           ScreenUtilPlusInit(
-            designSize: const Size(360, 690),
             child: MaterialApp(
               home: Scaffold(
                 body: Row(
@@ -406,11 +402,11 @@ void main() {
                           color: Colors.teal.shade100,
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: Center(
+                        child: const Center(
                           child: RText(
                             'RContainer 1',
                             textAlign: TextAlign.center,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: fontSize,
                               fontWeight: FontWeight.w600,
                               color: Colors.teal,
@@ -428,11 +424,11 @@ void main() {
                           color: Colors.pink.shade100,
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: Center(
+                        child: const Center(
                           child: RText(
                             'RContainer 2',
                             textAlign: TextAlign.center,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: fontSize,
                               fontWeight: FontWeight.w600,
                               color: Colors.pink,
@@ -451,16 +447,16 @@ void main() {
         await tester.pumpAndSettle();
 
         // Verify both text widgets are found
-        final text1Finder = find.text('RContainer 1');
-        final text2Finder = find.text('RContainer 2');
+        final Finder text1Finder = find.text('RContainer 1');
+        final Finder text2Finder = find.text('RContainer 2');
         expect(text1Finder, findsOneWidget);
         expect(text2Finder, findsOneWidget);
 
         // Verify both have correct scaled font sizes
-        final text1Widget = tester.widget<Text>(text1Finder);
-        final text2Widget = tester.widget<Text>(text2Finder);
+        final Text text1Widget = tester.widget<Text>(text1Finder);
+        final Text text2Widget = tester.widget<Text>(text2Finder);
         final util = ScreenUtilPlus();
-        final expectedFontSize = fontSize * util.scaleText;
+        final double expectedFontSize = fontSize * util.scaleText;
 
         expect(text1Widget.style?.fontSize, closeTo(expectedFontSize, 0.001));
         expect(text2Widget.style?.fontSize, closeTo(expectedFontSize, 0.001));
@@ -478,7 +474,7 @@ void main() {
 
   group('RText vertical centering across different screen sizes', () {
     // Mobile sizes
-    final mobileSizes = [
+    final List<Map<String, Object>> mobileSizes = [
       {'name': 'Small Mobile', 'size': const Size(320, 568)}, // iPhone SE
       {'name': 'Medium Mobile', 'size': const Size(375, 667)}, // iPhone 8
       {
@@ -488,14 +484,14 @@ void main() {
     ];
 
     // Tablet sizes
-    final tabletSizes = [
+    final List<Map<String, Object>> tabletSizes = [
       {'name': 'Small Tablet', 'size': const Size(600, 960)},
       {'name': 'Medium Tablet', 'size': const Size(768, 1024)}, // iPad
       {'name': 'Large Tablet', 'size': const Size(1024, 1366)}, // iPad Pro
     ];
 
     // Desktop/Web sizes
-    final desktopSizes = [
+    final List<Map<String, Object>> desktopSizes = [
       {'name': 'Small Desktop', 'size': const Size(1280, 720)}, // HD
       {'name': 'Medium Desktop', 'size': const Size(1920, 1080)}, // Full HD
       {'name': 'Large Desktop', 'size': const Size(2560, 1440)}, // 2K
@@ -503,7 +499,7 @@ void main() {
     ];
 
     // Web browser sizes
-    final webSizes = [
+    final List<Map<String, Object>> webSizes = [
       {'name': 'Mobile Web', 'size': const Size(375, 667)},
       {'name': 'Tablet Web', 'size': const Size(768, 1024)},
       {'name': 'Desktop Web', 'size': const Size(1920, 1080)},
@@ -521,7 +517,6 @@ void main() {
 
       await tester.pumpWidget(
         ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
           child: MaterialApp(
             home: Scaffold(
               body: Center(
@@ -530,10 +525,10 @@ void main() {
                   width: 200,
                   color: Colors.blue.shade50,
                   alignment: Alignment.center,
-                  child: RText(
+                  child: const RText(
                     'Centered Text',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: fontSize,
                       height: lineHeight,
                       fontWeight: FontWeight.w600,
@@ -548,16 +543,16 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      final textFinder = find.text('Centered Text');
+      final Finder textFinder = find.text('Centered Text');
       expect(
         textFinder,
         findsOneWidget,
         reason: 'Text should be found for $sizeName',
       );
 
-      final textWidget = tester.widget<Text>(textFinder);
+      final Text textWidget = tester.widget<Text>(textFinder);
       final util = ScreenUtilPlus();
-      final scaledFontSize = fontSize * util.scaleText;
+      final double scaledFontSize = fontSize * util.scaleText;
       // Height multiplier should be preserved
       const expectedHeight = lineHeight;
 
@@ -590,8 +585,8 @@ void main() {
         (tester) async {
           ScreenUtilPlus.configure(
             data: MediaQueryData(
-              size: sizeData['size'] as Size,
-              textScaler: const TextScaler.linear(1.0),
+              size: sizeData['size']! as Size,
+              textScaler: TextScaler.noScaling,
             ),
             designSize: const Size(360, 690),
             minTextAdapt: false,
@@ -599,8 +594,8 @@ void main() {
           );
 
           await testVerticalCenteringForSize(
-            sizeData['name'] as String,
-            sizeData['size'] as Size,
+            sizeData['name']! as String,
+            sizeData['size']! as Size,
             tester,
           );
         },
@@ -614,8 +609,8 @@ void main() {
         (tester) async {
           ScreenUtilPlus.configure(
             data: MediaQueryData(
-              size: sizeData['size'] as Size,
-              textScaler: const TextScaler.linear(1.0),
+              size: sizeData['size']! as Size,
+              textScaler: TextScaler.noScaling,
             ),
             designSize: const Size(360, 690),
             minTextAdapt: false,
@@ -623,8 +618,8 @@ void main() {
           );
 
           await testVerticalCenteringForSize(
-            sizeData['name'] as String,
-            sizeData['size'] as Size,
+            sizeData['name']! as String,
+            sizeData['size']! as Size,
             tester,
           );
         },
@@ -638,8 +633,8 @@ void main() {
         (tester) async {
           ScreenUtilPlus.configure(
             data: MediaQueryData(
-              size: sizeData['size'] as Size,
-              textScaler: const TextScaler.linear(1.0),
+              size: sizeData['size']! as Size,
+              textScaler: TextScaler.noScaling,
             ),
             designSize: const Size(360, 690),
             minTextAdapt: false,
@@ -647,8 +642,8 @@ void main() {
           );
 
           await testVerticalCenteringForSize(
-            sizeData['name'] as String,
-            sizeData['size'] as Size,
+            sizeData['name']! as String,
+            sizeData['size']! as Size,
             tester,
           );
         },
@@ -662,8 +657,8 @@ void main() {
         (tester) async {
           ScreenUtilPlus.configure(
             data: MediaQueryData(
-              size: sizeData['size'] as Size,
-              textScaler: const TextScaler.linear(1.0),
+              size: sizeData['size']! as Size,
+              textScaler: TextScaler.noScaling,
             ),
             designSize: const Size(360, 690),
             minTextAdapt: false,
@@ -671,8 +666,8 @@ void main() {
           );
 
           await testVerticalCenteringForSize(
-            sizeData['name'] as String,
-            sizeData['size'] as Size,
+            sizeData['name']! as String,
+            sizeData['size']! as Size,
             tester,
           );
         },
@@ -695,7 +690,7 @@ void main() {
         ScreenUtilPlus.configure(
           data: MediaQueryData(
             size: screenSize,
-            textScaler: const TextScaler.linear(1.0),
+            textScaler: TextScaler.noScaling,
           ),
           designSize: const Size(360, 690),
           minTextAdapt: false,
@@ -707,7 +702,6 @@ void main() {
 
         await tester.pumpWidget(
           ScreenUtilPlusInit(
-            designSize: const Size(360, 690),
             child: MaterialApp(
               home: Scaffold(
                 body: Row(
@@ -720,11 +714,11 @@ void main() {
                           color: Colors.teal.shade100,
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: Center(
+                        child: const Center(
                           child: RText(
                             'RContainer 1',
                             textAlign: TextAlign.center,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: fontSize,
                               fontWeight: FontWeight.w600,
                               color: Colors.teal,
@@ -742,11 +736,11 @@ void main() {
                           color: Colors.pink.shade100,
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: Center(
+                        child: const Center(
                           child: RText(
                             'RContainer 2',
                             textAlign: TextAlign.center,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: fontSize,
                               fontWeight: FontWeight.w600,
                               color: Colors.pink,
@@ -764,15 +758,15 @@ void main() {
 
         await tester.pumpAndSettle();
 
-        final text1Finder = find.text('RContainer 1');
-        final text2Finder = find.text('RContainer 2');
+        final Finder text1Finder = find.text('RContainer 1');
+        final Finder text2Finder = find.text('RContainer 2');
         expect(text1Finder, findsOneWidget);
         expect(text2Finder, findsOneWidget);
 
-        final text1Widget = tester.widget<Text>(text1Finder);
-        final text2Widget = tester.widget<Text>(text2Finder);
+        final Text text1Widget = tester.widget<Text>(text1Finder);
+        final Text text2Widget = tester.widget<Text>(text2Finder);
         final util = ScreenUtilPlus();
-        final expectedFontSize = fontSize * util.scaleText;
+        final double expectedFontSize = fontSize * util.scaleText;
 
         expect(
           text1Widget.style?.fontSize,
@@ -809,7 +803,7 @@ void main() {
         ScreenUtilPlus.configure(
           data: MediaQueryData(
             size: screenSize,
-            textScaler: const TextScaler.linear(1.0),
+            textScaler: TextScaler.noScaling,
           ),
           designSize: const Size(360, 690),
           minTextAdapt: false,
@@ -818,16 +812,17 @@ void main() {
 
         await tester.pumpWidget(
           MaterialApp(
-            home: RText(
+            key: ValueKey(screenSize),
+            home: const RText(
               'Test Text',
-              style: const TextStyle(fontSize: fontSize, height: lineHeight),
+              style: TextStyle(fontSize: fontSize, height: lineHeight),
             ),
           ),
         );
 
-        final textWidget = tester.widget<Text>(find.byType(Text));
+        final Text textWidget = tester.widget<Text>(find.byType(Text));
         final util = ScreenUtilPlus();
-        final scaledFontSize = fontSize * util.scaleText;
+        final double scaledFontSize = fontSize * util.scaleText;
         // Height multiplier should be preserved
         const expectedHeight = lineHeight;
 
@@ -845,9 +840,9 @@ void main() {
 
         // Verify the absolute line height scales with font size
         // (absolute line height = fontSize * height multiplier)
-        final absoluteLineHeight = scaledFontSize * expectedHeight;
-        final originalAbsoluteLineHeight = fontSize * lineHeight;
-        final fontSizeRatio = scaledFontSize / fontSize;
+        final double absoluteLineHeight = scaledFontSize * expectedHeight;
+        const double originalAbsoluteLineHeight = fontSize * lineHeight;
+        final double fontSizeRatio = scaledFontSize / fontSize;
         expect(
           absoluteLineHeight / originalAbsoluteLineHeight,
           closeTo(fontSizeRatio, 0.001),
@@ -875,7 +870,7 @@ void main() {
         ScreenUtilPlus.configure(
           data: MediaQueryData(
             size: screenSize,
-            textScaler: const TextScaler.linear(1.0),
+            textScaler: TextScaler.noScaling,
           ),
           designSize: const Size(360, 690),
           minTextAdapt: false,
@@ -884,9 +879,10 @@ void main() {
 
         await tester.pumpWidget(
           MaterialApp(
-            home: RText(
+            key: ValueKey(screenSize),
+            home: const RText(
               'Test Text',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: fontSize,
                 // No height specified - should use default
               ),
@@ -894,9 +890,9 @@ void main() {
           ),
         );
 
-        final textWidget = tester.widget<Text>(find.byType(Text));
+        final Text textWidget = tester.widget<Text>(find.byType(Text));
         final util = ScreenUtilPlus();
-        final scaledFontSize = fontSize * util.scaleText;
+        final double scaledFontSize = fontSize * util.scaleText;
 
         expect(
           textWidget.style?.fontSize,

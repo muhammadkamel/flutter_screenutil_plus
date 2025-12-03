@@ -8,7 +8,7 @@ void main() {
       ScreenUtilPlus.configure(
         data: const MediaQueryData(
           size: Size(400, 800),
-          textScaler: TextScaler.linear(1.0),
+          textScaler: TextScaler.noScaling,
         ),
         designSize: const Size(360, 690),
         minTextAdapt: false,
@@ -37,7 +37,7 @@ void main() {
         ),
       );
 
-      final responsiveTheme = ResponsiveTheme.fromTheme(baseTheme);
+      final ThemeData responsiveTheme = ResponsiveTheme.fromTheme(baseTheme);
       final util = ScreenUtilPlus();
 
       expect(
@@ -65,7 +65,7 @@ void main() {
         ),
       );
 
-      final responsiveTheme = ResponsiveTheme.fromTheme(baseTheme);
+      final ThemeData responsiveTheme = ResponsiveTheme.fromTheme(baseTheme);
 
       expect(responsiveTheme.textTheme.bodyLarge?.color, Colors.blue);
       expect(responsiveTheme.textTheme.bodyLarge?.fontWeight, FontWeight.bold);
@@ -79,7 +79,7 @@ void main() {
         ),
       );
 
-      final responsiveTheme = ResponsiveTheme.fromTheme(baseTheme);
+      final ThemeData responsiveTheme = ResponsiveTheme.fromTheme(baseTheme);
       final util = ScreenUtilPlus();
 
       // bodyLarge should be scaled

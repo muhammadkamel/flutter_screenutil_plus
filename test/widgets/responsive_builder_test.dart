@@ -304,10 +304,10 @@ void main() {
       addTearDown(tester.view.reset);
 
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: MediaQuery(
-            data: const MediaQueryData(size: Size(400, 800)),
-            child: ResponsiveBuilder(fallback: const Text('Fallback Widget')),
+            data: MediaQueryData(size: Size(400, 800)),
+            child: ResponsiveBuilder(fallback: Text('Fallback Widget')),
           ),
         ),
       );
@@ -325,9 +325,9 @@ void main() {
       addTearDown(tester.view.reset);
 
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: MediaQuery(
-            data: const MediaQueryData(size: Size(400, 800)),
+            data: MediaQueryData(size: Size(400, 800)),
             child: ResponsiveBuilder(),
           ),
         ),
@@ -336,7 +336,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(SizedBox), findsOneWidget);
-      final sizedBox = tester.widget<SizedBox>(find.byType(SizedBox));
+      final SizedBox sizedBox = tester.widget<SizedBox>(find.byType(SizedBox));
       expect(sizedBox.width, 0.0);
       expect(sizedBox.height, 0.0);
     });
@@ -347,14 +347,7 @@ void main() {
       addTearDown(tester.view.reset);
 
       // Custom breakpoints where sm is 500px
-      final customBreakpoints = Breakpoints(
-        xs: 0,
-        sm: 500,
-        md: 800,
-        lg: 1000,
-        xl: 1200,
-        xxl: 1400,
-      );
+      const customBreakpoints = Breakpoints(sm: 500, md: 800, lg: 1000);
 
       await tester.pumpWidget(
         MaterialApp(
@@ -422,6 +415,338 @@ void main() {
 
       // xxl breakpoint should fall back to xl -> lg -> md -> sm -> xs
       expect(find.text('XS Layout'), findsOneWidget);
+    });
+  });
+
+  group('SizeClassBuilder', () {
+    testWidgets('shows compact widget for compact size class', (tester) async {
+      tester.view.physicalSize = const Size(400, 400);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: MediaQuery(
+            data: const MediaQueryData(size: Size(400, 400)),
+            child: SizeClassBuilder(
+              threshold: 500,
+              compact: (context) => const Text('Compact Layout'),
+              regular: (context) => const Text('Regular Layout'),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(find.text('Compact Layout'), findsOneWidget);
+      expect(find.text('Regular Layout'), findsNothing);
+    });
+
+    testWidgets('shows regular widget for regular size class', (tester) async {
+      tester.view.physicalSize = const Size(800, 600);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: MediaQuery(
+            data: const MediaQueryData(size: Size(800, 600)),
+            child: SizeClassBuilder(
+              compact: (context) => const Text('Compact Layout'),
+              regular: (context) => const Text('Regular Layout'),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(find.text('Regular Layout'), findsOneWidget);
+      expect(find.text('Compact Layout'), findsNothing);
+    });
+
+    testWidgets('uses horizontal builder when provided', (tester) async {
+      tester.view.physicalSize = const Size(800, 600);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: MediaQuery(
+            data: const MediaQueryData(size: Size(800, 600)),
+            child: SizeClassBuilder(
+              horizontal: (context, sizeClass) {
+                if (sizeClass == SizeClass.regular) {
+                  return const Text('Regular Horizontal');
+                }
+                return const Text('Compact Horizontal');
+              },
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(find.text('Regular Horizontal'), findsOneWidget);
+    });
+
+    testWidgets('uses vertical builder when provided', (tester) async {
+      tester.view.physicalSize = const Size(400, 800);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: MediaQuery(
+            data: const MediaQueryData(size: Size(400, 800)),
+            child: SizeClassBuilder(
+              vertical: (context, sizeClass) {
+                if (sizeClass == SizeClass.regular) {
+                  return const Text('Regular Vertical');
+                }
+                return const Text('Compact Vertical');
+              },
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(find.text('Regular Vertical'), findsOneWidget);
+    });
+
+    testWidgets('uses builder with full size class information', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(800, 600);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: MediaQuery(
+            data: const MediaQueryData(size: Size(800, 600)),
+            child: SizeClassBuilder(
+              builder: (context, sizeClasses) {
+                return Text(
+                  'H: ${sizeClasses.horizontal}, V: ${sizeClasses.vertical}',
+                );
+              },
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining('H:'), findsOneWidget);
+      expect(find.textContaining('V:'), findsOneWidget);
+    });
+
+    testWidgets('falls back to regular when compact not provided', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(400, 600);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: MediaQuery(
+            data: const MediaQueryData(size: Size(400, 600)),
+            child: SizeClassBuilder(
+              regular: (context) => const Text('Regular Layout'),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(find.text('Regular Layout'), findsOneWidget);
+    });
+
+    testWidgets('falls back to compact when regular not provided', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(800, 600);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: MediaQuery(
+            data: const MediaQueryData(size: Size(800, 600)),
+            child: SizeClassBuilder(
+              compact: (context) => const Text('Compact Layout'),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(find.text('Compact Layout'), findsOneWidget);
+    });
+
+    testWidgets('returns SizedBox.shrink when no builders provided', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(800, 600);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: MediaQuery(
+            data: MediaQueryData(size: Size(800, 600)),
+            child: SizeClassBuilder(),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(SizedBox), findsOneWidget);
+      final SizedBox sizedBox = tester.widget<SizedBox>(find.byType(SizedBox));
+      expect(sizedBox.width, 0.0);
+      expect(sizedBox.height, 0.0);
+    });
+
+    testWidgets('uses custom threshold', (tester) async {
+      tester.view.physicalSize = const Size(500, 600);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: MediaQuery(
+            data: const MediaQueryData(size: Size(500, 600)),
+            child: SizeClassBuilder(
+              threshold: 400,
+              compact: (context) => const Text('Compact Layout'),
+              regular: (context) => const Text('Regular Layout'),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      // With threshold 400, 500px width should be regular
+      expect(find.text('Regular Layout'), findsOneWidget);
+    });
+  });
+
+  group('ConditionalBuilder', () {
+    testWidgets('shows builder widget when condition is true', (tester) async {
+      tester.view.physicalSize = const Size(800, 600);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: MediaQuery(
+            data: const MediaQueryData(size: Size(800, 600)),
+            child: ConditionalBuilder(
+              condition: (context) => context.isAtLeast(Breakpoint.md),
+              builder: (context) => const Text('Desktop Layout'),
+              fallback: (context) => const Text('Mobile Layout'),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(find.text('Desktop Layout'), findsOneWidget);
+      expect(find.text('Mobile Layout'), findsNothing);
+    });
+
+    testWidgets('shows fallback widget when condition is false', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(400, 600);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: MediaQuery(
+            data: const MediaQueryData(size: Size(400, 600)),
+            child: ConditionalBuilder(
+              condition: (context) => context.isAtLeast(Breakpoint.md),
+              builder: (context) => const Text('Desktop Layout'),
+              fallback: (context) => const Text('Mobile Layout'),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(find.text('Mobile Layout'), findsOneWidget);
+      expect(find.text('Desktop Layout'), findsNothing);
+    });
+
+    testWidgets(
+      'returns SizedBox.shrink when condition false and no fallback',
+      (tester) async {
+        tester.view.physicalSize = const Size(400, 600);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.reset);
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: MediaQuery(
+              data: const MediaQueryData(size: Size(400, 600)),
+              child: ConditionalBuilder(
+                condition: (context) => context.isAtLeast(Breakpoint.md),
+                builder: (context) => const Text('Desktop Layout'),
+              ),
+            ),
+          ),
+        );
+
+        await tester.pumpAndSettle();
+
+        expect(find.text('Desktop Layout'), findsNothing);
+        expect(find.byType(SizedBox), findsOneWidget);
+        final SizedBox sizedBox = tester.widget<SizedBox>(
+          find.byType(SizedBox),
+        );
+        expect(sizedBox.width, 0.0);
+        expect(sizedBox.height, 0.0);
+      },
+    );
+
+    testWidgets('handles complex conditions', (tester) async {
+      tester.view.physicalSize = const Size(1000, 600);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: MediaQuery(
+            data: const MediaQueryData(size: Size(1000, 600)),
+            child: ConditionalBuilder(
+              condition: (context) =>
+                  context.isBetween(Breakpoint.md, Breakpoint.xl),
+              builder: (context) => const Text('Tablet Layout'),
+              fallback: (context) => const Text('Other Layout'),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      // 1000px is between md (768) and xl (1200)
+      expect(find.text('Tablet Layout'), findsOneWidget);
+      expect(find.text('Other Layout'), findsNothing);
     });
   });
 }

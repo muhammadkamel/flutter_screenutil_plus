@@ -18,6 +18,25 @@ import '../utils/responsive_query.dart';
 /// )
 /// ```
 class AdaptiveContainer extends StatelessWidget {
+  /// Creates an [AdaptiveContainer] with adaptive properties.
+  ///
+  /// All properties can be specified as maps of breakpoints to values,
+  /// allowing different values for different screen sizes.
+  const AdaptiveContainer({
+    super.key,
+    this.width,
+    this.height,
+    this.padding,
+    this.margin,
+    this.decoration,
+    this.alignment,
+    this.child,
+    this.constraints,
+    this.transform,
+    this.breakpoints,
+    this.color,
+  });
+
   /// Width values for different breakpoints
   final Map<Breakpoint, num>? width;
 
@@ -51,25 +70,10 @@ class AdaptiveContainer extends StatelessWidget {
   /// Color (convenience property)
   final Color? color;
 
-  const AdaptiveContainer({
-    super.key,
-    this.width,
-    this.height,
-    this.padding,
-    this.margin,
-    this.decoration,
-    this.alignment,
-    this.child,
-    this.constraints,
-    this.transform,
-    this.breakpoints,
-    this.color,
-  });
-
   @override
   Widget build(BuildContext context) {
     final query = ResponsiveQuery.of(context, breakpoints: breakpoints);
-    final breakpoint = query.breakpoint;
+    final Breakpoint breakpoint = query.breakpoint;
 
     // Get values for current breakpoint, falling back to smaller breakpoints
     double? resolvedWidth;
@@ -92,7 +96,7 @@ class AdaptiveContainer extends StatelessWidget {
       resolvedMargin = _getValueForBreakpoint(margin!, breakpoint);
     }
 
-    Widget container = Container(
+    final Widget container = Container(
       width: resolvedWidth,
       height: resolvedHeight,
       padding: resolvedPadding,
@@ -116,14 +120,14 @@ class AdaptiveContainer extends StatelessWidget {
     }
 
     // Try smaller breakpoints in reverse order
-    for (var bp in Breakpoint.values.reversed) {
+    for (final Breakpoint bp in Breakpoint.values.reversed) {
       if (bp.index < current.index && values.containsKey(bp)) {
         return values[bp];
       }
     }
 
     // Try larger breakpoints as fallback
-    for (var bp in Breakpoint.values) {
+    for (final Breakpoint bp in Breakpoint.values) {
       if (bp.index > current.index && values.containsKey(bp)) {
         return values[bp];
       }
@@ -147,6 +151,33 @@ class AdaptiveContainer extends StatelessWidget {
 /// )
 /// ```
 class SimpleAdaptiveContainer extends StatelessWidget {
+  /// Creates a [SimpleAdaptiveContainer] with simplified breakpoint properties.
+  ///
+  /// Instead of using maps, this widget provides individual properties
+  /// for each breakpoint, making it easier to use for common cases.
+  const SimpleAdaptiveContainer({
+    super.key,
+    this.widthXs,
+    this.widthSm,
+    this.widthMd,
+    this.widthLg,
+    this.widthXl,
+    this.heightXs,
+    this.heightSm,
+    this.heightMd,
+    this.heightLg,
+    this.heightXl,
+    this.paddingXs,
+    this.paddingSm,
+    this.paddingMd,
+    this.paddingLg,
+    this.paddingXl,
+    this.child,
+    this.color,
+    this.decoration,
+    this.breakpoints,
+  });
+
   /// Width for extra small screens
   final num? widthXs;
 
@@ -203,29 +234,6 @@ class SimpleAdaptiveContainer extends StatelessWidget {
 
   /// Custom breakpoints
   final Breakpoints? breakpoints;
-
-  const SimpleAdaptiveContainer({
-    super.key,
-    this.widthXs,
-    this.widthSm,
-    this.widthMd,
-    this.widthLg,
-    this.widthXl,
-    this.heightXs,
-    this.heightSm,
-    this.heightMd,
-    this.heightLg,
-    this.heightXl,
-    this.paddingXs,
-    this.paddingSm,
-    this.paddingMd,
-    this.paddingLg,
-    this.paddingXl,
-    this.child,
-    this.color,
-    this.decoration,
-    this.breakpoints,
-  });
 
   @override
   Widget build(BuildContext context) {

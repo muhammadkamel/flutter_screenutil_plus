@@ -19,13 +19,11 @@ enum SizeClass {
 ///
 /// Similar to SwiftUI's `UserInterfaceSizeClass` which has both
 /// horizontal and vertical size classes.
+///
+/// This class is immutable and can be safely used in equality comparisons.
+@immutable
 class SizeClasses {
-  /// Horizontal size class
-  final SizeClass horizontal;
-
-  /// Vertical size class
-  final SizeClass vertical;
-
+  /// Creates size classes with the specified horizontal and vertical values.
   const SizeClasses({required this.horizontal, required this.vertical});
 
   /// Creates size classes from screen dimensions
@@ -53,6 +51,12 @@ class SizeClasses {
   }) {
     return SizeClasses.fromSize(mediaQuery.size, threshold: threshold);
   }
+
+  /// Horizontal size class
+  final SizeClass horizontal;
+
+  /// Vertical size class
+  final SizeClass vertical;
 
   /// Checks if both dimensions are regular
   bool get isRegular =>
@@ -94,7 +98,7 @@ class SizeClasses {
 extension SizeClassExtension on BuildContext {
   /// Gets the current size classes from MediaQuery
   SizeClasses get sizeClasses {
-    final mediaQuery = MediaQuery.of(this);
+    final MediaQueryData mediaQuery = MediaQuery.of(this);
     return SizeClasses.fromMediaQuery(mediaQuery);
   }
 

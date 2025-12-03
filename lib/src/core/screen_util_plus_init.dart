@@ -1,18 +1,42 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
-import 'package:flutter_screenutil_plus/src/utils/font_size_resolvers.dart';
-import 'package:flutter_screenutil_plus/src/utils/rebuild_factor.dart';
-import 'package:flutter_screenutil_plus/src/utils/rebuild_factors.dart';
-import 'package:flutter_screenutil_plus/src/utils/screen_util_init_builder.dart';
 
 import '../internal/_flutter_widgets.dart';
 import '../mixins/screenutil_mixin.dart';
+import '../utils/font_size_resolvers.dart';
+import '../utils/rebuild_factor.dart';
+import '../utils/rebuild_factors.dart';
+import '../utils/screen_util_init_builder.dart';
 import 'screen_util_plus.dart';
 
+/// A helper widget that initializes [ScreenUtilPlus] and provides responsive
+/// screen utilities for Flutter applications.
+///
+/// This widget should be placed at the root of your widget tree to enable
+/// screen size adaptation based on design specifications. It configures
+/// [ScreenUtilPlus] with the provided design size and other settings, and
+/// automatically handles screen size changes and responsive widget rebuilding.
+///
+/// Example usage:
+/// ```dart
+/// ScreenUtilPlusInit(
+///   designSize: const Size(375, 812),
+///   child: MyApp(),
+/// )
+/// ```
+///
+/// See also:
+/// - [ScreenUtilPlus] for the underlying utility class
+/// - [RebuildFactor] for controlling when widgets rebuild
+/// - [FontSizeResolver] for font size scaling strategies
 class ScreenUtilPlusInit extends StatefulWidget {
-  /// A helper widget that initializes [ScreenUtilPlus].
+  /// Creates a [ScreenUtilPlusInit] widget.
+  ///
+  /// The [designSize] parameter specifies the design draft size in dp.
+  /// The [child] or [builder] parameter must be provided to build the widget tree.
   const ScreenUtilPlusInit({
     super.key,
     this.builder,
@@ -28,18 +52,48 @@ class ScreenUtilPlusInit extends StatefulWidget {
     this.fontSizeResolver = FontSizeResolvers.width,
   });
 
+  /// Optional builder function that receives the [BuildContext] and [child]
+  /// widget, allowing custom widget tree construction.
   final ScreenUtilInitBuilder? builder;
+
+  /// The child widget to be displayed. Either [child] or [builder] must be
+  /// provided.
   final Widget? child;
+
+  /// Whether to enable split screen mode, which adjusts scaling behavior
+  /// for devices in split-screen or multi-window mode.
   final bool splitScreenMode;
+
+  /// Whether to use minimum text adaptation, which ensures text scales
+  /// based on the smaller dimension to prevent text from becoming too large.
   final bool minTextAdapt;
+
+  /// Whether to ensure the screen size is initialized before building.
+  /// When `true`, the widget will wait for the screen size to be available
+  /// before rendering its child.
   final bool ensureScreenSize;
+
+  /// Optional function that determines whether width and height scaling
+  /// should be enabled. When `null` or returns `true`, scaling is enabled.
   final bool Function()? enableScaleWH;
+
+  /// Optional function that determines whether text scaling should be enabled.
+  /// When `null` or returns `true`, text scaling is enabled.
   final bool Function()? enableScaleText;
+
+  /// A function that determines when widgets should rebuild based on changes
+  /// in [MediaQueryData]. Defaults to [RebuildFactors.size].
   final RebuildFactor rebuildFactor;
+
+  /// The strategy for resolving font sizes. Defaults to [FontSizeResolvers.width].
   final FontSizeResolver fontSizeResolver;
 
   /// The [Size] of the device in the design draft, in dp.
   final Size designSize;
+
+  /// Optional list of widget type names that should be marked for rebuilding
+  /// when screen metrics change. If `null`, all widgets (except Flutter
+  /// framework widgets and private widgets) will be rebuilt.
   final Iterable<String>? responsiveWidgets;
 
   @override
@@ -50,7 +104,7 @@ class _ScreenUtilPlusInitState extends State<ScreenUtilPlusInit>
     with WidgetsBindingObserver {
   final _canMarkedToBuild = HashSet<String>();
   MediaQueryData? _mediaQueryData;
-  final _binding = WidgetsBinding.instance;
+  final WidgetsBinding _binding = WidgetsBinding.instance;
   final _screenSizeCompleter = Completer<void>();
 
   @override
@@ -96,7 +150,7 @@ class _ScreenUtilPlusInitState extends State<ScreenUtilPlusInit>
   }
 
   MediaQueryData? _getMediaQueryData() {
-    final view = View.maybeOf(context);
+    final FlutterView? view = View.maybeOf(context);
     return view != null ? MediaQueryData.fromView(view) : null;
   }
 
@@ -104,10 +158,14 @@ class _ScreenUtilPlusInitState extends State<ScreenUtilPlusInit>
     final widgetName = element.widget.runtimeType.toString();
 
     // Always rebuild if widget uses SU mixin
-    if (element.widget is SU) return true;
+    if (element.widget is SU) {
+      return true;
+    }
 
     // Rebuild if explicitly in responsive widgets list
-    if (_canMarkedToBuild.contains(widgetName)) return true;
+    if (_canMarkedToBuild.contains(widgetName)) {
+      return true;
+    }
 
     // Don't rebuild Flutter widgets or private widgets
     if (widgetName.startsWith('_') || flutterWidgets.contains(widgetName)) {
@@ -129,11 +187,13 @@ class _ScreenUtilPlusInitState extends State<ScreenUtilPlusInit>
   }
 
   void _revalidate([void Function()? callback]) {
-    final newData = _getMediaQueryData();
-    if (newData == null) return;
+    final MediaQueryData? newData = _getMediaQueryData();
+    if (newData == null) {
+      return;
+    }
 
-    final oldData = _mediaQueryData;
-    final shouldUpdate =
+    final MediaQueryData? oldData = _mediaQueryData;
+    final bool shouldUpdate =
         oldData == null || widget.rebuildFactor(oldData, newData);
 
     if (shouldUpdate) {
@@ -157,7 +217,7 @@ class _ScreenUtilPlusInitState extends State<ScreenUtilPlusInit>
 
   @override
   Widget build(BuildContext context) {
-    final mediaQueryData = _mediaQueryData;
+    final MediaQueryData? mediaQueryData = _mediaQueryData;
     if (mediaQueryData == null) {
       return const SizedBox.shrink();
     }

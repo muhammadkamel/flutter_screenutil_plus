@@ -23,6 +23,7 @@ import '../utils/responsive_query.dart';
 /// )
 /// ```
 class AdaptiveText extends StatelessWidget {
+  /// Creates an [AdaptiveText] widget with adaptive text properties.
   const AdaptiveText(
     this.data, {
     super.key,
@@ -70,70 +71,149 @@ class AdaptiveText extends StatelessWidget {
     this.selectionColor,
   });
 
+  /// The text string to display.
   final String data;
 
   // Font size for each breakpoint
+  /// Font size for extra small screens (xs breakpoint).
   final double? fontSizeXs;
+
+  /// Font size for small screens (sm breakpoint).
   final double? fontSizeSm;
+
+  /// Font size for medium screens (md breakpoint).
   final double? fontSizeMd;
+
+  /// Font size for large screens (lg breakpoint).
   final double? fontSizeLg;
+
+  /// Font size for extra large screens (xl breakpoint).
   final double? fontSizeXl;
+
+  /// Font size for 2XL screens (xxl breakpoint).
   final double? fontSizeXxl;
 
   // Line height for each breakpoint
+  /// Line height for extra small screens (xs breakpoint).
   final double? lineHeightXs;
+
+  /// Line height for small screens (sm breakpoint).
   final double? lineHeightSm;
+
+  /// Line height for medium screens (md breakpoint).
   final double? lineHeightMd;
+
+  /// Line height for large screens (lg breakpoint).
   final double? lineHeightLg;
+
+  /// Line height for extra large screens (xl breakpoint).
   final double? lineHeightXl;
+
+  /// Line height for 2XL screens (xxl breakpoint).
   final double? lineHeightXxl;
 
   // Font weight for each breakpoint
+  /// Font weight for extra small screens (xs breakpoint).
   final FontWeight? fontWeightXs;
+
+  /// Font weight for small screens (sm breakpoint).
   final FontWeight? fontWeightSm;
+
+  /// Font weight for medium screens (md breakpoint).
   final FontWeight? fontWeightMd;
+
+  /// Font weight for large screens (lg breakpoint).
   final FontWeight? fontWeightLg;
+
+  /// Font weight for extra large screens (xl breakpoint).
   final FontWeight? fontWeightXl;
+
+  /// Font weight for 2XL screens (xxl breakpoint).
   final FontWeight? fontWeightXxl;
 
   // Color for each breakpoint
+  /// Text color for extra small screens (xs breakpoint).
   final Color? colorXs;
+
+  /// Text color for small screens (sm breakpoint).
   final Color? colorSm;
+
+  /// Text color for medium screens (md breakpoint).
   final Color? colorMd;
+
+  /// Text color for large screens (lg breakpoint).
   final Color? colorLg;
+
+  /// Text color for extra large screens (xl breakpoint).
   final Color? colorXl;
+
+  /// Text color for 2XL screens (xxl breakpoint).
   final Color? colorXxl;
 
   // Letter spacing for each breakpoint
+  /// Letter spacing for extra small screens (xs breakpoint).
   final double? letterSpacingXs;
+
+  /// Letter spacing for small screens (sm breakpoint).
   final double? letterSpacingSm;
+
+  /// Letter spacing for medium screens (md breakpoint).
   final double? letterSpacingMd;
+
+  /// Letter spacing for large screens (lg breakpoint).
   final double? letterSpacingLg;
+
+  /// Letter spacing for extra large screens (xl breakpoint).
   final double? letterSpacingXl;
+
+  /// Letter spacing for 2XL screens (xxl breakpoint).
   final double? letterSpacingXxl;
 
   // Base style to merge with adaptive properties
+  /// Base text style that adaptive properties will be merged with.
   final TextStyle? baseStyle;
 
   // Text widget properties
+  /// How the text should be aligned horizontally.
   final TextAlign? textAlign;
+
+  /// The directionality of the text.
   final TextDirection? textDirection;
+
+  /// Used to select a font when the same Unicode character can
+  /// be rendered differently, depending on the locale.
   final Locale? locale;
+
+  /// Whether the text should break at soft line breaks.
   final bool? softWrap;
+
+  /// How visual overflow should be handled.
   final TextOverflow? overflow;
+
+  /// The scaling factor for the text.
   final TextScaler? textScaler;
+
+  /// An optional maximum number of lines for the text to span.
   final int? maxLines;
+
+  /// An alternative semantics label for this text.
   final String? semanticsLabel;
+
+  /// Defines how the width of the text is determined.
   final TextWidthBasis? textWidthBasis;
+
+  /// Controls how the text will be painted vertically.
   final TextHeightBehavior? textHeightBehavior;
+
+  /// The color to use when painting the selection.
   final Color? selectionColor;
 
   @override
   Widget build(BuildContext context) {
-    final breakpoint = context.breakpoint;
+    final Breakpoint breakpoint = context.breakpoint;
 
     // Determine adaptive values based on current breakpoint
-    final fontSize = _getAdaptiveValue(
+    final double? fontSize = _getAdaptiveValue(
       breakpoint,
       fontSizeXs,
       fontSizeSm,
@@ -143,7 +223,7 @@ class AdaptiveText extends StatelessWidget {
       fontSizeXxl,
     );
 
-    final lineHeight = _getAdaptiveValue(
+    final double? lineHeight = _getAdaptiveValue(
       breakpoint,
       lineHeightXs,
       lineHeightSm,
@@ -153,7 +233,7 @@ class AdaptiveText extends StatelessWidget {
       lineHeightXxl,
     );
 
-    final fontWeight = _getAdaptiveValue(
+    final FontWeight? fontWeight = _getAdaptiveValue(
       breakpoint,
       fontWeightXs,
       fontWeightSm,
@@ -163,7 +243,7 @@ class AdaptiveText extends StatelessWidget {
       fontWeightXxl,
     );
 
-    final color = _getAdaptiveValue(
+    final Color? color = _getAdaptiveValue(
       breakpoint,
       colorXs,
       colorSm,
@@ -173,7 +253,7 @@ class AdaptiveText extends StatelessWidget {
       colorXxl,
     );
 
-    final letterSpacing = _getAdaptiveValue(
+    final double? letterSpacing = _getAdaptiveValue(
       breakpoint,
       letterSpacingXs,
       letterSpacingSm,

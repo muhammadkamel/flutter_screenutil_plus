@@ -18,6 +18,19 @@ import '../utils/size_class.dart';
 /// )
 /// ```
 class ResponsiveBuilder extends StatelessWidget {
+  /// Creates a [ResponsiveBuilder] with breakpoint-specific builders.
+  const ResponsiveBuilder({
+    super.key,
+    this.xs,
+    this.sm,
+    this.md,
+    this.lg,
+    this.xl,
+    this.xxl,
+    this.breakpoints,
+    this.fallback,
+  });
+
   /// Widget builder for extra small screens
   final Widget Function(BuildContext)? xs;
 
@@ -42,24 +55,12 @@ class ResponsiveBuilder extends StatelessWidget {
   /// Fallback widget if no breakpoint matches
   final Widget? fallback;
 
-  const ResponsiveBuilder({
-    super.key,
-    this.xs,
-    this.sm,
-    this.md,
-    this.lg,
-    this.xl,
-    this.xxl,
-    this.breakpoints,
-    this.fallback,
-  });
-
   @override
   Widget build(BuildContext context) {
     final query = ResponsiveQuery.of(context, breakpoints: breakpoints);
-    final breakpoint = query.breakpoint;
+    final Breakpoint breakpoint = query.breakpoint;
 
-    final builder = switch (breakpoint) {
+    final Widget Function(BuildContext)? builder = switch (breakpoint) {
       Breakpoint.xs => xs ?? sm ?? md ?? lg ?? xl ?? xxl,
       Breakpoint.sm => sm ?? md ?? lg ?? xl ?? xxl ?? xs,
       Breakpoint.md => md ?? lg ?? xl ?? xxl ?? sm ?? xs,
@@ -89,6 +90,17 @@ class ResponsiveBuilder extends StatelessWidget {
 /// )
 /// ```
 class SizeClassBuilder extends StatelessWidget {
+  /// Creates a [SizeClassBuilder] with size class-specific builders.
+  const SizeClassBuilder({
+    super.key,
+    this.compact,
+    this.regular,
+    this.horizontal,
+    this.vertical,
+    this.builder,
+    this.threshold = 600,
+  });
+
   /// Widget builder for compact size class
   final Widget Function(BuildContext)? compact;
 
@@ -106,16 +118,6 @@ class SizeClassBuilder extends StatelessWidget {
 
   /// Size class threshold (default: 600)
   final double threshold;
-
-  const SizeClassBuilder({
-    super.key,
-    this.compact,
-    this.regular,
-    this.horizontal,
-    this.vertical,
-    this.builder,
-    this.threshold = 600,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -175,6 +177,14 @@ class SizeClassBuilder extends StatelessWidget {
 /// )
 /// ```
 class ConditionalBuilder extends StatelessWidget {
+  /// Creates a [ConditionalBuilder] with a condition function.
+  const ConditionalBuilder({
+    super.key,
+    required this.condition,
+    required this.builder,
+    this.fallback,
+  });
+
   /// Condition function that determines which widget to show
   final bool Function(BuildContext) condition;
 
@@ -183,13 +193,6 @@ class ConditionalBuilder extends StatelessWidget {
 
   /// Widget builder when condition is false (optional)
   final Widget Function(BuildContext)? fallback;
-
-  const ConditionalBuilder({
-    super.key,
-    required this.condition,
-    required this.builder,
-    this.fallback,
-  });
 
   @override
   Widget build(BuildContext context) {
