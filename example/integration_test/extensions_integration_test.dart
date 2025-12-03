@@ -22,12 +22,9 @@ void main() {
           },
           child: Builder(
             builder: (context) {
-              final width = AdaptiveValues.of(context).width(
-                xs: 50,
-                sm: 100,
-                md: 150,
-                lg: 200,
-              );
+              final width = AdaptiveValues.of(
+                context,
+              ).width(xs: 50, sm: 100, md: 150, lg: 200);
               return Scaffold(
                 body: Container(
                   width: width,
@@ -57,12 +54,9 @@ void main() {
           },
           child: Builder(
             builder: (context) {
-              final height = AdaptiveValues.of(context).height(
-                xs: 50,
-                sm: 100,
-                md: 150,
-                lg: 200,
-              );
+              final height = AdaptiveValues.of(
+                context,
+              ).height(xs: 50, sm: 100, md: 150, lg: 200);
               return Scaffold(
                 body: Container(
                   width: 100,
@@ -92,12 +86,9 @@ void main() {
           },
           child: Builder(
             builder: (context) {
-              final fontSize = AdaptiveValues.of(context).fontSize(
-                xs: 12,
-                sm: 14,
-                md: 16,
-                lg: 18,
-              );
+              final fontSize = AdaptiveValues.of(
+                context,
+              ).fontSize(xs: 12, sm: 14, md: 16, lg: 18);
               return Scaffold(
                 body: Text(
                   'Adaptive Font Size',
@@ -127,12 +118,9 @@ void main() {
           },
           child: Builder(
             builder: (context) {
-              final radius = AdaptiveValues.of(context).radius(
-                xs: 4,
-                sm: 8,
-                md: 12,
-                lg: 16,
-              );
+              final radius = AdaptiveValues.of(
+                context,
+              ).radius(xs: 4, sm: 8, md: 12, lg: 16);
               return Scaffold(
                 body: Container(
                   width: 100,
@@ -287,9 +275,7 @@ void main() {
                 colorXs: Colors.red,
                 colorLg: Colors.blue,
               );
-              return Scaffold(
-                body: Text('Adaptive Text Style', style: style),
-              );
+              return Scaffold(body: Text('Adaptive Text Style', style: style));
             },
           ),
         ),
@@ -318,9 +304,7 @@ void main() {
                   decoration: TextDecoration.underline,
                 ),
               );
-              return Scaffold(
-                body: Text('Base Style Test', style: style),
-              );
+              return Scaffold(body: Text('Base Style Test', style: style));
             },
           ),
         ),
@@ -347,9 +331,7 @@ void main() {
                 lineHeightMd: 1.5,
                 lineHeightLg: 1.8,
               );
-              return Scaffold(
-                body: Text('Line Height Test', style: style),
-              );
+              return Scaffold(body: Text('Line Height Test', style: style));
             },
           ),
         ),
@@ -523,9 +505,7 @@ void main() {
           child: Builder(
             builder: (context) {
               final breakpoint = context.breakpoint;
-              return Scaffold(
-                body: Text('Breakpoint: $breakpoint'),
-              );
+              return Scaffold(body: Text('Breakpoint: $breakpoint'));
             },
           ),
         ),
@@ -565,9 +545,7 @@ void main() {
       expect(find.textContaining('Size Classes:'), findsOneWidget);
     });
 
-    testWidgets('Context extension horizontalSizeClass works', (
-      tester,
-    ) async {
+    testWidgets('Context extension horizontalSizeClass works', (tester) async {
       tester.view.physicalSize = const Size(800, 400);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.reset);
@@ -581,9 +559,7 @@ void main() {
           child: Builder(
             builder: (context) {
               final sizeClass = context.horizontalSizeClass;
-              return Scaffold(
-                body: Text('Horizontal: $sizeClass'),
-              );
+              return Scaffold(body: Text('Horizontal: $sizeClass'));
             },
           ),
         ),
@@ -608,9 +584,7 @@ void main() {
           child: Builder(
             builder: (context) {
               final sizeClass = context.verticalSizeClass;
-              return Scaffold(
-                body: Text('Vertical: $sizeClass'),
-              );
+              return Scaffold(body: Text('Vertical: $sizeClass'));
             },
           ),
         ),
@@ -622,4 +596,3 @@ void main() {
     });
   });
 }
-

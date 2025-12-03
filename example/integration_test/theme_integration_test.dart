@@ -10,6 +10,11 @@ void main() {
     testWidgets('ResponsiveTheme.fromTheme scales all text styles', (
       tester,
     ) async {
+      // Set screen size larger than design size to ensure scaling occurs
+      tester.view.physicalSize = const Size(800, 1200);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+
       await tester.pumpWidget(
         ScreenUtilPlusInit(
           designSize: const Size(360, 690),
@@ -43,17 +48,22 @@ void main() {
             builder: (context) {
               final theme = Theme.of(context);
               return Scaffold(
-                body: Column(
-                  children: [
-                    Text('Display Large', style: theme.textTheme.displayLarge),
-                    Text(
-                      'Headline Large',
-                      style: theme.textTheme.headlineLarge,
-                    ),
-                    Text('Title Large', style: theme.textTheme.titleLarge),
-                    Text('Body Large', style: theme.textTheme.bodyLarge),
-                    Text('Label Large', style: theme.textTheme.labelLarge),
-                  ],
+                body: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Text(
+                        'Display Large',
+                        style: theme.textTheme.displayLarge,
+                      ),
+                      Text(
+                        'Headline Large',
+                        style: theme.textTheme.headlineLarge,
+                      ),
+                      Text('Title Large', style: theme.textTheme.titleLarge),
+                      Text('Body Large', style: theme.textTheme.bodyLarge),
+                      Text('Label Large', style: theme.textTheme.labelLarge),
+                    ],
+                  ),
                 ),
               );
             },

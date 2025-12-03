@@ -28,9 +28,7 @@ void main() {
                 Breakpoint.md: 200,
                 Breakpoint.lg: 300,
               },
-              height: {
-                Breakpoint.xs: 50,
-              },
+              height: {Breakpoint.xs: 50},
               color: Colors.blue,
               child: const Text('Adaptive Container'),
             ),
@@ -60,9 +58,7 @@ void main() {
           },
           child: Scaffold(
             body: AdaptiveContainer(
-              width: {
-                Breakpoint.xs: 200,
-              },
+              width: {Breakpoint.xs: 200},
               height: {
                 Breakpoint.xs: 50,
                 Breakpoint.md: 100,
@@ -91,12 +87,8 @@ void main() {
           },
           child: Scaffold(
             body: AdaptiveContainer(
-              width: {
-                Breakpoint.xs: 200,
-              },
-              height: {
-                Breakpoint.xs: 100,
-              },
+              width: {Breakpoint.xs: 200},
+              height: {Breakpoint.xs: 100},
               padding: {
                 Breakpoint.xs: const EdgeInsets.all(8),
                 Breakpoint.md: const EdgeInsets.all(16),
@@ -125,12 +117,8 @@ void main() {
           },
           child: Scaffold(
             body: AdaptiveContainer(
-              width: {
-                Breakpoint.xs: 200,
-              },
-              height: {
-                Breakpoint.xs: 100,
-              },
+              width: {Breakpoint.xs: 200},
+              height: {Breakpoint.xs: 100},
               margin: {
                 Breakpoint.xs: const EdgeInsets.symmetric(horizontal: 8),
                 Breakpoint.md: const EdgeInsets.symmetric(horizontal: 16),
@@ -164,13 +152,8 @@ void main() {
           },
           child: Scaffold(
             body: AdaptiveContainer(
-              width: {
-                Breakpoint.xs: 100,
-                Breakpoint.lg: 300,
-              },
-              height: {
-                Breakpoint.xs: 50,
-              },
+              width: {Breakpoint.xs: 100, Breakpoint.lg: 300},
+              height: {Breakpoint.xs: 50},
               color: Colors.purple,
               child: const Text('Fallback Test'),
             ),
@@ -233,13 +216,8 @@ void main() {
           },
           child: Scaffold(
             body: AdaptiveContainer(
-              width: {
-                Breakpoint.xs: 100,
-                Breakpoint.md: 200,
-              },
-              height: {
-                Breakpoint.xs: 50,
-              },
+              width: {Breakpoint.xs: 100, Breakpoint.md: 200},
+              height: {Breakpoint.xs: 50},
               breakpoints: customBreakpoints,
               color: Colors.teal,
               child: const Text('Custom Breakpoints'),
@@ -312,7 +290,9 @@ void main() {
       expect(find.text('Weight Adaptive'), findsOneWidget);
     });
 
-    testWidgets('AdaptiveText adapts color based on breakpoint', (tester) async {
+    testWidgets('AdaptiveText adapts color based on breakpoint', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         ScreenUtilPlusInit(
           designSize: const Size(360, 690),
@@ -478,4 +458,3 @@ void main() {
     });
   });
 }
-

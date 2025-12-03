@@ -51,6 +51,11 @@ void main() {
     });
 
     testWidgets('ResponsiveTheme integration with MaterialApp', (tester) async {
+      // Set screen size larger than design size to ensure scaling occurs
+      tester.view.physicalSize = const Size(800, 1200);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+
       await tester.pumpWidget(
         ScreenUtilPlusInit(
           designSize: const Size(360, 690),
@@ -72,11 +77,13 @@ void main() {
             builder: (context) {
               final theme = Theme.of(context);
               return Scaffold(
-                body: Column(
-                  children: [
-                    Text('Headline', style: theme.textTheme.headlineLarge),
-                    Text('Body', style: theme.textTheme.bodyLarge),
-                  ],
+                body: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Text('Headline', style: theme.textTheme.headlineLarge),
+                      Text('Body', style: theme.textTheme.bodyLarge),
+                    ],
+                  ),
                 ),
               );
             },
@@ -368,38 +375,39 @@ void main() {
       expect(util.scaleText, 1.0);
     });
 
-    testWidgets('RebuildFactor.orientation triggers rebuild on orientation change', (
-      tester,
-    ) async {
-      final buildCounter = _BuildCounter();
+    testWidgets(
+      'RebuildFactor.orientation triggers rebuild on orientation change',
+      (tester) async {
+        final buildCounter = _BuildCounter();
 
-      tester.view.physicalSize = const Size(600, 800);
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(tester.view.reset);
+        tester.view.physicalSize = const Size(600, 800);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.reset);
 
-      await tester.pumpWidget(
-        ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
-          rebuildFactor: RebuildFactors.orientation,
-          responsiveWidgets: ['_BuildCounterWidget'],
-          builder: (context, child) {
-            return MaterialApp(home: child);
-          },
-          child: _BuildCounterWidget(buildCounter),
-        ),
-      );
+        await tester.pumpWidget(
+          ScreenUtilPlusInit(
+            designSize: const Size(360, 690),
+            rebuildFactor: RebuildFactors.orientation,
+            responsiveWidgets: ['_BuildCounterWidget'],
+            builder: (context, child) {
+              return MaterialApp(home: child);
+            },
+            child: _BuildCounterWidget(buildCounter),
+          ),
+        );
 
-      await tester.pumpAndSettle();
-      final initialBuildCount = buildCounter.count;
+        await tester.pumpAndSettle();
+        final initialBuildCount = buildCounter.count;
 
-      // Change orientation
-      tester.view.physicalSize = const Size(800, 600);
-      tester.binding.handleMetricsChanged();
-      await tester.pump();
-      await tester.pumpAndSettle();
+        // Change orientation
+        tester.view.physicalSize = const Size(800, 600);
+        tester.binding.handleMetricsChanged();
+        await tester.pump();
+        await tester.pumpAndSettle();
 
-      expect(buildCounter.count, greaterThan(initialBuildCount));
-    });
+        expect(buildCounter.count, greaterThan(initialBuildCount));
+      },
+    );
 
     testWidgets('RebuildFactor.change triggers rebuild on any change', (
       tester,
@@ -489,34 +497,35 @@ void main() {
       expect(buildCounter.count, initialBuildCount);
     });
 
-    testWidgets('RebuildFactor.sizeAndViewInsets triggers on viewInsets change', (
-      tester,
-    ) async {
-      final buildCounter = _BuildCounter();
+    testWidgets(
+      'RebuildFactor.sizeAndViewInsets triggers on viewInsets change',
+      (tester) async {
+        final buildCounter = _BuildCounter();
 
-      await tester.pumpWidget(
-        ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
-          rebuildFactor: RebuildFactors.sizeAndViewInsets,
-          responsiveWidgets: ['_BuildCounterWidget'],
-          builder: (context, child) {
-            return MaterialApp(home: child);
-          },
-          child: _BuildCounterWidget(buildCounter),
-        ),
-      );
+        await tester.pumpWidget(
+          ScreenUtilPlusInit(
+            designSize: const Size(360, 690),
+            rebuildFactor: RebuildFactors.sizeAndViewInsets,
+            responsiveWidgets: ['_BuildCounterWidget'],
+            builder: (context, child) {
+              return MaterialApp(home: child);
+            },
+            child: _BuildCounterWidget(buildCounter),
+          ),
+        );
 
-      await tester.pumpAndSettle();
-      final initialBuildCount = buildCounter.count;
+        await tester.pumpAndSettle();
+        final initialBuildCount = buildCounter.count;
 
-      // Simulate view insets change (e.g., keyboard appears)
-      tester.view.viewInsets = const FakeViewPadding(bottom: 300);
-      tester.binding.handleMetricsChanged();
-      await tester.pump();
-      await tester.pumpAndSettle();
+        // Simulate view insets change (e.g., keyboard appears)
+        tester.view.viewInsets = const FakeViewPadding(bottom: 300);
+        tester.binding.handleMetricsChanged();
+        await tester.pump();
+        await tester.pumpAndSettle();
 
-      expect(buildCounter.count, greaterThan(initialBuildCount));
-    });
+        expect(buildCounter.count, greaterThan(initialBuildCount));
+      },
+    );
 
     testWidgets('minTextAdapt parameter works correctly', (tester) async {
       await tester.pumpWidget(
