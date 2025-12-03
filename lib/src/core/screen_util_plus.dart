@@ -1,17 +1,48 @@
-import 'dart:math' show min, max;
+import 'dart:math' show max, min;
 import 'dart:ui' as ui show FlutterView;
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform;
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 import 'package:flutter/widgets.dart';
 
 import '../utils/device_type.dart';
 import '../utils/media_query_extension.dart';
 
+/// A function type for resolving font sizes based on the original font size
+/// and the [ScreenUtilPlus] instance.
+///
+/// This allows custom font scaling strategies beyond the default text scaling.
+/// The function receives the original [fontSize] in dp and the [instance]
+/// of [ScreenUtilPlus], and should return the scaled font size.
 typedef FontSizeResolver =
     double Function(num fontSize, ScreenUtilPlus instance);
 
+/// A utility class for responsive screen adaptation in Flutter applications.
+///
+/// This class provides methods to adapt UI elements (width, height, font size,
+/// spacing) based on a design size, ensuring consistent appearance across
+/// different screen sizes and orientations.
+///
+/// The class uses a singleton pattern - access the instance using the
+/// factory constructor [ScreenUtilPlus()].
+///
+/// Example usage:
+/// ```dart
+/// ScreenUtilPlus.init(context, designSize: const Size(375, 812));
+/// final width = ScreenUtilPlus().setWidth(100);
+/// final height = ScreenUtilPlus().setHeight(50);
+/// final fontSize = ScreenUtilPlus().setSp(16);
+/// ```
 class ScreenUtilPlus {
+  /// Returns the singleton instance of [ScreenUtilPlus].
+  factory ScreenUtilPlus() => _instance;
+
+  ScreenUtilPlus._();
+
+  /// The default design size used when no design size is specified.
+  ///
+  /// Defaults to `Size(360, 690)`, which represents a typical mobile device
+  /// screen size in dp.
   static const Size defaultSize = Size(360, 690);
   static final ScreenUtilPlus _instance = ScreenUtilPlus._();
 
@@ -27,11 +58,13 @@ class ScreenUtilPlus {
   late bool _minTextAdapt;
   late MediaQueryData _data;
   late bool _splitScreenMode;
+
+  /// Optional custom font size resolver function.
+  ///
+  /// When set, this function is used instead of the default text scaling
+  /// strategy to determine font sizes. If `null`, the default scaling based
+  /// on [scaleText] is used.
   FontSizeResolver? fontSizeResolver;
-
-  ScreenUtilPlus._();
-
-  factory ScreenUtilPlus() => _instance;
 
   /// Enable scale
   ///
@@ -72,7 +105,7 @@ class ScreenUtilPlus {
     ui.FlutterView? window,
     Duration duration = const Duration(milliseconds: 10),
   ]) async {
-    final binding = WidgetsFlutterBinding.ensureInitialized();
+    final WidgetsBinding binding = WidgetsFlutterBinding.ensureInitialized();
     binding.deferFirstFrame();
 
     await Future.doWhile(() async {
@@ -108,6 +141,23 @@ class ScreenUtilPlus {
     }
   }
 
+  /// Configures the [ScreenUtilPlus] instance with the provided parameters.
+  ///
+  /// This method updates the internal state of the singleton instance with
+  /// new screen metrics, design size, and configuration options. It also
+  /// triggers rebuilds of registered widgets when the configuration changes.
+  ///
+  /// Parameters:
+  /// - [data]: The [MediaQueryData] containing screen information. If `null`,
+  ///   uses the previously set data.
+  /// - [designSize]: The design size in dp. If `null`, uses the previously
+  ///   set design size.
+  /// - [splitScreenMode]: Whether to enable split screen mode. If `null`,
+  ///   keeps the current setting.
+  /// - [minTextAdapt]: Whether to use minimum text adaptation. If `null`,
+  ///   keeps the current setting.
+  /// - [fontSizeResolver]: Custom font size resolver function. If `null`,
+  ///   keeps the current resolver.
   static void configure({
     MediaQueryData? data,
     Size? designSize,
@@ -136,13 +186,13 @@ class ScreenUtilPlus {
     }
 
     // Capture previous state for change detection
-    final previousMetrics = _instance._metrics;
-    final previousResolver = _instance.fontSizeResolver;
+    final _ScreenMetrics? previousMetrics = _instance._metrics;
+    final FontSizeResolver? previousResolver = _instance.fontSizeResolver;
 
-    final deviceData = data.nonEmptySizeOrNull();
-    final deviceSize = deviceData?.size ?? designSize;
+    final MediaQueryData? deviceData = data.nonEmptySizeOrNull();
+    final Size deviceSize = deviceData?.size ?? designSize;
 
-    final orientation =
+    final Orientation orientation =
         deviceData?.orientation ??
         (deviceSize.width > deviceSize.height
             ? Orientation.landscape
@@ -197,7 +247,7 @@ class ScreenUtilPlus {
     bool minTextAdapt = false,
     FontSizeResolver? fontSizeResolver,
   }) {
-    final view = View.maybeOf(context);
+    final ui.FlutterView? view = View.maybeOf(context);
     return configure(
       data: view != null ? MediaQueryData.fromView(view) : null,
       designSize: designSize,
@@ -207,6 +257,19 @@ class ScreenUtilPlus {
     );
   }
 
+  /// Ensures the screen size is initialized and then initializes the library.
+  ///
+  /// This method first waits for the screen size to be available using
+  /// [ensureScreenSize], then initializes [ScreenUtilPlus] with the provided
+  /// parameters. This is useful when you need to ensure the window size is
+  /// ready before initializing screen utilities.
+  ///
+  /// Parameters:
+  /// - [context]: The [BuildContext] to get screen information from.
+  /// - [designSize]: The design size in dp. Defaults to [defaultSize].
+  /// - [splitScreenMode]: Whether to enable split screen mode.
+  /// - [minTextAdapt]: Whether to use minimum text adaptation.
+  /// - [fontSizeResolver]: Custom font size resolver function.
   static Future<void> ensureScreenSizeAndInit(
     BuildContext context, {
     Size designSize = defaultSize,
@@ -215,7 +278,9 @@ class ScreenUtilPlus {
     FontSizeResolver? fontSizeResolver,
   }) {
     return ScreenUtilPlus.ensureScreenSize().then((_) {
-      if (!context.mounted) return;
+      if (!context.mounted) {
+        return;
+      }
       return init(
         context,
         designSize: designSize,
@@ -256,6 +321,13 @@ class ScreenUtilPlus {
       : (_splitScreenMode ? max(screenHeight, 700) : screenHeight) /
             _uiSize.height;
 
+  /// The ratio for text scaling.
+  ///
+  /// Returns 1 if text scaling is disabled, otherwise returns the appropriate
+  /// scale factor based on [minTextAdapt] setting:
+  /// - If [minTextAdapt] is `true`, uses the minimum of [scaleWidth] and
+  ///   [scaleHeight] to prevent text from becoming too large.
+  /// - If [minTextAdapt] is `false`, uses [scaleWidth].
   double get scaleText => !_enableScaleText()
       ? 1
       : (_minTextAdapt ? min(scaleWidth, scaleHeight) : scaleWidth);
@@ -285,22 +357,31 @@ class ScreenUtilPlus {
   double setSp(num fontSize) =>
       fontSizeResolver?.call(fontSize, _instance) ?? fontSize * scaleText;
 
+  /// Determines the device type based on the platform and screen size.
+  ///
+  /// Returns [DeviceType.mobile], [DeviceType.tablet], [DeviceType.web],
+  /// or a platform-specific desktop type (e.g., [DeviceType.mac],
+  /// [DeviceType.windows], [DeviceType.linux]) based on the current
+  /// platform and screen dimensions.
+  ///
+  /// For mobile platforms (iOS/Android), a device is considered a tablet
+  /// if the screen width (portrait) or height (landscape) is at least 600 dp.
   DeviceType deviceType(BuildContext context) {
     if (kIsWeb) {
       return DeviceType.web;
     }
 
-    final mediaQuery = MediaQuery.of(context);
-    final screenWidth = mediaQuery.size.width;
-    final screenHeight = mediaQuery.size.height;
-    final orientation = mediaQuery.orientation;
+    final MediaQueryData mediaQuery = MediaQuery.of(context);
+    final double screenWidth = mediaQuery.size.width;
+    final double screenHeight = mediaQuery.size.height;
+    final Orientation orientation = mediaQuery.orientation;
 
-    final isMobilePlatform =
+    final bool isMobilePlatform =
         defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.android;
 
     if (isMobilePlatform) {
-      final isTablet =
+      final bool isTablet =
           (orientation == Orientation.portrait && screenWidth >= 600) ||
           (orientation == Orientation.landscape && screenHeight >= 600);
       return isTablet ? DeviceType.tablet : DeviceType.mobile;
@@ -319,34 +400,45 @@ class ScreenUtilPlus {
         return DeviceType.windows;
       case TargetPlatform.fuchsia:
         return DeviceType.fuchsia;
-      default:
+      case TargetPlatform.iOS:
+      case TargetPlatform.android:
+        // These should not occur in this method, but handle for completeness
         return DeviceType.web;
     }
   }
 
+  /// Creates a vertical [SizedBox] with height adapted using [setHeight].
   SizedBox setVerticalSpacing(num height) =>
       SizedBox(height: setHeight(height));
 
+  /// Creates a vertical [SizedBox] with height adapted using [setWidth].
   SizedBox setVerticalSpacingFromWidth(num height) =>
       SizedBox(height: setWidth(height));
 
+  /// Creates a horizontal [SizedBox] with width adapted using [setWidth].
   SizedBox setHorizontalSpacing(num width) => SizedBox(width: setWidth(width));
 
+  /// Creates a horizontal [SizedBox] with width adapted using [radius].
   SizedBox setHorizontalSpacingRadius(num width) =>
       SizedBox(width: radius(width));
 
+  /// Creates a vertical [SizedBox] with height adapted using [radius].
   SizedBox setVerticalSpacingRadius(num height) =>
       SizedBox(height: radius(height));
 
+  /// Creates a horizontal [SizedBox] with width adapted using [diameter].
   SizedBox setHorizontalSpacingDiameter(num width) =>
       SizedBox(width: diameter(width));
 
+  /// Creates a vertical [SizedBox] with height adapted using [diameter].
   SizedBox setVerticalSpacingDiameter(num height) =>
       SizedBox(height: diameter(height));
 
+  /// Creates a horizontal [SizedBox] with width adapted using [diagonal].
   SizedBox setHorizontalSpacingDiagonal(num width) =>
       SizedBox(width: diagonal(width));
 
+  /// Creates a vertical [SizedBox] with height adapted using [diagonal].
   SizedBox setVerticalSpacingDiagonal(num height) =>
       SizedBox(height: diagonal(height));
 }

@@ -1,4 +1,4 @@
-import 'dart:math' show min, max;
+import 'dart:math' show max, min;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -40,7 +40,7 @@ void main() {
     test('configure with valid data', () {
       const data = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
       const designSize = Size(360, 690);
 
@@ -59,7 +59,7 @@ void main() {
     });
 
     test('configure with empty size uses designSize', () {
-      const emptyData = MediaQueryData(size: Size.zero);
+      const emptyData = MediaQueryData();
       const designSize = Size(360, 690);
 
       ScreenUtilPlus.configure(
@@ -76,7 +76,7 @@ void main() {
     test('configure with landscape orientation', () {
       const data = MediaQueryData(
         size: Size(800, 400),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
       const designSize = Size(360, 690);
 
@@ -96,7 +96,7 @@ void main() {
     setUp(() {
       const data = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
       ScreenUtilPlus.configure(
         data: data,
@@ -208,7 +208,7 @@ void main() {
       ScreenUtilPlus.configure(
         data: const MediaQueryData(
           size: Size(400, 500),
-          textScaler: TextScaler.linear(1.0),
+          textScaler: TextScaler.noScaling,
         ),
         designSize: const Size(360, 690),
         splitScreenMode: true,
@@ -222,7 +222,7 @@ void main() {
       ScreenUtilPlus.configure(
         data: const MediaQueryData(
           size: Size(400, 800),
-          textScaler: TextScaler.linear(1.0),
+          textScaler: TextScaler.noScaling,
         ),
         designSize: const Size(360, 690),
         minTextAdapt: false,
@@ -235,7 +235,7 @@ void main() {
       ScreenUtilPlus.configure(
         data: const MediaQueryData(
           size: Size(400, 800),
-          textScaler: TextScaler.linear(1.0),
+          textScaler: TextScaler.noScaling,
         ),
         designSize: const Size(360, 690),
         minTextAdapt: true,
@@ -249,7 +249,7 @@ void main() {
     setUp(() {
       const data = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
       ScreenUtilPlus.configure(
         data: data,
@@ -261,40 +261,40 @@ void main() {
 
     test('setWidth', () {
       final util = ScreenUtilPlus();
-      final result = util.setWidth(100);
+      final double result = util.setWidth(100);
       expect(result, closeTo(100 * (400 / 360), 0.001));
     });
 
     test('setHeight', () {
       final util = ScreenUtilPlus();
-      final result = util.setHeight(100);
+      final double result = util.setHeight(100);
       expect(result, closeTo(100 * (800 / 690), 0.001));
     });
 
     test('radius uses min of scaleWidth and scaleHeight', () {
       final util = ScreenUtilPlus();
-      final result = util.radius(50);
-      final expected = 50 * min(util.scaleWidth, util.scaleHeight);
+      final double result = util.radius(50);
+      final num expected = 50 * min(util.scaleWidth, util.scaleHeight);
       expect(result, closeTo(expected, 0.001));
     });
 
     test('diagonal uses scaleHeight * scaleWidth', () {
       final util = ScreenUtilPlus();
-      final result = util.diagonal(50);
-      final expected = 50 * util.scaleHeight * util.scaleWidth;
+      final double result = util.diagonal(50);
+      final double expected = 50 * util.scaleHeight * util.scaleWidth;
       expect(result, closeTo(expected, 0.001));
     });
 
     test('diameter uses max of scaleWidth and scaleHeight', () {
       final util = ScreenUtilPlus();
-      final result = util.diameter(50);
-      final expected = 50 * max(util.scaleWidth, util.scaleHeight);
+      final double result = util.diameter(50);
+      final num expected = 50 * max(util.scaleWidth, util.scaleHeight);
       expect(result, closeTo(expected, 0.001));
     });
 
     test('setSp without fontSizeResolver', () {
       final util = ScreenUtilPlus();
-      final result = util.setSp(16);
+      final double result = util.setSp(16);
       expect(result, closeTo(16 * util.scaleText, 0.001));
     });
 
@@ -306,14 +306,14 @@ void main() {
       ScreenUtilPlus.configure(
         data: const MediaQueryData(
           size: Size(400, 800),
-          textScaler: TextScaler.linear(1.0),
+          textScaler: TextScaler.noScaling,
         ),
         designSize: const Size(360, 690),
         fontSizeResolver: customResolver,
       );
 
       final util = ScreenUtilPlus();
-      final result = util.setSp(16);
+      final double result = util.setSp(16);
       expect(result, 32.0);
     });
   });
@@ -322,7 +322,7 @@ void main() {
     setUp(() {
       const data = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
       ScreenUtilPlus.configure(
         data: data,
@@ -334,7 +334,7 @@ void main() {
 
     test('setVerticalSpacing', () {
       final util = ScreenUtilPlus();
-      final spacing = util.setVerticalSpacing(20);
+      final SizedBox spacing = util.setVerticalSpacing(20);
       expect(spacing, isA<SizedBox>());
       expect(spacing.height, closeTo(20 * util.scaleHeight, 0.001));
       expect(spacing.width, isNull);
@@ -342,7 +342,7 @@ void main() {
 
     test('setVerticalSpacingFromWidth', () {
       final util = ScreenUtilPlus();
-      final spacing = util.setVerticalSpacingFromWidth(20);
+      final SizedBox spacing = util.setVerticalSpacingFromWidth(20);
       expect(spacing, isA<SizedBox>());
       expect(spacing.height, closeTo(20 * util.scaleWidth, 0.001));
       expect(spacing.width, isNull);
@@ -350,7 +350,7 @@ void main() {
 
     test('setHorizontalSpacing', () {
       final util = ScreenUtilPlus();
-      final spacing = util.setHorizontalSpacing(20);
+      final SizedBox spacing = util.setHorizontalSpacing(20);
       expect(spacing, isA<SizedBox>());
       expect(spacing.width, closeTo(20 * util.scaleWidth, 0.001));
       expect(spacing.height, isNull);
@@ -358,7 +358,7 @@ void main() {
 
     test('setHorizontalSpacingRadius', () {
       final util = ScreenUtilPlus();
-      final spacing = util.setHorizontalSpacingRadius(20);
+      final SizedBox spacing = util.setHorizontalSpacingRadius(20);
       expect(spacing, isA<SizedBox>());
       expect(
         spacing.width,
@@ -368,7 +368,7 @@ void main() {
 
     test('setVerticalSpacingRadius', () {
       final util = ScreenUtilPlus();
-      final spacing = util.setVerticalSpacingRadius(20);
+      final SizedBox spacing = util.setVerticalSpacingRadius(20);
       expect(spacing, isA<SizedBox>());
       expect(
         spacing.height,
@@ -378,7 +378,7 @@ void main() {
 
     test('setHorizontalSpacingDiameter', () {
       final util = ScreenUtilPlus();
-      final spacing = util.setHorizontalSpacingDiameter(20);
+      final SizedBox spacing = util.setHorizontalSpacingDiameter(20);
       expect(spacing, isA<SizedBox>());
       expect(
         spacing.width,
@@ -388,7 +388,7 @@ void main() {
 
     test('setVerticalSpacingDiameter', () {
       final util = ScreenUtilPlus();
-      final spacing = util.setVerticalSpacingDiameter(20);
+      final SizedBox spacing = util.setVerticalSpacingDiameter(20);
       expect(spacing, isA<SizedBox>());
       expect(
         spacing.height,
@@ -398,7 +398,7 @@ void main() {
 
     test('setHorizontalSpacingDiagonal', () {
       final util = ScreenUtilPlus();
-      final spacing = util.setHorizontalSpacingDiagonal(20);
+      final SizedBox spacing = util.setHorizontalSpacingDiagonal(20);
       expect(spacing, isA<SizedBox>());
       expect(
         spacing.width,
@@ -408,7 +408,7 @@ void main() {
 
     test('setVerticalSpacingDiagonal', () {
       final util = ScreenUtilPlus();
-      final spacing = util.setVerticalSpacingDiagonal(20);
+      final SizedBox spacing = util.setVerticalSpacingDiagonal(20);
       expect(spacing, isA<SizedBox>());
       expect(
         spacing.height,
@@ -421,7 +421,7 @@ void main() {
     testWidgets('deviceType returns valid DeviceType', (tester) async {
       const data = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
       ScreenUtilPlus.configure(
         data: data,
@@ -435,7 +435,7 @@ void main() {
           home: Builder(
             builder: (context) {
               final util = ScreenUtilPlus();
-              final deviceType = util.deviceType(context);
+              final DeviceType deviceType = util.deviceType(context);
               // Verify it returns a valid DeviceType
               expect(deviceType, isA<DeviceType>());
               // Should be one of the valid types
@@ -458,7 +458,7 @@ void main() {
     testWidgets('deviceType detects tablet correctly', (tester) async {
       const data = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
       ScreenUtilPlus.configure(
         data: data,
@@ -472,7 +472,7 @@ void main() {
           home: Builder(
             builder: (context) {
               final util = ScreenUtilPlus();
-              final deviceType = util.deviceType(context);
+              final DeviceType deviceType = util.deviceType(context);
               expect(deviceType, isA<DeviceType>());
               return const SizedBox();
             },
@@ -486,7 +486,7 @@ void main() {
     setUp(() {
       const data = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
       ScreenUtilPlus.configure(
         data: data,
@@ -531,7 +531,7 @@ void main() {
       ScreenUtilPlus.configure(
         data: const MediaQueryData(
           size: Size(400, 800),
-          textScaler: TextScaler.linear(1.0),
+          textScaler: TextScaler.noScaling,
         ),
         designSize: const Size(360, 690),
         fontSizeResolver: (fontSize, instance) => fontSize * instance.scaleText,
@@ -543,20 +543,20 @@ void main() {
     });
 
     test('spMin extension', () {
-      final spValue = 16.sp;
-      final minValue = min(16.0, spValue);
+      final double spValue = 16.sp;
+      final double minValue = min(16.0, spValue);
       expect(16.spMin, closeTo(minValue, 0.001));
     });
 
     test('sm extension (deprecated)', () {
-      final spValue = 16.sp;
-      final minValue = min(16.0, spValue);
+      final double spValue = 16.sp;
+      final double minValue = min(16.0, spValue);
       expect(16.spMin, closeTo(minValue, 0.001));
     });
 
     test('spMax extension', () {
-      final spValue = 16.sp;
-      final maxValue = max(16.0, spValue);
+      final double spValue = 16.sp;
+      final double maxValue = max(16.0, spValue);
       expect(16.spMax, closeTo(maxValue, 0.001));
     });
 
@@ -571,25 +571,25 @@ void main() {
     });
 
     test('verticalSpace extension', () {
-      final spacing = 20.verticalSpace;
+      final SizedBox spacing = 20.verticalSpace;
       expect(spacing, isA<SizedBox>());
       expect(spacing.height, closeTo(20 * (800 / 690), 0.001));
     });
 
     test('verticalSpaceFromWidth extension', () {
-      final spacing = 20.verticalSpaceFromWidth;
+      final SizedBox spacing = 20.verticalSpaceFromWidth;
       expect(spacing, isA<SizedBox>());
       expect(spacing.height, closeTo(20 * (400 / 360), 0.001));
     });
 
     test('horizontalSpace extension', () {
-      final spacing = 20.horizontalSpace;
+      final SizedBox spacing = 20.horizontalSpace;
       expect(spacing, isA<SizedBox>());
       expect(spacing.width, closeTo(20 * (400 / 360), 0.001));
     });
 
     test('horizontalSpaceRadius extension', () {
-      final spacing = 20.horizontalSpaceRadius;
+      final SizedBox spacing = 20.horizontalSpaceRadius;
       expect(spacing, isA<SizedBox>());
       final util = ScreenUtilPlus();
       expect(
@@ -599,7 +599,7 @@ void main() {
     });
 
     test('verticalSpacingRadius extension', () {
-      final spacing = 20.verticalSpacingRadius;
+      final SizedBox spacing = 20.verticalSpacingRadius;
       expect(spacing, isA<SizedBox>());
       final util = ScreenUtilPlus();
       expect(
@@ -609,7 +609,7 @@ void main() {
     });
 
     test('horizontalSpaceDiameter extension', () {
-      final spacing = 20.horizontalSpaceDiameter;
+      final SizedBox spacing = 20.horizontalSpaceDiameter;
       expect(spacing, isA<SizedBox>());
       final util = ScreenUtilPlus();
       expect(
@@ -619,7 +619,7 @@ void main() {
     });
 
     test('verticalSpacingDiameter extension', () {
-      final spacing = 20.verticalSpacingDiameter;
+      final SizedBox spacing = 20.verticalSpacingDiameter;
       expect(spacing, isA<SizedBox>());
       final util = ScreenUtilPlus();
       expect(
@@ -629,7 +629,7 @@ void main() {
     });
 
     test('horizontalSpaceDiagonal extension', () {
-      final spacing = 20.horizontalSpaceDiagonal;
+      final SizedBox spacing = 20.horizontalSpaceDiagonal;
       expect(spacing, isA<SizedBox>());
       final util = ScreenUtilPlus();
       expect(
@@ -639,7 +639,7 @@ void main() {
     });
 
     test('verticalSpacingDiagonal extension', () {
-      final spacing = 20.verticalSpacingDiagonal;
+      final SizedBox spacing = 20.verticalSpacingDiagonal;
       expect(spacing, isA<SizedBox>());
       final util = ScreenUtilPlus();
       expect(
@@ -647,13 +647,122 @@ void main() {
         closeTo(20 * util.scaleHeight * util.scaleWidth, 0.001),
       );
     });
+
+    test('w extension with zero', () {
+      expect(0.w, 0.0);
+    });
+
+    test('h extension with zero', () {
+      expect(0.h, 0.0);
+    });
+
+    test('r extension with zero', () {
+      expect(0.r, 0.0);
+    });
+
+    test('sp extension with zero', () {
+      expect(0.sp, 0.0);
+    });
+
+    test('spMin extension with zero', () {
+      expect(0.spMin, 0.0);
+    });
+
+    test('spMax extension with zero', () {
+      expect(0.spMax, 0.0);
+    });
+
+    test('sw extension with zero', () {
+      expect(0.sw, 0.0);
+    });
+
+    test('sh extension with zero', () {
+      expect(0.sh, 0.0);
+    });
+
+    test('spMin returns original when sp is larger', () {
+      ScreenUtilPlus.configure(
+        data: const MediaQueryData(
+          size: Size(720, 1380), // Larger than design size
+          textScaler: TextScaler.noScaling,
+        ),
+        designSize: const Size(360, 690),
+        minTextAdapt: false,
+        splitScreenMode: false,
+      );
+      final double spValue = 16.sp;
+      if (spValue > 16.0) {
+        expect(16.spMin, 16.0);
+      } else {
+        expect(16.spMin, closeTo(spValue, 0.001));
+      }
+    });
+
+    test('spMax returns sp when sp is larger', () {
+      ScreenUtilPlus.configure(
+        data: const MediaQueryData(
+          size: Size(720, 1380), // Larger than design size
+          textScaler: TextScaler.noScaling,
+        ),
+        designSize: const Size(360, 690),
+        minTextAdapt: false,
+        splitScreenMode: false,
+      );
+      final double spValue = 16.sp;
+      final double maxValue = max(16.0, spValue);
+      expect(16.spMax, closeTo(maxValue, 0.001));
+    });
+
+    test('spMin returns sp when sp is smaller', () {
+      ScreenUtilPlus.configure(
+        data: const MediaQueryData(
+          size: Size(180, 345), // Smaller than design size
+          textScaler: TextScaler.noScaling,
+        ),
+        designSize: const Size(360, 690),
+        minTextAdapt: false,
+        splitScreenMode: false,
+      );
+      final double spValue = 16.sp;
+      if (spValue < 16.0) {
+        expect(16.spMin, closeTo(spValue, 0.001));
+      } else {
+        expect(16.spMin, 16.0);
+      }
+    });
+
+    test('extensions work with decimal values', () {
+      final util = ScreenUtilPlus();
+      expect(10.5.w, closeTo(10.5 * util.scaleWidth, 0.001));
+      expect(10.5.h, closeTo(10.5 * util.scaleHeight, 0.001));
+      expect(10.5.sp, closeTo(10.5 * util.scaleText, 0.001));
+    });
+
+    test('extensions work with very large values', () {
+      final util = ScreenUtilPlus();
+      expect(10000.w, closeTo(10000 * util.scaleWidth, 0.001));
+      expect(10000.h, closeTo(10000 * util.scaleHeight, 0.001));
+      expect(10000.sp, closeTo(10000 * util.scaleText, 0.001));
+    });
+
+    test('SizedBox extensions return SizedBox instances', () {
+      expect(10.verticalSpace, isA<SizedBox>());
+      expect(10.horizontalSpace, isA<SizedBox>());
+      expect(10.verticalSpaceFromWidth, isA<SizedBox>());
+      expect(10.horizontalSpaceRadius, isA<SizedBox>());
+      expect(10.verticalSpacingRadius, isA<SizedBox>());
+      expect(10.horizontalSpaceDiameter, isA<SizedBox>());
+      expect(10.verticalSpacingDiameter, isA<SizedBox>());
+      expect(10.horizontalSpaceDiagonal, isA<SizedBox>());
+      expect(10.verticalSpacingDiagonal, isA<SizedBox>());
+    });
   });
 
   group('EdgeInsetsExtension', () {
     setUp(() {
       const data = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
       ScreenUtilPlus.configure(
         data: data,
@@ -664,41 +773,89 @@ void main() {
     });
 
     test('EdgeInsets.r extension', () {
-      final padding = const EdgeInsets.all(10).r;
+      final EdgeInsets padding = const EdgeInsets.all(10).r;
       expect(padding, isA<EdgeInsets>());
       final util = ScreenUtilPlus();
-      final expected = min(util.scaleWidth, util.scaleHeight);
+      final double expected = min(util.scaleWidth, util.scaleHeight);
       expect(padding.top, closeTo(10 * expected, 0.001));
     });
 
     test('EdgeInsets.dm extension', () {
-      final padding = const EdgeInsets.all(10).dm;
+      final EdgeInsets padding = const EdgeInsets.all(10).dm;
       expect(padding, isA<EdgeInsets>());
       final util = ScreenUtilPlus();
-      final expected = max(util.scaleWidth, util.scaleHeight);
+      final double expected = max(util.scaleWidth, util.scaleHeight);
       expect(padding.top, closeTo(10 * expected, 0.001));
     });
 
     test('EdgeInsets.dg extension', () {
-      final padding = const EdgeInsets.all(10).dg;
+      final EdgeInsets padding = const EdgeInsets.all(10).dg;
       expect(padding, isA<EdgeInsets>());
       final util = ScreenUtilPlus();
-      final expected = util.scaleHeight * util.scaleWidth;
+      final double expected = util.scaleHeight * util.scaleWidth;
       expect(padding.top, closeTo(10 * expected, 0.001));
     });
 
     test('EdgeInsets.w extension', () {
-      final padding = const EdgeInsets.all(10).w;
+      final EdgeInsets padding = const EdgeInsets.all(10).w;
       expect(padding, isA<EdgeInsets>());
       final util = ScreenUtilPlus();
       expect(padding.top, closeTo(10 * util.scaleWidth, 0.001));
     });
 
     test('EdgeInsets.h extension', () {
-      final padding = const EdgeInsets.all(10).h;
+      final EdgeInsets padding = const EdgeInsets.all(10).h;
       expect(padding, isA<EdgeInsets>());
       final util = ScreenUtilPlus();
       expect(padding.top, closeTo(10 * util.scaleHeight, 0.001));
+    });
+
+    test('EdgeInsets.only with r extension', () {
+      final EdgeInsets padding = const EdgeInsets.only(
+        top: 10,
+        bottom: 20,
+        left: 15,
+        right: 25,
+      ).r;
+      expect(padding, isA<EdgeInsets>());
+      final util = ScreenUtilPlus();
+      final double expected = min(util.scaleWidth, util.scaleHeight);
+      expect(padding.top, closeTo(10 * expected, 0.001));
+      expect(padding.bottom, closeTo(20 * expected, 0.001));
+      expect(padding.left, closeTo(15 * expected, 0.001));
+      expect(padding.right, closeTo(25 * expected, 0.001));
+    });
+
+    test('EdgeInsets.symmetric with w extension', () {
+      final EdgeInsets padding = const EdgeInsets.symmetric(
+        horizontal: 10,
+        vertical: 20,
+      ).w;
+      expect(padding, isA<EdgeInsets>());
+      final util = ScreenUtilPlus();
+      expect(padding.left, closeTo(10 * util.scaleWidth, 0.001));
+      expect(padding.right, closeTo(10 * util.scaleWidth, 0.001));
+      expect(padding.top, closeTo(20 * util.scaleWidth, 0.001));
+      expect(padding.bottom, closeTo(20 * util.scaleWidth, 0.001));
+    });
+
+    test('EdgeInsets.fromLTRB with h extension', () {
+      final EdgeInsets padding = const EdgeInsets.fromLTRB(10, 20, 30, 40).h;
+      expect(padding, isA<EdgeInsets>());
+      final util = ScreenUtilPlus();
+      expect(padding.left, closeTo(10 * util.scaleHeight, 0.001));
+      expect(padding.top, closeTo(20 * util.scaleHeight, 0.001));
+      expect(padding.right, closeTo(30 * util.scaleHeight, 0.001));
+      expect(padding.bottom, closeTo(40 * util.scaleHeight, 0.001));
+    });
+
+    test('EdgeInsets.zero with extensions', () {
+      final EdgeInsets padding = EdgeInsets.zero.r;
+      expect(padding, isA<EdgeInsets>());
+      expect(padding.top, 0.0);
+      expect(padding.bottom, 0.0);
+      expect(padding.left, 0.0);
+      expect(padding.right, 0.0);
     });
   });
 
@@ -706,7 +863,7 @@ void main() {
     setUp(() {
       const data = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
       ScreenUtilPlus.configure(
         data: data,
@@ -717,16 +874,16 @@ void main() {
     });
 
     test('BorderRadius.r extension', () {
-      final borderRadius = BorderRadius.circular(10).r;
+      final BorderRadius borderRadius = BorderRadius.circular(10).r;
       expect(borderRadius, isA<BorderRadius>());
       final util = ScreenUtilPlus();
-      final expected = min(util.scaleWidth, util.scaleHeight);
+      final double expected = min(util.scaleWidth, util.scaleHeight);
       expect(borderRadius.topLeft.x, closeTo(10 * expected, 0.001));
       expect(borderRadius.topLeft.y, closeTo(10 * expected, 0.001));
     });
 
     test('BorderRadius.w extension', () {
-      final borderRadius = BorderRadius.circular(10).w;
+      final BorderRadius borderRadius = BorderRadius.circular(10).w;
       expect(borderRadius, isA<BorderRadius>());
       final util = ScreenUtilPlus();
       expect(borderRadius.topLeft.x, closeTo(10 * util.scaleWidth, 0.001));
@@ -734,11 +891,49 @@ void main() {
     });
 
     test('BorderRadius.h extension', () {
-      final borderRadius = BorderRadius.circular(10).h;
+      final BorderRadius borderRadius = BorderRadius.circular(10).h;
       expect(borderRadius, isA<BorderRadius>());
       final util = ScreenUtilPlus();
       expect(borderRadius.topLeft.x, closeTo(10 * util.scaleHeight, 0.001));
       expect(borderRadius.topLeft.y, closeTo(10 * util.scaleHeight, 0.001));
+    });
+
+    test('BorderRadius.only with r extension', () {
+      final BorderRadius borderRadius = const BorderRadius.only(
+        topLeft: Radius.circular(10),
+        topRight: Radius.circular(20),
+        bottomLeft: Radius.circular(15),
+        bottomRight: Radius.circular(25),
+      ).r;
+      expect(borderRadius, isA<BorderRadius>());
+      final util = ScreenUtilPlus();
+      final double expected = min(util.scaleWidth, util.scaleHeight);
+      expect(borderRadius.topLeft.x, closeTo(10 * expected, 0.001));
+      expect(borderRadius.topRight.x, closeTo(20 * expected, 0.001));
+      expect(borderRadius.bottomLeft.x, closeTo(15 * expected, 0.001));
+      expect(borderRadius.bottomRight.x, closeTo(25 * expected, 0.001));
+    });
+
+    test('BorderRadius.vertical with w extension', () {
+      final BorderRadius borderRadius = const BorderRadius.vertical(
+        top: Radius.circular(10),
+        bottom: Radius.circular(20),
+      ).w;
+      expect(borderRadius, isA<BorderRadius>());
+      final util = ScreenUtilPlus();
+      expect(borderRadius.topLeft.x, closeTo(10 * util.scaleWidth, 0.001));
+      expect(borderRadius.bottomLeft.x, closeTo(20 * util.scaleWidth, 0.001));
+    });
+
+    test('BorderRadius.horizontal with h extension', () {
+      final BorderRadius borderRadius = const BorderRadius.horizontal(
+        left: Radius.circular(10),
+        right: Radius.circular(20),
+      ).h;
+      expect(borderRadius, isA<BorderRadius>());
+      final util = ScreenUtilPlus();
+      expect(borderRadius.topLeft.x, closeTo(10 * util.scaleHeight, 0.001));
+      expect(borderRadius.topRight.x, closeTo(20 * util.scaleHeight, 0.001));
     });
   });
 
@@ -746,7 +941,7 @@ void main() {
     setUp(() {
       const data = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
       ScreenUtilPlus.configure(
         data: data,
@@ -757,41 +952,83 @@ void main() {
     });
 
     test('Radius.r extension', () {
-      final radius = const Radius.circular(10).r;
+      final Radius radius = const Radius.circular(10).r;
       expect(radius, isA<Radius>());
       final util = ScreenUtilPlus();
-      final expected = min(util.scaleWidth, util.scaleHeight);
+      final double expected = min(util.scaleWidth, util.scaleHeight);
       expect(radius.x, closeTo(10 * expected, 0.001));
     });
 
     test('Radius.dm extension', () {
-      final radius = const Radius.circular(10).dm;
+      final Radius radius = const Radius.circular(10).dm;
       expect(radius, isA<Radius>());
       final util = ScreenUtilPlus();
-      final expected = max(util.scaleWidth, util.scaleHeight);
+      final double expected = max(util.scaleWidth, util.scaleHeight);
       expect(radius.x, closeTo(10 * expected, 0.001));
     });
 
     test('Radius.dg extension', () {
-      final radius = const Radius.circular(10).dg;
+      final Radius radius = const Radius.circular(10).dg;
       expect(radius, isA<Radius>());
       final util = ScreenUtilPlus();
-      final expected = util.scaleHeight * util.scaleWidth;
+      final double expected = util.scaleHeight * util.scaleWidth;
       expect(radius.x, closeTo(10 * expected, 0.001));
     });
 
     test('Radius.w extension', () {
-      final radius = const Radius.circular(10).w;
+      final Radius radius = const Radius.circular(10).w;
       expect(radius, isA<Radius>());
       final util = ScreenUtilPlus();
       expect(radius.x, closeTo(10 * util.scaleWidth, 0.001));
     });
 
     test('Radius.h extension', () {
-      final radius = const Radius.circular(10).h;
+      final Radius radius = const Radius.circular(10).h;
       expect(radius, isA<Radius>());
       final util = ScreenUtilPlus();
       expect(radius.x, closeTo(10 * util.scaleHeight, 0.001));
+    });
+
+    test('Radius.elliptical with r extension', () {
+      final Radius radius = const Radius.elliptical(10, 20).r;
+      expect(radius, isA<Radius>());
+      final util = ScreenUtilPlus();
+      final double expected = min(util.scaleWidth, util.scaleHeight);
+      expect(radius.x, closeTo(10 * expected, 0.001));
+      expect(radius.y, closeTo(20 * expected, 0.001));
+    });
+
+    test('Radius.elliptical with dm extension', () {
+      final Radius radius = const Radius.elliptical(10, 20).dm;
+      expect(radius, isA<Radius>());
+      final util = ScreenUtilPlus();
+      final double expected = max(util.scaleWidth, util.scaleHeight);
+      expect(radius.x, closeTo(10 * expected, 0.001));
+      expect(radius.y, closeTo(20 * expected, 0.001));
+    });
+
+    test('Radius.elliptical with dg extension', () {
+      final Radius radius = const Radius.elliptical(10, 20).dg;
+      expect(radius, isA<Radius>());
+      final util = ScreenUtilPlus();
+      final double expected = util.scaleHeight * util.scaleWidth;
+      expect(radius.x, closeTo(10 * expected, 0.001));
+      expect(radius.y, closeTo(20 * expected, 0.001));
+    });
+
+    test('Radius.elliptical with w extension', () {
+      final Radius radius = const Radius.elliptical(10, 20).w;
+      expect(radius, isA<Radius>());
+      final util = ScreenUtilPlus();
+      expect(radius.x, closeTo(10 * util.scaleWidth, 0.001));
+      expect(radius.y, closeTo(20 * util.scaleWidth, 0.001));
+    });
+
+    test('Radius.zero with extensions', () {
+      final Radius radius = Radius.zero.r;
+      expect(radius, isA<Radius>());
+      expect(radius.x, 0.0);
+      expect(radius.y, 0.0);
     });
   });
 
@@ -799,7 +1036,7 @@ void main() {
     setUp(() {
       const data = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
       ScreenUtilPlus.configure(
         data: data,
@@ -810,7 +1047,7 @@ void main() {
     });
 
     test('BoxConstraints.r extension', () {
-      final constraints = const BoxConstraints(
+      final BoxConstraints constraints = const BoxConstraints(
         minWidth: 100,
         minHeight: 100,
         maxWidth: 200,
@@ -818,12 +1055,12 @@ void main() {
       ).r;
       expect(constraints, isA<BoxConstraints>());
       final util = ScreenUtilPlus();
-      final expected = min(util.scaleWidth, util.scaleHeight);
+      final double expected = min(util.scaleWidth, util.scaleHeight);
       expect(constraints.minWidth, closeTo(100 * expected, 0.001));
     });
 
     test('BoxConstraints.hw extension', () {
-      final constraints = const BoxConstraints(
+      final BoxConstraints constraints = const BoxConstraints(
         minWidth: 100,
         minHeight: 100,
         maxWidth: 200,
@@ -836,7 +1073,7 @@ void main() {
     });
 
     test('BoxConstraints.w extension', () {
-      final constraints = const BoxConstraints(
+      final BoxConstraints constraints = const BoxConstraints(
         minWidth: 100,
         minHeight: 100,
         maxWidth: 200,
@@ -849,7 +1086,7 @@ void main() {
     });
 
     test('BoxConstraints.h extension', () {
-      final constraints = const BoxConstraints(
+      final BoxConstraints constraints = const BoxConstraints(
         minWidth: 100,
         minHeight: 100,
         maxWidth: 200,
@@ -860,13 +1097,111 @@ void main() {
       expect(constraints.minWidth, closeTo(100 * util.scaleHeight, 0.001));
       expect(constraints.minHeight, closeTo(100 * util.scaleHeight, 0.001));
     });
+
+    test('BoxConstraints.r extension scales all properties', () {
+      final BoxConstraints constraints = const BoxConstraints(
+        minWidth: 50,
+        minHeight: 60,
+        maxWidth: 150,
+        maxHeight: 160,
+      ).r;
+      expect(constraints, isA<BoxConstraints>());
+      final util = ScreenUtilPlus();
+      final double expected = min(util.scaleWidth, util.scaleHeight);
+      expect(constraints.minWidth, closeTo(50 * expected, 0.001));
+      expect(constraints.minHeight, closeTo(60 * expected, 0.001));
+      expect(constraints.maxWidth, closeTo(150 * expected, 0.001));
+      expect(constraints.maxHeight, closeTo(160 * expected, 0.001));
+    });
+
+    test(
+      'BoxConstraints.hw extension scales width and height independently',
+      () {
+        final BoxConstraints constraints = const BoxConstraints(
+          minWidth: 50,
+          minHeight: 60,
+          maxWidth: 150,
+          maxHeight: 160,
+        ).hw;
+        expect(constraints, isA<BoxConstraints>());
+        final util = ScreenUtilPlus();
+        expect(constraints.minWidth, closeTo(50 * util.scaleWidth, 0.001));
+        expect(constraints.minHeight, closeTo(60 * util.scaleHeight, 0.001));
+        expect(constraints.maxWidth, closeTo(150 * util.scaleWidth, 0.001));
+        expect(constraints.maxHeight, closeTo(160 * util.scaleHeight, 0.001));
+      },
+    );
+
+    test('BoxConstraints.w extension scales all properties with width', () {
+      final BoxConstraints constraints = const BoxConstraints(
+        minWidth: 50,
+        minHeight: 60,
+        maxWidth: 150,
+        maxHeight: 160,
+      ).w;
+      expect(constraints, isA<BoxConstraints>());
+      final util = ScreenUtilPlus();
+      expect(constraints.minWidth, closeTo(50 * util.scaleWidth, 0.001));
+      expect(constraints.minHeight, closeTo(60 * util.scaleWidth, 0.001));
+      expect(constraints.maxWidth, closeTo(150 * util.scaleWidth, 0.001));
+      expect(constraints.maxHeight, closeTo(160 * util.scaleWidth, 0.001));
+    });
+
+    test('BoxConstraints.h extension scales all properties with height', () {
+      final BoxConstraints constraints = const BoxConstraints(
+        minWidth: 50,
+        minHeight: 60,
+        maxWidth: 150,
+        maxHeight: 160,
+      ).h;
+      expect(constraints, isA<BoxConstraints>());
+      final util = ScreenUtilPlus();
+      expect(constraints.minWidth, closeTo(50 * util.scaleHeight, 0.001));
+      expect(constraints.minHeight, closeTo(60 * util.scaleHeight, 0.001));
+      expect(constraints.maxWidth, closeTo(150 * util.scaleHeight, 0.001));
+      expect(constraints.maxHeight, closeTo(160 * util.scaleHeight, 0.001));
+    });
+
+    test('BoxConstraints with zero values', () {
+      final BoxConstraints constraints = const BoxConstraints(
+        maxWidth: 0,
+        maxHeight: 0,
+      ).r;
+      expect(constraints, isA<BoxConstraints>());
+      expect(constraints.minWidth, 0.0);
+      expect(constraints.minHeight, 0.0);
+      expect(constraints.maxWidth, 0.0);
+      expect(constraints.maxHeight, 0.0);
+    });
+
+    test('BoxConstraints.loose with extensions', () {
+      final loose = BoxConstraints.loose(const Size(100, 200));
+      final BoxConstraints scaled = loose.r;
+      expect(scaled, isA<BoxConstraints>());
+      final util = ScreenUtilPlus();
+      final double expected = min(util.scaleWidth, util.scaleHeight);
+      expect(scaled.maxWidth, closeTo(100 * expected, 0.001));
+      expect(scaled.maxHeight, closeTo(200 * expected, 0.001));
+    });
+
+    test('BoxConstraints.tight with extensions', () {
+      final tight = BoxConstraints.tight(const Size(100, 200));
+      final BoxConstraints scaled = tight.r;
+      expect(scaled, isA<BoxConstraints>());
+      final util = ScreenUtilPlus();
+      final double expected = min(util.scaleWidth, util.scaleHeight);
+      expect(scaled.minWidth, closeTo(100 * expected, 0.001));
+      expect(scaled.maxWidth, closeTo(100 * expected, 0.001));
+      expect(scaled.minHeight, closeTo(200 * expected, 0.001));
+      expect(scaled.maxHeight, closeTo(200 * expected, 0.001));
+    });
   });
 
   group('RPadding and REdgeInsets', () {
     setUp(() {
       const data = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
       ScreenUtilPlus.configure(
         data: data,
@@ -880,15 +1215,14 @@ void main() {
       tester,
     ) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: RPadding(
-            padding: const EdgeInsets.all(10),
-            child: const SizedBox(),
-          ),
+        const MaterialApp(
+          home: RPadding(padding: EdgeInsets.all(10), child: SizedBox()),
         ),
       );
 
-      final renderObject = tester.renderObject(find.byType(RPadding));
+      final RenderObject renderObject = tester.renderObject(
+        find.byType(RPadding),
+      );
       expect(renderObject, isA<RenderPadding>());
     });
 
@@ -896,7 +1230,7 @@ void main() {
       final padding = REdgeInsets.fromLTRB(10, 20, 30, 40);
       expect(padding, isA<REdgeInsets>());
       final util = ScreenUtilPlus();
-      final expected = min(util.scaleWidth, util.scaleHeight);
+      final double expected = min(util.scaleWidth, util.scaleHeight);
       expect(padding.left, closeTo(10 * expected, 0.001));
     });
 
@@ -904,7 +1238,7 @@ void main() {
       final padding = REdgeInsets.all(10);
       expect(padding, isA<REdgeInsets>());
       final util = ScreenUtilPlus();
-      final expected = min(util.scaleWidth, util.scaleHeight);
+      final double expected = min(util.scaleWidth, util.scaleHeight);
       expect(padding.top, closeTo(10 * expected, 0.001));
     });
 
@@ -912,7 +1246,7 @@ void main() {
       final padding = REdgeInsets.symmetric(vertical: 10, horizontal: 20);
       expect(padding, isA<REdgeInsets>());
       final util = ScreenUtilPlus();
-      final expected = min(util.scaleWidth, util.scaleHeight);
+      final double expected = min(util.scaleWidth, util.scaleHeight);
       expect(padding.top, closeTo(10 * expected, 0.001));
       expect(padding.left, closeTo(20 * expected, 0.001));
     });
@@ -926,7 +1260,7 @@ void main() {
       );
       expect(padding, isA<REdgeInsets>());
       final util = ScreenUtilPlus();
-      final expected = min(util.scaleWidth, util.scaleHeight);
+      final double expected = min(util.scaleWidth, util.scaleHeight);
       expect(padding.top, closeTo(10 * expected, 0.001));
     });
 
@@ -934,7 +1268,7 @@ void main() {
       final padding = REdgeInsetsDirectional.all(10);
       expect(padding, isA<REdgeInsetsDirectional>());
       final util = ScreenUtilPlus();
-      final expected = min(util.scaleWidth, util.scaleHeight);
+      final double expected = min(util.scaleWidth, util.scaleHeight);
       expect(padding.top, closeTo(10 * expected, 0.001));
     });
 
@@ -947,7 +1281,7 @@ void main() {
       );
       expect(padding, isA<REdgeInsetsDirectional>());
       final util = ScreenUtilPlus();
-      final expected = min(util.scaleWidth, util.scaleHeight);
+      final double expected = min(util.scaleWidth, util.scaleHeight);
       expect(padding.top, closeTo(10 * expected, 0.001));
     });
 
@@ -955,7 +1289,7 @@ void main() {
       final padding = REdgeInsetsDirectional.fromSTEB(10, 20, 30, 40);
       expect(padding, isA<REdgeInsetsDirectional>());
       final util = ScreenUtilPlus();
-      final expected = min(util.scaleWidth, util.scaleHeight);
+      final double expected = min(util.scaleWidth, util.scaleHeight);
       expect(padding.top, closeTo(20 * expected, 0.001));
     });
   });
@@ -964,7 +1298,7 @@ void main() {
     setUp(() {
       const data = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
       ScreenUtilPlus.configure(
         data: data,
@@ -976,18 +1310,20 @@ void main() {
 
     testWidgets('RSizedBox with width and height', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: RSizedBox(width: 100, height: 200, child: const SizedBox()),
+        const MaterialApp(
+          home: RSizedBox(width: 100, height: 200, child: SizedBox()),
         ),
       );
 
-      final renderObject = tester.renderObject(find.byType(RSizedBox));
+      final RenderObject renderObject = tester.renderObject(
+        find.byType(RSizedBox),
+      );
       expect(renderObject, isA<RenderConstrainedBox>());
     });
 
     testWidgets('RSizedBox.vertical', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(home: RSizedBox.vertical(100, child: const SizedBox())),
+        const MaterialApp(home: RSizedBox.vertical(100, child: SizedBox())),
       );
 
       expect(find.byType(RSizedBox), findsOneWidget);
@@ -995,7 +1331,7 @@ void main() {
 
     testWidgets('RSizedBox.horizontal', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(home: RSizedBox.horizontal(100, child: const SizedBox())),
+        const MaterialApp(home: RSizedBox.horizontal(100, child: SizedBox())),
       );
 
       expect(find.byType(RSizedBox), findsOneWidget);
@@ -1003,8 +1339,8 @@ void main() {
 
     testWidgets('RSizedBox.square', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: RSizedBox.square(dimension: 100, child: const SizedBox()),
+        const MaterialApp(
+          home: RSizedBox.square(dimension: 100, child: SizedBox()),
         ),
       );
 
@@ -1023,13 +1359,171 @@ void main() {
 
       expect(find.byType(RSizedBox), findsOneWidget);
     });
+
+    testWidgets('RSizedBox applies hw constraints for non-square', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: RSizedBox(width: 100, height: 200, child: SizedBox()),
+        ),
+      );
+
+      final renderObject =
+          tester.renderObject(find.byType(RSizedBox)) as RenderConstrainedBox;
+
+      final util = ScreenUtilPlus();
+      final double expectedWidth = 100 * util.scaleWidth;
+      final double expectedHeight = 200 * util.scaleHeight;
+
+      expect(
+        renderObject.additionalConstraints.minWidth,
+        closeTo(expectedWidth, 0.001),
+      );
+      expect(
+        renderObject.additionalConstraints.minHeight,
+        closeTo(expectedHeight, 0.001),
+      );
+    });
+
+    testWidgets('RSizedBox.square applies r constraints', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: RSizedBox.square(dimension: 100, child: SizedBox()),
+        ),
+      );
+
+      final renderObject =
+          tester.renderObject(find.byType(RSizedBox)) as RenderConstrainedBox;
+
+      final util = ScreenUtilPlus();
+      final num expected = 100 * min(util.scaleWidth, util.scaleHeight);
+
+      expect(
+        renderObject.additionalConstraints.minWidth,
+        closeTo(expected, 0.001),
+      );
+      expect(
+        renderObject.additionalConstraints.minHeight,
+        closeTo(expected, 0.001),
+      );
+    });
+
+    testWidgets('RSizedBox.vertical applies height constraint', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(home: RSizedBox.vertical(200, child: SizedBox())),
+      );
+
+      final renderObject =
+          tester.renderObject(find.byType(RSizedBox)) as RenderConstrainedBox;
+
+      final util = ScreenUtilPlus();
+      final double expectedHeight = 200 * util.scaleHeight;
+
+      expect(
+        renderObject.additionalConstraints.minHeight,
+        closeTo(expectedHeight, 0.001),
+      );
+    });
+
+    testWidgets('RSizedBox.horizontal applies width constraint', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        const MaterialApp(home: RSizedBox.horizontal(150, child: SizedBox())),
+      );
+
+      final renderObject =
+          tester.renderObject(find.byType(RSizedBox)) as RenderConstrainedBox;
+
+      final util = ScreenUtilPlus();
+      final double expectedWidth = 150 * util.scaleWidth;
+
+      expect(
+        renderObject.additionalConstraints.minWidth,
+        closeTo(expectedWidth, 0.001),
+      );
+    });
+
+    testWidgets('RSizedBox updates constraints on rebuild', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: RSizedBox(width: 100, height: 200, child: SizedBox()),
+        ),
+      );
+
+      final renderObject =
+          tester.renderObject(find.byType(RSizedBox)) as RenderConstrainedBox;
+
+      final double initialWidth = renderObject.additionalConstraints.minWidth;
+
+      // Reconfigure with different screen size
+      ScreenUtilPlus.configure(
+        data: const MediaQueryData(
+          size: Size(800, 1600),
+          textScaler: TextScaler.noScaling,
+        ),
+        designSize: const Size(360, 690),
+        minTextAdapt: false,
+        splitScreenMode: false,
+      );
+
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: RSizedBox(width: 100, height: 200, child: SizedBox()),
+        ),
+      );
+
+      final double newWidth = renderObject.additionalConstraints.minWidth;
+      expect(newWidth, isNot(closeTo(initialWidth, 0.001)));
+    });
+
+    testWidgets('RSizedBox with null dimensions', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(home: RSizedBox(child: SizedBox())),
+      );
+
+      final renderObject =
+          tester.renderObject(find.byType(RSizedBox)) as RenderConstrainedBox;
+
+      expect(renderObject.additionalConstraints.minWidth, 0);
+      expect(renderObject.additionalConstraints.minHeight, 0);
+    });
+
+    testWidgets('RSizedBox.fromSize applies constraints correctly', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: RSizedBox.fromSize(
+            size: const Size(120, 180),
+            child: const SizedBox(),
+          ),
+        ),
+      );
+
+      final renderObject =
+          tester.renderObject(find.byType(RSizedBox)) as RenderConstrainedBox;
+
+      final util = ScreenUtilPlus();
+      final double expectedWidth = 120 * util.scaleWidth;
+      final double expectedHeight = 180 * util.scaleHeight;
+
+      expect(
+        renderObject.additionalConstraints.minWidth,
+        closeTo(expectedWidth, 0.001),
+      );
+      expect(
+        renderObject.additionalConstraints.minHeight,
+        closeTo(expectedHeight, 0.001),
+      );
+    });
   });
 
   group('ScreenUtilInit', () {
     testWidgets('ScreenUtilInit initializes ScreenUtil', (tester) async {
       await tester.pumpWidget(
         ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
           child: MaterialApp(
             home: Builder(
               builder: (context) {
@@ -1047,10 +1541,9 @@ void main() {
 
     testWidgets('ScreenUtilInit with responsiveWidgets', (tester) async {
       await tester.pumpWidget(
-        ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
+        const ScreenUtilPlusInit(
           responsiveWidgets: ['CustomWidget'],
-          child: const MaterialApp(home: SizedBox()),
+          child: MaterialApp(home: SizedBox()),
         ),
       );
 
@@ -1062,8 +1555,6 @@ void main() {
 
       await tester.pumpWidget(
         ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
-          rebuildFactor: RebuildFactors.size,
           child: MaterialApp(
             home: ValueListenableBuilder<int>(
               valueListenable: buildCount,
@@ -1077,7 +1568,7 @@ void main() {
       );
 
       await tester.pumpAndSettle();
-      final initialCount = buildCount.value;
+      final int initialCount = buildCount.value;
 
       // Simulate metrics change
       tester.view.physicalSize = const Size(500, 1000);
@@ -1089,20 +1580,14 @@ void main() {
 
     testWidgets('ScreenUtilInit handles didChangeDependencies', (tester) async {
       await tester.pumpWidget(
-        ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
-          child: const MaterialApp(home: SizedBox()),
-        ),
+        const ScreenUtilPlusInit(child: MaterialApp(home: SizedBox())),
       );
 
       await tester.pumpAndSettle();
 
       // Change widget tree to trigger didChangeDependencies
       await tester.pumpWidget(
-        ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
-          child: const MaterialApp(home: Text('Changed')),
-        ),
+        const ScreenUtilPlusInit(child: MaterialApp(home: Text('Changed'))),
       );
 
       await tester.pumpAndSettle();
@@ -1112,7 +1597,6 @@ void main() {
     testWidgets('ScreenUtilInit with builder', (tester) async {
       await tester.pumpWidget(
         ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
           builder: (context, child) => MaterialApp(home: child),
           child: const SizedBox(),
         ),
@@ -1123,10 +1607,9 @@ void main() {
 
     testWidgets('ScreenUtilInit with splitScreenMode', (tester) async {
       await tester.pumpWidget(
-        ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
+        const ScreenUtilPlusInit(
           splitScreenMode: true,
-          child: const MaterialApp(home: SizedBox()),
+          child: MaterialApp(home: SizedBox()),
         ),
       );
 
@@ -1135,10 +1618,9 @@ void main() {
 
     testWidgets('ScreenUtilInit with minTextAdapt', (tester) async {
       await tester.pumpWidget(
-        ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
+        const ScreenUtilPlusInit(
           minTextAdapt: true,
-          child: const MaterialApp(home: SizedBox()),
+          child: MaterialApp(home: SizedBox()),
         ),
       );
 
@@ -1147,10 +1629,9 @@ void main() {
 
     testWidgets('ScreenUtilInit with ensureScreenSize', (tester) async {
       await tester.pumpWidget(
-        ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
+        const ScreenUtilPlusInit(
           ensureScreenSize: true,
-          child: const MaterialApp(home: SizedBox()),
+          child: MaterialApp(home: SizedBox()),
         ),
       );
 
@@ -1160,59 +1641,53 @@ void main() {
 
   group('RebuildFactors', () {
     test('RebuildFactors.size', () {
-      final old = MediaQueryData(size: const Size(100, 200));
-      final data = MediaQueryData(size: const Size(200, 300));
+      const old = MediaQueryData(size: Size(100, 200));
+      const data = MediaQueryData(size: Size(200, 300));
       expect(RebuildFactors.size(old, data), true);
 
-      final same = MediaQueryData(size: const Size(100, 200));
+      const same = MediaQueryData(size: Size(100, 200));
       expect(RebuildFactors.size(old, same), false);
     });
 
     test('RebuildFactors.orientation', () {
-      final old = MediaQueryData(size: const Size(200, 100));
-      final data = MediaQueryData(size: const Size(100, 200));
+      const old = MediaQueryData(size: Size(200, 100));
+      const data = MediaQueryData(size: Size(100, 200));
       expect(RebuildFactors.orientation(old, data), true);
 
-      final same = MediaQueryData(size: const Size(200, 100));
+      const same = MediaQueryData(size: Size(200, 100));
       expect(RebuildFactors.orientation(old, same), false);
     });
 
     test('RebuildFactors.sizeAndViewInsets', () {
-      final old = MediaQueryData(
-        size: const Size(100, 200),
-        viewInsets: EdgeInsets.zero,
-      );
-      final data = MediaQueryData(
-        size: const Size(100, 200),
-        viewInsets: const EdgeInsets.only(bottom: 100),
+      const old = MediaQueryData(size: Size(100, 200));
+      const data = MediaQueryData(
+        size: Size(100, 200),
+        viewInsets: EdgeInsets.only(bottom: 100),
       );
       expect(RebuildFactors.sizeAndViewInsets(old, data), true);
 
-      final same = MediaQueryData(
-        size: const Size(100, 200),
-        viewInsets: EdgeInsets.zero,
-      );
+      const same = MediaQueryData(size: Size(100, 200));
       expect(RebuildFactors.sizeAndViewInsets(old, same), false);
     });
 
     test('RebuildFactors.change', () {
-      final old = MediaQueryData(size: const Size(100, 200));
-      final data = MediaQueryData(size: const Size(200, 300));
+      const old = MediaQueryData(size: Size(100, 200));
+      const data = MediaQueryData(size: Size(200, 300));
       expect(RebuildFactors.change(old, data), true);
 
-      final same = MediaQueryData(size: const Size(100, 200));
+      const same = MediaQueryData(size: Size(100, 200));
       expect(RebuildFactors.change(old, same), false);
     });
 
     test('RebuildFactors.always', () {
-      final old = MediaQueryData(size: const Size(100, 200));
-      final data = MediaQueryData(size: const Size(100, 200));
+      const old = MediaQueryData(size: Size(100, 200));
+      const data = MediaQueryData(size: Size(100, 200));
       expect(RebuildFactors.always(old, data), true);
     });
 
     test('RebuildFactors.none', () {
-      final old = MediaQueryData(size: const Size(100, 200));
-      final data = MediaQueryData(size: const Size(200, 300));
+      const old = MediaQueryData(size: Size(100, 200));
+      const data = MediaQueryData(size: Size(200, 300));
       expect(RebuildFactors.none(old, data), false);
     });
   });
@@ -1221,7 +1696,7 @@ void main() {
     setUp(() {
       const data = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
       ScreenUtilPlus.configure(
         data: data,
@@ -1233,32 +1708,137 @@ void main() {
 
     test('FontSizeResolvers.width', () {
       final util = ScreenUtilPlus();
-      final result = FontSizeResolvers.width(16, util);
+      final double result = FontSizeResolvers.width(16, util);
       expect(result, closeTo(util.setWidth(16), 0.001));
     });
 
     test('FontSizeResolvers.height', () {
       final util = ScreenUtilPlus();
-      final result = FontSizeResolvers.height(16, util);
+      final double result = FontSizeResolvers.height(16, util);
       expect(result, closeTo(util.setHeight(16), 0.001));
     });
 
     test('FontSizeResolvers.radius', () {
       final util = ScreenUtilPlus();
-      final result = FontSizeResolvers.radius(16, util);
+      final double result = FontSizeResolvers.radius(16, util);
       expect(result, closeTo(util.radius(16), 0.001));
     });
 
     test('FontSizeResolvers.diameter', () {
       final util = ScreenUtilPlus();
-      final result = FontSizeResolvers.diameter(16, util);
+      final double result = FontSizeResolvers.diameter(16, util);
       expect(result, closeTo(util.diameter(16), 0.001));
     });
 
     test('FontSizeResolvers.diagonal', () {
       final util = ScreenUtilPlus();
-      final result = FontSizeResolvers.diagonal(16, util);
+      final double result = FontSizeResolvers.diagonal(16, util);
       expect(result, closeTo(util.diagonal(16), 0.001));
+    });
+
+    test('FontSizeResolvers.width with zero', () {
+      final util = ScreenUtilPlus();
+      final double result = FontSizeResolvers.width(0, util);
+      expect(result, 0.0);
+    });
+
+    test('FontSizeResolvers.height with zero', () {
+      final util = ScreenUtilPlus();
+      final double result = FontSizeResolvers.height(0, util);
+      expect(result, 0.0);
+    });
+
+    test('FontSizeResolvers.radius with zero', () {
+      final util = ScreenUtilPlus();
+      final double result = FontSizeResolvers.radius(0, util);
+      expect(result, 0.0);
+    });
+
+    test('FontSizeResolvers.diameter with zero', () {
+      final util = ScreenUtilPlus();
+      final double result = FontSizeResolvers.diameter(0, util);
+      expect(result, 0.0);
+    });
+
+    test('FontSizeResolvers.diagonal with zero', () {
+      final util = ScreenUtilPlus();
+      final double result = FontSizeResolvers.diagonal(0, util);
+      expect(result, 0.0);
+    });
+
+    test('FontSizeResolvers.width with large value', () {
+      final util = ScreenUtilPlus();
+      final double result = FontSizeResolvers.width(1000, util);
+      expect(result, closeTo(util.setWidth(1000), 0.001));
+    });
+
+    test('FontSizeResolvers.height with large value', () {
+      final util = ScreenUtilPlus();
+      final double result = FontSizeResolvers.height(1000, util);
+      expect(result, closeTo(util.setHeight(1000), 0.001));
+    });
+
+    test('FontSizeResolvers.radius with decimal value', () {
+      final util = ScreenUtilPlus();
+      final double result = FontSizeResolvers.radius(16.5, util);
+      expect(result, closeTo(util.radius(16.5), 0.001));
+    });
+
+    test('FontSizeResolvers.diameter with decimal value', () {
+      final util = ScreenUtilPlus();
+      final double result = FontSizeResolvers.diameter(16.5, util);
+      expect(result, closeTo(util.diameter(16.5), 0.001));
+    });
+
+    test('FontSizeResolvers.diagonal with decimal value', () {
+      final util = ScreenUtilPlus();
+      final double result = FontSizeResolvers.diagonal(16.5, util);
+      expect(result, closeTo(util.diagonal(16.5), 0.001));
+    });
+
+    test('FontSizeResolvers work with different screen sizes', () {
+      final testSizes = [
+        const Size(320, 568),
+        const Size(414, 896),
+        const Size(768, 1024),
+        const Size(1920, 1080),
+      ];
+
+      for (final screenSize in testSizes) {
+        ScreenUtilPlus.configure(
+          data: MediaQueryData(
+            size: screenSize,
+            textScaler: TextScaler.noScaling,
+          ),
+          designSize: const Size(360, 690),
+          minTextAdapt: false,
+          splitScreenMode: false,
+        );
+
+        final util = ScreenUtilPlus();
+        const fontSize = 16.0;
+
+        expect(
+          FontSizeResolvers.width(fontSize, util),
+          closeTo(util.setWidth(fontSize), 0.001),
+        );
+        expect(
+          FontSizeResolvers.height(fontSize, util),
+          closeTo(util.setHeight(fontSize), 0.001),
+        );
+        expect(
+          FontSizeResolvers.radius(fontSize, util),
+          closeTo(util.radius(fontSize), 0.001),
+        );
+        expect(
+          FontSizeResolvers.diameter(fontSize, util),
+          closeTo(util.diameter(fontSize), 0.001),
+        );
+        expect(
+          FontSizeResolvers.diagonal(fontSize, util),
+          closeTo(util.diagonal(fontSize), 0.001),
+        );
+      }
     });
   });
 
@@ -1268,7 +1848,7 @@ void main() {
         MaterialApp(
           home: Builder(
             builder: (context) {
-              ScreenUtilPlus.init(context, designSize: const Size(360, 690));
+              ScreenUtilPlus.init(context);
               final util = ScreenUtilPlus();
               expect(util.screenWidth, greaterThan(0));
               return const SizedBox();
@@ -1285,10 +1865,7 @@ void main() {
         MaterialApp(
           home: Builder(
             builder: (context) {
-              ScreenUtilPlus.ensureScreenSizeAndInit(
-                context,
-                designSize: const Size(360, 690),
-              );
+              ScreenUtilPlus.ensureScreenSizeAndInit(context);
               return const SizedBox();
             },
           ),
@@ -1303,7 +1880,7 @@ void main() {
     testWidgets('registerToBuild without descendants', (tester) async {
       const data = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
       ScreenUtilPlus.configure(
         data: data,
@@ -1334,7 +1911,7 @@ void main() {
     testWidgets('registerToBuild with descendants', (tester) async {
       const data = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
       ScreenUtilPlus.configure(
         data: data,
@@ -1365,7 +1942,7 @@ void main() {
     testWidgets('registerToBuild handles defunct elements', (tester) async {
       const data = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
       ScreenUtilPlus.configure(
         data: data,
@@ -1401,7 +1978,7 @@ void main() {
     test('configure with null data uses existing data', () {
       const initialData = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
       ScreenUtilPlus.configure(
         data: initialData,
@@ -1425,7 +2002,7 @@ void main() {
     test('configure with null designSize uses existing designSize', () {
       const data = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
       ScreenUtilPlus.configure(
         data: data,
@@ -1449,7 +2026,7 @@ void main() {
     test('configure updates fontSizeResolver', () {
       const data = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
       ScreenUtilPlus.configure(
         data: data,
@@ -1476,7 +2053,7 @@ void main() {
     test('configure updates minTextAdapt', () {
       const data = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
       ScreenUtilPlus.configure(
         data: data,
@@ -1497,7 +2074,7 @@ void main() {
     test('configure updates splitScreenMode', () {
       const data = MediaQueryData(
         size: Size(400, 500),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
       ScreenUtilPlus.configure(
         data: data,
@@ -1523,7 +2100,7 @@ void main() {
     ) async {
       const initialData = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
 
       ScreenUtilPlus.configure(
@@ -1548,7 +2125,7 @@ void main() {
       );
 
       await tester.pumpAndSettle();
-      final initialRebuilds = rebuildCount.value;
+      final int initialRebuilds = rebuildCount.value;
 
       // Configure with identical metrics - should NOT trigger rebuild.
       ScreenUtilPlus.configure(
@@ -1564,7 +2141,7 @@ void main() {
       // Configure with new metrics - should trigger rebuild exactly once.
       const updatedData = MediaQueryData(
         size: Size(500, 900),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
 
       ScreenUtilPlus.configure(
@@ -1622,7 +2199,7 @@ void main() {
     setUp(() {
       const data = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
       ScreenUtilPlus.configure(
         data: data,
@@ -1641,7 +2218,7 @@ void main() {
             child: Builder(
               builder: (context) {
                 final util = ScreenUtilPlus();
-                final deviceType = util.deviceType(context);
+                final DeviceType deviceType = util.deviceType(context);
                 // Should be mobile (width < 600 in portrait)
                 expect(deviceType, isA<DeviceType>());
                 return const SizedBox();
@@ -1664,7 +2241,7 @@ void main() {
             child: Builder(
               builder: (context) {
                 final util = ScreenUtilPlus();
-                final deviceType = util.deviceType(context);
+                final DeviceType deviceType = util.deviceType(context);
                 expect(deviceType, isA<DeviceType>());
                 return const SizedBox();
               },
@@ -1686,7 +2263,7 @@ void main() {
             child: Builder(
               builder: (context) {
                 final util = ScreenUtilPlus();
-                final deviceType = util.deviceType(context);
+                final DeviceType deviceType = util.deviceType(context);
                 expect(deviceType, isA<DeviceType>());
                 return const SizedBox();
               },
@@ -1708,7 +2285,7 @@ void main() {
             child: Builder(
               builder: (context) {
                 final util = ScreenUtilPlus();
-                final deviceType = util.deviceType(context);
+                final DeviceType deviceType = util.deviceType(context);
                 expect(deviceType, isA<DeviceType>());
                 return const SizedBox();
               },
@@ -1730,7 +2307,7 @@ void main() {
             child: Builder(
               builder: (context) {
                 final util = ScreenUtilPlus();
-                final deviceType = util.deviceType(context);
+                final DeviceType deviceType = util.deviceType(context);
                 expect(deviceType, isA<DeviceType>());
                 return const SizedBox();
               },
@@ -1752,7 +2329,7 @@ void main() {
             child: Builder(
               builder: (context) {
                 final util = ScreenUtilPlus();
-                final deviceType = util.deviceType(context);
+                final DeviceType deviceType = util.deviceType(context);
                 expect(deviceType, isA<DeviceType>());
                 return const SizedBox();
               },
@@ -1768,7 +2345,7 @@ void main() {
     testWidgets('configure detects size change in metrics', (tester) async {
       const initialData = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
 
       ScreenUtilPlus.configure(
@@ -1793,12 +2370,12 @@ void main() {
       );
 
       await tester.pumpAndSettle();
-      final initialRebuilds = rebuildCount.value;
+      final int initialRebuilds = rebuildCount.value;
 
       // Change size - should trigger rebuild
       const updatedData = MediaQueryData(
         size: Size(500, 900),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
 
       ScreenUtilPlus.configure(
@@ -1817,7 +2394,7 @@ void main() {
     ) async {
       const data = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
 
       ScreenUtilPlus.configure(
@@ -1842,7 +2419,7 @@ void main() {
       );
 
       await tester.pumpAndSettle();
-      final initialRebuilds = rebuildCount.value;
+      final int initialRebuilds = rebuildCount.value;
 
       // Change designSize - should trigger rebuild
       ScreenUtilPlus.configure(
@@ -1861,7 +2438,7 @@ void main() {
     ) async {
       const data = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
 
       ScreenUtilPlus.configure(
@@ -1886,7 +2463,7 @@ void main() {
       );
 
       await tester.pumpAndSettle();
-      final initialRebuilds = rebuildCount.value;
+      final int initialRebuilds = rebuildCount.value;
 
       // Change splitScreenMode - should trigger rebuild
       ScreenUtilPlus.configure(
@@ -1905,7 +2482,7 @@ void main() {
     ) async {
       const data = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
 
       ScreenUtilPlus.configure(
@@ -1930,7 +2507,7 @@ void main() {
       );
 
       await tester.pumpAndSettle();
-      final initialRebuilds = rebuildCount.value;
+      final int initialRebuilds = rebuildCount.value;
 
       // Change minTextAdapt - should trigger rebuild
       ScreenUtilPlus.configure(
@@ -1951,7 +2528,7 @@ void main() {
       (tester) async {
         const portraitData = MediaQueryData(
           size: Size(400, 800),
-          textScaler: TextScaler.linear(1.0),
+          textScaler: TextScaler.noScaling,
         );
 
         ScreenUtilPlus.configure(
@@ -1976,12 +2553,12 @@ void main() {
         );
 
         await tester.pumpAndSettle();
-        final initialRebuilds = rebuildCount.value;
+        final int initialRebuilds = rebuildCount.value;
 
         // Change to landscape - should trigger rebuild
         const landscapeData = MediaQueryData(
           size: Size(800, 400),
-          textScaler: TextScaler.linear(1.0),
+          textScaler: TextScaler.noScaling,
         );
 
         ScreenUtilPlus.configure(
@@ -2002,7 +2579,7 @@ void main() {
     test('configure calculates orientation from deviceData when available', () {
       const data = MediaQueryData(
         size: Size(800, 400),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
 
       ScreenUtilPlus.configure(
@@ -2022,7 +2599,7 @@ void main() {
         // When size width > height, should be landscape
         const data = MediaQueryData(
           size: Size(800, 400),
-          textScaler: TextScaler.linear(1.0),
+          textScaler: TextScaler.noScaling,
         );
 
         ScreenUtilPlus.configure(
@@ -2041,7 +2618,7 @@ void main() {
       // Edge case: square screen should be portrait
       const data = MediaQueryData(
         size: Size(400, 400),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
 
       ScreenUtilPlus.configure(
@@ -2061,7 +2638,7 @@ void main() {
     setUp(() {
       const data = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
       ScreenUtilPlus.configure(
         data: data,
@@ -2103,21 +2680,21 @@ void main() {
 
     test('setWidth with negative value', () {
       final util = ScreenUtilPlus();
-      final result = util.setWidth(-10);
+      final double result = util.setWidth(-10);
       // Should return negative scaled value
       expect(result, lessThan(0));
     });
 
     test('setHeight with negative value', () {
       final util = ScreenUtilPlus();
-      final result = util.setHeight(-10);
+      final double result = util.setHeight(-10);
       // Should return negative scaled value
       expect(result, lessThan(0));
     });
 
     test('setSp with negative value', () {
       final util = ScreenUtilPlus();
-      final result = util.setSp(-10);
+      final double result = util.setSp(-10);
       // Should return negative scaled value
       expect(result, lessThan(0));
     });
@@ -2127,7 +2704,7 @@ void main() {
     setUp(() {
       const data = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
       ScreenUtilPlus.configure(
         data: data,
@@ -2145,12 +2722,12 @@ void main() {
 
       // If resolver is null, should use default behavior
       if (util.fontSizeResolver == null) {
-        final result = util.setSp(16);
-        final expected = 16 * util.scaleText;
+        final double result = util.setSp(16);
+        final double expected = 16 * util.scaleText;
         expect(result, closeTo(expected, 0.001));
       } else {
         // If resolver was set by previous test, verify it uses the resolver
-        final result = util.setSp(16);
+        final double result = util.setSp(16);
         expect(result, isA<double>());
         expect(result, greaterThan(0));
       }
@@ -2165,7 +2742,7 @@ void main() {
       ScreenUtilPlus.configure(
         data: const MediaQueryData(
           size: Size(400, 800),
-          textScaler: TextScaler.linear(1.0),
+          textScaler: TextScaler.noScaling,
         ),
         designSize: const Size(360, 690),
         fontSizeResolver: customResolver,
@@ -2207,10 +2784,7 @@ void main() {
         // Now try to call ensureScreenSizeAndInit with unmounted context
         // This should not throw and should not call init
         if (testContext != null && !testContext!.mounted) {
-          await ScreenUtilPlus.ensureScreenSizeAndInit(
-            testContext!,
-            designSize: const Size(360, 690),
-          );
+          await ScreenUtilPlus.ensureScreenSizeAndInit(testContext!);
           // Should complete without error
           expect(true, isTrue);
         }
@@ -2222,7 +2796,7 @@ void main() {
     test('configure with all null parameters uses existing values', () {
       const initialData = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
 
       ScreenUtilPlus.configure(
@@ -2252,7 +2826,7 @@ void main() {
     });
 
     test('nonEmptySizeOrNull returns null for empty size', () {
-      const data = MediaQueryData(size: Size.zero);
+      const data = MediaQueryData();
       expect(data.nonEmptySizeOrNull(), isNull);
     });
 

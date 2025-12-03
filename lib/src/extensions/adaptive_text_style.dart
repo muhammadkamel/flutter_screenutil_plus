@@ -64,10 +64,10 @@ extension AdaptiveTextStyleExtension on BuildContext {
     double? letterSpacingXxl,
     TextStyle? baseStyle,
   }) {
-    final breakpoint = this.breakpoint;
+    final Breakpoint breakpoint = this.breakpoint;
 
     // Determine adaptive values based on current breakpoint
-    final fontSize = _getAdaptiveValue(
+    final double? fontSize = _getAdaptiveValue(
       breakpoint,
       fontSizeXs,
       fontSizeSm,
@@ -77,7 +77,7 @@ extension AdaptiveTextStyleExtension on BuildContext {
       fontSizeXxl,
     );
 
-    final lineHeight = _getAdaptiveValue(
+    final double? lineHeight = _getAdaptiveValue(
       breakpoint,
       lineHeightXs,
       lineHeightSm,
@@ -87,7 +87,7 @@ extension AdaptiveTextStyleExtension on BuildContext {
       lineHeightXxl,
     );
 
-    final fontWeight = _getAdaptiveValue(
+    final FontWeight? fontWeight = _getAdaptiveValue(
       breakpoint,
       fontWeightXs,
       fontWeightSm,
@@ -97,7 +97,7 @@ extension AdaptiveTextStyleExtension on BuildContext {
       fontWeightXxl,
     );
 
-    final color = _getAdaptiveValue(
+    final Color? color = _getAdaptiveValue(
       breakpoint,
       colorXs,
       colorSm,
@@ -107,7 +107,7 @@ extension AdaptiveTextStyleExtension on BuildContext {
       colorXxl,
     );
 
-    final letterSpacing = _getAdaptiveValue(
+    final double? letterSpacing = _getAdaptiveValue(
       breakpoint,
       letterSpacingXs,
       letterSpacingSm,

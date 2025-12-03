@@ -81,6 +81,7 @@ coverage/
 # macOS
 **/macos/Flutter/GeneratedPluginRegistrant.swift
 **/macos/Flutter/ephemeral
+Podfile.lock
 
 # Windows
 **/windows/flutter/generated_plugin_registrant.cc

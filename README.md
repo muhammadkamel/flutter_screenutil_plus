@@ -6,46 +6,403 @@
 
 [![Flutter Package](https://img.shields.io/pub/v/flutter_screenutil_plus.svg)](https://pub.dev/packages/flutter_screenutil_plus)
 [![Pub Points](https://img.shields.io/pub/points/flutter_screenutil_plus)](https://pub.dev/packages/flutter_screenutil_plus/score)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/muhammadkamel/flutter_screenutil_plus/blob/master/LICENSE)
 
-**A flutter plugin for adapting screen and font size. Let your UI display a reasonable layout on different screen sizes!**
+**A powerful Flutter plugin for adapting screen and font size with CSS-like breakpoints and SwiftUI-like size classes. Let your UI display a reasonable layout on different screen sizes!**
 
-## Usage
+## ✨ Features
 
-### Add dependency
+- 📱 **Responsive Scaling**: Automatic scaling of width, height, font size, and more
+- 🎯 **CSS-like Breakpoints**: Media query-style breakpoints (Bootstrap, Tailwind, Material Design)
+- 📐 **SwiftUI-like Size Classes**: Compact/Regular size classes for adaptive layouts
+- 🎨 **Adaptive Widgets**: Breakpoint-aware containers, text, and builders
+- 🚀 **Performance Optimized**: Intelligent rebuild detection with Equatable
+- 🎭 **Responsive Theme**: Automatic text style scaling in themes
+- 📦 **Zero Configuration**: Works out of the box with sensible defaults
+- 🧪 **Well Tested**: 98.3% code coverage with 500+ tests
 
-Please check the latest version before installation.
-If there is any problem with the new version, please use the previous version
+## 📦 Installation
+
+Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  flutter:
-    sdk: flutter
-  # add flutter_screenutil_plus
-  flutter_screenutil_plus: ^{latest version}
+  flutter_screenutil_plus: ^1.2.0
 ```
 
-### Add the following imports to your Dart code
+Then run:
+
+```bash
+flutter pub get
+```
+
+## 🚀 Quick Start
+
+### 1. Initialize the Library
+
+Wrap your app with `ScreenUtilPlusInit`:
 
 ```dart
 import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ScreenUtilPlusInit(
+      designSize: const Size(360, 690), // Your design draft size
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return MaterialApp(
+          title: 'Flutter ScreenUtil Plus',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home: child,
+        );
+      },
+      child: const HomePage(),
+    );
+  }
+}
+```
+
+### 2. Use Responsive Extensions
+
+```dart
+Container(
+  width: 100.w,   // Responsive width
+  height: 50.h,   // Responsive height
+  padding: EdgeInsets.all(16.r), // Responsive padding
+  child: Text(
+    'Hello World',
+    style: TextStyle(fontSize: 16.sp), // Responsive font
+  ),
+)
+```
+
+## 📚 Core Features
+
+### Responsive Extensions
+
+The package provides extension methods for easy responsive sizing:
+
+```dart
+// Width and Height
+100.w    // Adapt to screen width
+100.h    // Adapt to screen height
+100.r    // Adapt to smaller of width/height (radius)
+100.dm   // Adapt to larger of width/height (diameter)
+100.dg   // Adapt based on diagonal calculation
+
+// Font Size
+16.sp    // Responsive font size
+16.spMin // min(16, 16.sp) - prevents font from being too large
+16.spMax // max(16, 16.sp) - ensures minimum font size
+
+// Screen Dimensions
+1.sw     // Screen width
+1.sh     // Screen height
+
+// Spacing Helpers
+20.verticalSpace      // SizedBox(height: 20 * scaleHeight)
+20.horizontalSpace    // SizedBox(width: 20 * scaleWidth)
+```
+
+### Responsive Widgets
+
+Pre-built widgets that automatically apply scaling:
+
+```dart
+// Responsive Container
+RContainer(
+  width: 100,
+  height: 50,
+  padding: EdgeInsets.all(8),
+  child: Text('Responsive'),
+)
+
+// Responsive Padding
+RPadding(
+  padding: EdgeInsets.all(16),
+  child: Text('Padded'),
+)
+
+// Responsive SizedBox
+RSizedBox(width: 100, height: 50)
+
+// Responsive Text (auto-scales fontSize)
+RText('Hello', style: TextStyle(fontSize: 16))
+```
+
+## 🎯 CSS-like Breakpoints
+
+Create responsive designs similar to CSS media queries.
+
+### Using Breakpoints
+
+```dart
+// Get current breakpoint
+final breakpoint = context.breakpoint; // xs, sm, md, lg, xl, xxl
+
+// Check breakpoints
+if (context.isAtLeast(Breakpoint.md)) {
+  // Tablet and larger
+}
+
+if (context.isLessThan(Breakpoint.lg)) {
+  // Smaller than desktop
+}
+
+if (context.isBetween(Breakpoint.sm, Breakpoint.lg)) {
+  // Between small and large
+}
+```
+
+### Predefined Breakpoint Sets
+
+```dart
+// Bootstrap 5 (default)
+Breakpoints.bootstrap  // xs: 0, sm: 576, md: 768, lg: 992, xl: 1200, xxl: 1400
+
+// Tailwind CSS
+Breakpoints.tailwind  // sm: 640, md: 768, lg: 1024, xl: 1280, xxl: 1536
+
+// Material Design
+Breakpoints.material  // sm: 600, md: 960, lg: 1280, xl: 1920, xxl: 2560
+
+// Mobile-first
+Breakpoints.mobileFirst  // sm: 480, md: 768, lg: 1024, xl: 1440, xxl: 1920
+
+// Custom breakpoints
+const customBreakpoints = Breakpoints(
+  xs: 0,
+  sm: 480,
+  md: 768,
+  lg: 1024,
+  xl: 1440,
+);
+```
+
+### ResponsiveBuilder
+
+Build different layouts for different breakpoints:
+
+```dart
+ResponsiveBuilder(
+  xs: (context) => MobileLayout(),
+  sm: (context) => MobileLandscapeLayout(),
+  md: (context) => TabletLayout(),
+  lg: (context) => DesktopLayout(),
+  xl: (context) => LargeDesktopLayout(),
+)
+```
+
+### AdaptiveContainer
+
+Container that adapts properties based on breakpoints:
+
+```dart
+AdaptiveContainer(
+  width: {
+    Breakpoint.xs: 100,
+    Breakpoint.md: 200,
+    Breakpoint.lg: 300,
+  },
+  padding: {
+    Breakpoint.xs: EdgeInsets.all(8),
+    Breakpoint.md: EdgeInsets.all(16),
+    Breakpoint.lg: EdgeInsets.all(24),
+  },
+  child: Text('Adaptive Container'),
+)
+
+// Or use SimpleAdaptiveContainer for easier syntax
+SimpleAdaptiveContainer(
+  widthXs: 100,
+  widthMd: 200,
+  widthLg: 300,
+  paddingXs: 8,
+  paddingMd: 16,
+  child: Text('Simple Adaptive'),
+)
+```
+
+### Responsive Queries
+
+Get values based on breakpoints:
+
+```dart
+final query = ResponsiveQuery.of(context);
+
+// Get value based on current breakpoint
+final padding = query.value(
+  xs: 8.0,
+  sm: 12.0,
+  md: 16.0,
+  lg: 24.0,
+);
+
+// Or use AdaptiveValues for responsive sizing
+final adaptive = AdaptiveValues.of(context);
+final width = adaptive.width(xs: 50, sm: 100, md: 150, lg: 200);
+final fontSize = adaptive.fontSize(xs: 12, sm: 14, md: 16, lg: 18);
+```
+
+## 📐 SwiftUI-like Size Classes
+
+Create adaptive layouts using size classes (similar to SwiftUI).
+
+### Using Size Classes
+
+```dart
+// Get size classes
+final sizeClasses = context.sizeClasses;
+
+// Check size classes
+if (sizeClasses.isRegular) {
+  // Regular size (e.g., iPad)
+}
+
+if (sizeClasses.isCompact) {
+  // Compact size (e.g., iPhone in portrait)
+}
+
+// Check individual dimensions
+if (sizeClasses.isRegularHorizontal) {
+  // Wide screen
+}
+
+if (sizeClasses.isCompactVertical) {
+  // Short screen
+}
+```
+
+### SizeClassBuilder
+
+Build different layouts based on size classes:
+
+```dart
+SizeClassBuilder(
+  compact: (context) => CompactLayout(),
+  regular: (context) => RegularLayout(),
+)
+
+// Or with horizontal/vertical size classes
+SizeClassBuilder(
+  horizontal: (context, horizontal) {
+    return horizontal == SizeClass.regular
+        ? WideLayout()
+        : NarrowLayout();
+  },
+  vertical: (context, vertical) {
+    return vertical == SizeClass.regular
+        ? TallLayout()
+        : ShortLayout();
+  },
+)
+
+// Or with full size class information
+SizeClassBuilder(
+  builder: (context, sizeClasses) {
+    return Text(
+      'H: ${sizeClasses.horizontal}, V: ${sizeClasses.vertical}',
+    );
+  },
+)
+```
+
+### Custom Threshold
+
+```dart
+SizeClassBuilder(
+  threshold: 600, // Custom threshold (default: 600)
+  compact: (context) => CompactLayout(),
+  regular: (context) => RegularLayout(),
+)
+```
+
+## 🎨 Adaptive Text Styles
+
+Create text styles that adapt based on breakpoints:
+
+```dart
+// Using context extension
+final style = context.adaptiveTextStyle(
+  xs: TextStyle(fontSize: 12, color: Colors.black),
+  md: TextStyle(fontSize: 16, color: Colors.blue),
+  lg: TextStyle(fontSize: 20, color: Colors.green),
+);
+
+// Using AdaptiveText widget
+AdaptiveText(
+  'Adaptive Text',
+  xs: TextStyle(fontSize: 12),
+  md: TextStyle(fontSize: 16),
+  lg: TextStyle(fontSize: 20),
+)
+
+// Using TextStyle extensions
+TextStyle(fontSize: 16)
+  .r  // Makes fontSize responsive
+  .withLineHeight(1.5)  // Sets line height
+  .withAutoLineHeight()  // Auto-calculates line height
+```
+
+## 🔧 Advanced Usage
+
+### Conditional Rendering
+
+```dart
+ConditionalBuilder(
+  condition: (context) => context.isAtLeast(Breakpoint.md),
+  builder: (context) => DesktopLayout(),
+  fallback: (context) => MobileLayout(),
+)
+```
+
+### Responsive Theme
+
+Automatically scale all text styles in your theme:
+
+```dart
+ScreenUtilPlusInit(
+  designSize: const Size(360, 690),
+  builder: (context, child) {
+    return MaterialApp(
+      theme: ResponsiveTheme.fromTheme(
+        ThemeData(
+          primarySwatch: Colors.blue,
+          textTheme: TextTheme(
+            headlineLarge: TextStyle(fontSize: 24),
+            bodyLarge: TextStyle(fontSize: 16),
+          ),
+        ),
+      ),
+      home: child,
+    );
+  },
+  child: HomePage(),
+)
 ```
 
 ### Properties
 
-| Property          | Type             | Default Value | Description                                                                                                                                   |
-| ----------------- | ---------------- | ------------- |-----------------------------------------------------------------------------------------------------------------------------------------------|
-| designSize        | Size             | Size(360,690) | The size of the device screen in the design draft, in dp                                                                                      |
-| builder           | Function         | null          | Return widget that uses the library in a property (ex: MaterialApp's theme)                                                                   |
-| child             | Widget           | null          | A part of builder that its dependencies/properties don't use the library                                                                      |
-| rebuildFactor     | RebuildFactor    | RebuildFactors.size | Function that takes old and new screen metrics and returns whether to rebuild or not when changes occur. See [RebuildFactors](#rebuild-factors) |
-| splitScreenMode   | bool             | false         | Support for split screen mode                                                                                                                 |
-| minTextAdapt      | bool             | false         | Whether to adapt the text according to the minimum of width and height                                                                        |
-| ensureScreenSize  | bool             | false         | Whether to wait for screen size to be initialized before building (useful for web/desktop)                                                    |
-| fontSizeResolver  | FontSizeResolver | FontSizeResolvers.width | Function that specifies how font size should be adapted. See [FontSizeResolvers](#font-size-resolvers) |
-| responsiveWidgets | Iterable<String> | null          | List/Set of widget names that should be included in rebuilding tree. (See [How flutter_screenutil_plus marks a widget needs build](#rebuild-list)) |
-| enableScaleWH     | Function         | null          | Function to enable/disable scaling of width and height                                                                                        |
-| enableScaleText   | Function         | null          | Function to enable/disable scaling of text                                                                                                     |
-
+| Property          | Type             | Default Value           | Description                                                                                                                                          |
+| ----------------- | ---------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| designSize        | Size             | Size(360,690)           | The size of the device screen in the design draft, in dp                                                                                             |
+| builder           | Function         | null                    | Return widget that uses the library in a property (ex: MaterialApp's theme)                                                                          |
+| child             | Widget           | null                    | A part of builder that its dependencies/properties don't use the library                                                                             |
+| rebuildFactor     | RebuildFactor    | RebuildFactors.size     | Function that takes old and new screen metrics and returns whether to rebuild or not when changes occur. See [RebuildFactors](#rebuild-factors)      |
+| splitScreenMode   | bool             | false                   | Support for split screen mode                                                                                                                        |
+| minTextAdapt      | bool             | false                   | Whether to adapt the text according to the minimum of width and height                                                                               |
+| ensureScreenSize  | bool             | false                   | Whether to wait for screen size to be initialized before building (useful for web/desktop)                                                           |
+| fontSizeResolver  | FontSizeResolver | FontSizeResolvers.width | Function that specifies how font size should be adapted. See [FontSizeResolvers](#font-size-resolvers)                                               |
+| responsiveWidgets | Iterable<String> | null                    | List/Set of widget names that should be included in rebuilding tree. (See [How flutter_screenutil_plus marks a widget needs build](#rebuild-list)) |
+| enableScaleWH     | Function         | null                    | Function to enable/disable scaling of width and height                                                                                               |
+| enableScaleText   | Function         | null                    | Function to enable/disable scaling of text                                                                                                             |
 
 **Note : You must either provide builder, child or both.**
 
@@ -61,6 +418,7 @@ The `rebuildFactor` parameter controls when the widget tree should rebuild based
 - `RebuildFactors.none` - Never rebuild automatically
 
 You can also provide a custom function:
+
 ```dart
 rebuildFactor: (oldData, newData) => oldData.size != newData.size
 ```
@@ -76,12 +434,15 @@ The `fontSizeResolver` parameter controls how font sizes are calculated. Availab
 - `FontSizeResolvers.diagonal` - Scale based on diagonal calculation
 
 You can also provide a custom function:
+
 ```dart
 fontSizeResolver: (fontSize, instance) => instance.setWidth(fontSize * 0.9)
 ```
 
-### Rebuild list
+### Rebuild List
+
 Starting from version 1.0.0, ScreenUtilInit won't rebuild the whole widget tree, instead it will mark widget needs build only if:
+
 - Widget is not a flutter widget (widgets are available in [Flutter Docs](https://docs.flutter.dev/reference/widgets))
 - Widget does not start with underscore (`_`)
 - Widget does not declare `SU` mixin
@@ -108,181 +469,16 @@ class MyCustomWidget extends StatelessWidget with SU {
 }
 ```
 
-### Initialize and set the fit size and font size to scale according to the system's "font size" accessibility option 
-
-Please set the size of the design draft before use, the width and height of the design draft.
-
-#### The first way (Recommended - Use it once in your app)
+### Enable or Disable Scaling
 
 ```dart
-import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
-
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    //Set the fit size (Find your UI design, look at the dimensions of the device screen and fill it in,unit in dp)
-    return ScreenUtilPlusInit(
-      designSize: const Size(360, 690),
-      minTextAdapt: true,
-      splitScreenMode: true,
-      // Use builder only if you need to use library outside ScreenUtilPlusInit context
-      builder: (_ , child) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'First Method',
-          // You can use the library anywhere in the app even in theme
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-            textTheme: Typography.englishLike2018.apply(fontSizeFactor: 1.sp),
-          ),
-          home: child,
-        );
-      },
-      child: const HomePage(title: 'First Method'),
-    );
-  }
+Widget build(BuildContext context) {
+  return ScreenUtilPlusInit(
+    enableScaleWH: () => false,  // Disable width/height scaling
+    enableScaleText: () => false, // Disable text scaling
+    //...
+  );
 }
-```
-
-#### Using ResponsiveTheme
-
-For easier theme management, you can use `ResponsiveTheme` to automatically scale all text styles:
-
-```dart
-import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
-
-ScreenUtilPlusInit(
-  designSize: const Size(360, 690),
-  builder: (context, child) {
-    return MaterialApp(
-      theme: ResponsiveTheme.fromTheme(
-        ThemeData(
-          primarySwatch: Colors.blue,
-          textTheme: TextTheme(
-            headlineLarge: TextStyle(fontSize: 24),
-            bodyLarge: TextStyle(fontSize: 16),
-          ),
-        ),
-      ),
-      home: child,
-    );
-  },
-  child: HomePage(),
-)
-```
-
-#### The second way:You need a trick to support font adaptation in the textTheme of app theme
-
-**Hybrid development uses the second way**
-
-not support this:
-
-```dart
-MaterialApp(
-  ...
-  //To support the following, you need to use the first initialization method
-  theme: ThemeData(
-    textTheme: TextTheme(
-      button: TextStyle(fontSize: 45.sp)
-    ),
-  ),
-)
-```
-
-but you can do this:
-
-```dart
-import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
-
-void main() async {
-  // Add this line to wait for screen size initialization (useful for web/desktop)
-  await ScreenUtilPlus.ensureScreenSize();
-  runApp(MyApp());
-}
-...
-MaterialApp(
-  ...
-  builder: (ctx, child) {
-    ScreenUtilPlus.init(ctx);
-    return Theme(
-      data: ThemeData(
-        primarySwatch: Colors.blue,
-        textTheme: TextTheme(bodyLarge: TextStyle(fontSize: 30.sp)),
-      ),
-      child: HomePage(title: 'FlutterScreenUtil Demo'),
-    );
-  },
-)
-```
-
-```dart
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter_ScreenUtil',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: HomePage(title: 'FlutterScreenUtil Demo'),
-    );
-  }
-}
-
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key, this.title}) : super(key: key);
-
-  final String? title;
-
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
-  Widget build(BuildContext context) {
-    //Set the fit size (fill in the screen size of the device in the design) 
-    //If the design is based on the size of the 360*690(dp)
-    ScreenUtilPlus.init(context, designSize: const Size(360, 690));
-    ...
-  }
-}
-```
-
-**Note: calling `ScreenUtilPlus.init` a second time, any non-provided parameter will not be replaced with default value. Use `ScreenUtilPlus.configure` instead**
-
-#### Using ensureScreenSize in ScreenUtilPlusInit
-
-For web and desktop apps, you can use the `ensureScreenSize` parameter:
-
-```dart
-ScreenUtilPlusInit(
-  designSize: const Size(360, 690),
-  ensureScreenSize: true, // Waits for screen size before building
-  builder: (context, child) {
-    return MaterialApp(home: child);
-  },
-  child: HomePage(),
-)
-```
-
-### API
-
-#### Enable or disable scale
-
-```dart
-  Widget build(BuildContext context) {
-    return ScreenUtilPlusInit(
-      enableScaleWH: () => false,  // Disable width/height scaling
-      enableScaleText: () => false, // Disable text scaling
-      //...
-    );
-  }
 ```
 
 or
@@ -294,7 +490,7 @@ ScreenUtilPlus.enableScale(
 );
 ```
 
-#### Device Type Detection
+### Device Type Detection
 
 You can detect the device type for platform-specific UI adjustments:
 
@@ -314,302 +510,50 @@ switch (deviceType) {
 }
 ```
 
-#### Register Elements for Rebuild (Experimental)
+### API Reference
 
-For web and desktop apps, you can manually register elements to rebuild:
+#### Extension Methods
 
-```dart
-// Register current widget and descendants
-ScreenUtilPlus.registerToBuild(context, withDescendants: true);
+| Extension | Description | Example |
+|-----------|-------------|---------|
+| `.w` | Adapt to screen width | `100.w` |
+| `.h` | Adapt to screen height | `100.h` |
+| `.r` | Adapt to smaller of width/height | `100.r` |
+| `.dm` | Adapt to larger of width/height | `100.dm` |
+| `.dg` | Adapt based on diagonal | `100.dg` |
+| `.sp` | Responsive font size | `16.sp` |
+| `.spMin` | Minimum font size | `12.spMin` |
+| `.spMax` | Maximum font size | `16.spMax` |
+| `.sw` | Screen width | `1.sw` |
+| `.sh` | Screen height | `1.sh` |
 
-// Or register only the current widget
-ScreenUtilPlus.registerToBuild(context);
-```
+#### Context Extensions
 
+| Extension | Description | Example |
+|-----------|-------------|---------|
+| `context.breakpoint` | Current breakpoint | `context.breakpoint` |
+| `context.isAtLeast()` | Check if at least breakpoint | `context.isAtLeast(Breakpoint.md)` |
+| `context.isLessThan()` | Check if less than breakpoint | `context.isLessThan(Breakpoint.lg)` |
+| `context.isBetween()` | Check if between breakpoints | `context.isBetween(Breakpoint.sm, Breakpoint.lg)` |
+| `context.sizeClasses` | Get size classes | `context.sizeClasses` |
+| `context.adaptive()` | Get AdaptiveValues | `context.adaptive()` |
+| `context.responsive()` | Get ResponsiveQuery | `context.responsive()` |
 
-#### Pass the dp size of the design draft
+#### Widgets
 
-```dart
-    // Size extensions
-    ScreenUtilPlus().setWidth(540)  (dart sdk>=2.6 : 540.w) //Adapted to screen width
-    ScreenUtilPlus().setHeight(200) (dart sdk>=2.6 : 200.h) //Adapted to screen height
-    ScreenUtilPlus().radius(200)    (dart sdk>=2.6 : 200.r) //Adapt according to the smaller of width or height
-    ScreenUtilPlus().diagonal(200)  (dart sdk>=2.6 : 200.dg) //Adapt according to diagonal calculation
-    ScreenUtilPlus().diameter(200)  (dart sdk>=2.6 : 200.dm) //Adapt according to the larger of width/height
-    ScreenUtilPlus().setSp(24)      (dart sdk>=2.6 : 24.sp) //Adapter font
-    12.spMin   //return min(12,12.sp) - prevents font from being too large
-    12.spMax   //return max(12,12.sp) - ensures minimum font size
-
-    // Screen properties
-    ScreenUtilPlus().pixelRatio       //Device pixel density
-    ScreenUtilPlus().screenWidth   (dart sdk>=2.6 : 1.sw)    //Device width
-    ScreenUtilPlus().screenHeight  (dart sdk>=2.6 : 1.sh)    //Device height
-    ScreenUtilPlus().bottomBarHeight  //Bottom safe zone distance, suitable for buttons with full screen
-    ScreenUtilPlus().statusBarHeight  //Status bar height, Notch will be higher
-    ScreenUtilPlus().textScaleFactor  //System font scaling factor
-    ScreenUtilPlus().scaleWidth //The ratio of actual width to UI design
-    ScreenUtilPlus().scaleHeight //The ratio of actual height to UI design
-    ScreenUtilPlus().orientation  //Screen orientation
-
-    // Spacing helpers
-    0.2.sw  //0.2 times the screen width
-    0.5.sh  //50% of screen height
-    20.verticalSpace  // SizedBox(height: 20 * scaleHeight)
-    20.horizontalSpace  // SizedBox(width: 20 * scaleWidth)
-    20.verticalSpaceFromWidth  // SizedBox(height: 20 * scaleWidth)
-    20.horizontalSpaceRadius  // SizedBox(width: 20.r)
-    20.verticalSpacingRadius  // SizedBox(height: 20.r)
-    20.horizontalSpaceDiameter  // SizedBox(width: 20.dm)
-    20.verticalSpacingDiameter  // SizedBox(height: 20.dm)
-    20.horizontalSpaceDiagonal  // SizedBox(width: 20.dg)
-    20.verticalSpacingDiagonal  // SizedBox(height: 20.dg)
-
-    // Responsive widgets
-    const RPadding.all(8)   // Padding.all(8.r) - take advantage of const keyword
-    REdgeInsets.all(8)       // EdgeInsets.all(8.r)
-    REdgeInsets.only(left: 8, right: 8) // EdgeInsets.only(left: 8.r, right: 8.r)
-    REdgeInsets.symmetric(vertical: 8, horizontal: 16) // Symmetric padding
-    REdgeInsetsDirectional.all(8) // Directional padding
-    RSizedBox(width: 100, height: 50) // Responsive SizedBox
-    RSizedBox.square(dimension: 50) // Square SizedBox
-    RContainer(width: 100, height: 50) // Responsive Container
-    RText('Hello', style: TextStyle(fontSize: 16)) // Responsive Text (auto-scales fontSize)
-
-    // Extension methods on existing widgets
-    EdgeInsets.all(10).w    //EdgeInsets.all(10.w)
-    EdgeInsets.all(10).h    //EdgeInsets.all(10.h)
-    EdgeInsets.all(10).r    //EdgeInsets.all(10.r)
-    EdgeInsets.all(10).dm   //EdgeInsets.all(10.dm)
-    EdgeInsets.all(10).dg   //EdgeInsets.all(10.dg)
-    EdgeInsets.only(left:8,right:8).r // EdgeInsets.only(left:8.r,right:8.r)
-    BoxConstraints(maxWidth: 100, minHeight: 100).w    //BoxConstraints(maxWidth: 100.w, minHeight: 100.w)
-    BoxConstraints(maxWidth: 100, minHeight: 100).h    //BoxConstraints(maxWidth: 100.h, minHeight: 100.h)
-    BoxConstraints(maxWidth: 100, minHeight: 100).r    //BoxConstraints(maxWidth: 100.r, minHeight: 100.r)
-    BoxConstraints(maxWidth: 100, minHeight: 100).hw   //BoxConstraints(maxWidth: 100.w, minHeight: 100.h)
-    Radius.circular(16).w          //Radius.circular(16.w)
-    Radius.circular(16).h          //Radius.circular(16.h)
-    Radius.circular(16).r          //Radius.circular(16.r)
-    BorderRadius.circular(16).w    //BorderRadius with width-based radius
-    BorderRadius.circular(16).h    //BorderRadius with height-based radius
-    BorderRadius.circular(16).r    //BorderRadius with radius-based scaling  
-```
-
-#### Adapt screen size
-
-Pass the dp size of the design draft (The unit is the same as the unit at initialization):
-
-- Adapted to screen width: `ScreenUtilPlus().setWidth(540)` or `540.w`
-- Adapted to screen height: `ScreenUtilPlus().setHeight(200)` or `200.h`
-- Adapted to radius (smaller of width/height): `ScreenUtilPlus().radius(200)` or `200.r`
-- Adapted to diagonal: `ScreenUtilPlus().diagonal(200)` or `200.dg`
-- Adapted to diameter (larger of width/height): `ScreenUtilPlus().diameter(200)` or `200.dm`
-
-In general, the height is best to adapt to the width to avoid deformation.
-
-If your dart sdk>=2.6, you can use extension functions:
-
-example:
-
-instead of :
-
-```dart
-Container(
-  width: ScreenUtil().setWidth(50),
-  height:ScreenUtil().setHeight(200),
-)
-```
-
-you can use it like this:
-
-```dart
-Container(
-  width: 50.w,
-  height:200.h
-)
-```
-
-#### `Note`
-
-The height can also use setWidth to ensure that it is not deformed(when you want a square)
-
-The setHeight method is mainly to adapt to the height, which is used when you want to control the height of a screen on the UI to be the same as the actual display.
-
-Generally speaking, 50.w!=50.h.
-
-```dart
-//for example:
-
-//If you want to display a rectangle:
-Container(
-  width: 375.w,
-  height: 375.h,
-),
-            
-//If you want to display a square based on width:
-Container(
-  width: 300.w,
-  height: 300.w,
-),
-
-//If you want to display a square based on height:
-Container(
-  width: 300.h,
-  height: 300.h,
-),
-
-//If you want to display a square based on minimum(height, width):
-Container(
-  width: 300.r,
-  height: 300.r,
-),
-```
-
-#### Adapter font
-
-```dart
-//Incoming font size (The unit is the same as the unit at initialization)
-ScreenUtilPlus().setSp(28) 
-28.sp
-
-// Smart font sizing
-12.spMin  // Returns min(12, 12.sp) - prevents font from being too large
-12.spMax  // Returns max(12, 12.sp) - ensures minimum font size
-
-//for example:
-Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: <Widget>[
-    Text(
-      '16sp, will not change with the system.',
-      style: TextStyle(
-        color: Colors.black,
-        fontSize: 16.sp,
-      ),
-      textScaler: TextScaler.linear(1.0), // Use textScaler instead of textScaleFactor
-    ),
-    Text(
-      '16sp, if data is not set in MediaQuery, my font size will change with the system.',
-      style: TextStyle(
-        color: Colors.black,
-        fontSize: 16.sp,
-      ),
-    ),
-    // Using RText for automatic font scaling
-    RText(
-      'Auto-scaled text',
-      style: TextStyle(fontSize: 16), // Automatically converted to 16.sp
-    ),
-  ],
-)
-```
-
-#### Setting font does not change with system font size
-
-APP global:
-
-```dart
-MaterialApp(
-  debugShowCheckedModeBanner: false,
-  title: 'Flutter_ScreenUtil',
-  theme: ThemeData(
-    primarySwatch: Colors.blue,
-  ),
-  builder: (context, widget) {
-    return MediaQuery(
-      ///Setting font does not change with system font size
-      data: MediaQuery.of(context).copyWith(
-        textScaler: TextScaler.linear(1.0), // Use textScaler instead of textScaleFactor
-      ),
-      child: widget,
-    );
-  },
-  home: HomePage(title: 'FlutterScreenUtil Demo'),
-),
-```
-
-Specified Text:
-
-```dart
-Text("text", textScaler: TextScaler.linear(1.0))
-```
-
-Specified Widget:
-
-```dart
-MediaQuery(
-  // If there is no context available you can wrap [MediaQuery] with [Builder]
-  data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
-  child: AnyWidget(),
-)
-```
-
-### Responsive Widgets
-
-The package provides several responsive widgets that automatically apply scaling:
-
-#### RContainer
-
-A responsive Container that automatically scales width, height, padding, and margin:
-
-```dart
-RContainer(
-  width: 100,
-  height: 50,
-  padding: EdgeInsets.all(8), // Automatically converted to 8.r
-  margin: EdgeInsets.symmetric(horizontal: 16), // Automatically scaled
-  decoration: BoxDecoration(
-    color: Colors.blue,
-    borderRadius: BorderRadius.circular(8.r),
-  ),
-  child: Text('Responsive Container'),
-)
-```
-
-#### RPadding
-
-A responsive Padding widget:
-
-```dart
-RPadding(
-  padding: EdgeInsets.all(16), // Automatically converted to 16.r
-  child: Text('Padded content'),
-)
-
-// Or use REdgeInsets for const constructors
-const RPadding(
-  padding: REdgeInsets.all(8),
-  child: Text('Const padding'),
-)
-```
-
-#### RSizedBox
-
-A responsive SizedBox:
-
-```dart
-RSizedBox(
-  width: 100,  // Automatically scaled
-  height: 50,  // Automatically scaled
-  child: Text('Sized content'),
-)
-
-// Square SizedBox
-RSizedBox.square(
-  dimension: 50, // Automatically scaled
-  child: Icon(Icons.star),
-)
-```
-
-#### RText
-
-A responsive Text widget that automatically scales font size:
-
-```dart
-RText(
-  'Hello World',
-  style: TextStyle(fontSize: 16), // Automatically converted to 16.sp
-)
-```
+| Widget | Description |
+|--------|-------------|
+| `ScreenUtilPlusInit` | Initialize the library |
+| `RContainer` | Responsive Container |
+| `RPadding` | Responsive Padding |
+| `RSizedBox` | Responsive SizedBox |
+| `RText` | Responsive Text |
+| `AdaptiveContainer` | Breakpoint-aware Container |
+| `SimpleAdaptiveContainer` | Simplified adaptive container |
+| `AdaptiveText` | Breakpoint-aware Text |
+| `ResponsiveBuilder` | Builder for different breakpoints |
+| `SizeClassBuilder` | Builder for size classes |
+| `ConditionalBuilder` | Conditional rendering |
 
 ### Performance Optimizations
 
@@ -626,3 +570,110 @@ This optimization is automatic and requires no code changes. The package will on
 - Split screen mode changes
 - Minimum text adaptation setting changes
 - Font size resolver function changes
+
+## 💡 Best Practices
+
+1. **Set design size once**: Initialize `ScreenUtilPlusInit` at the root of your app
+2. **Use `.r` for squares**: Use `.r` extension when you want perfect squares
+3. **Use breakpoints for major layout changes**: Use `ResponsiveBuilder` for different layouts
+4. **Use size classes for adaptive UI**: Use `SizeClassBuilder` for SwiftUI-like adaptive layouts
+5. **Combine with responsive widgets**: Use `AdaptiveContainer` for breakpoint-aware properties
+6. **Test on multiple devices**: Always test your responsive design on different screen sizes
+
+## 🎯 Complete Example
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ScreenUtilPlusInit(
+      designSize: const Size(360, 690),
+      minTextAdapt: true,
+      builder: (context, child) {
+        return MaterialApp(
+          title: 'Flutter ScreenUtil Plus',
+          theme: ResponsiveTheme.fromTheme(
+            ThemeData(
+              primarySwatch: Colors.blue,
+              textTheme: TextTheme(
+                headlineLarge: TextStyle(fontSize: 24),
+                bodyLarge: TextStyle(fontSize: 16),
+              ),
+            ),
+          ),
+          home: child,
+        );
+      },
+      child: const HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Flutter ScreenUtil Plus'),
+      ),
+      body: ResponsiveBuilder(
+        xs: (context) => _MobileLayout(),
+        md: (context) => _TabletLayout(),
+        lg: (context) => _DesktopLayout(),
+      ),
+    );
+  }
+}
+
+class _MobileLayout extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SingleColumnLayout();
+  }
+}
+
+class _TabletLayout extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return TwoColumnLayout();
+  }
+}
+
+class _DesktopLayout extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ThreeColumnLayout();
+  }
+}
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Inspired by [flutter_screenutil](https://pub.dev/packages/flutter_screenutil)
+- Breakpoint system inspired by CSS media queries
+- Size class system inspired by SwiftUI
+
+## 📞 Support
+
+- 🐛 Issues: [GitHub Issues](https://github.com/muhammadkamel/flutter_screenutil_plus/issues)
+- 📖 Documentation: [Full Documentation](https://pub.dev/documentation/flutter_screenutil_plus/latest/)
+- 📧 Email: [mu7ammadkamel@hotmail.com](mailto:mu7ammadkamel@hotmail.com)
+
+---
+
+Made with ❤️ by Muhammad Kamel

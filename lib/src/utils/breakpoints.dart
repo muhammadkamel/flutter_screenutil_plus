@@ -7,6 +7,18 @@
 /// - lg: Large devices (desktops)
 /// - xl: Extra large devices (large desktops)
 class Breakpoints {
+  /// Creates a [Breakpoints] instance with custom breakpoint values.
+  ///
+  /// All breakpoints default to standard Bootstrap 5 values if not specified.
+  const Breakpoints({
+    this.xs = 0,
+    this.sm = 576,
+    this.md = 768,
+    this.lg = 992,
+    this.xl = 1200,
+    this.xxl = 1400,
+  });
+
   /// Extra small devices (phones in portrait mode)
   /// Default: 0px
   final double xs;
@@ -31,30 +43,12 @@ class Breakpoints {
   /// Default: 1400px
   final double xxl;
 
-  const Breakpoints({
-    this.xs = 0,
-    this.sm = 576,
-    this.md = 768,
-    this.lg = 992,
-    this.xl = 1200,
-    this.xxl = 1400,
-  });
-
   /// Bootstrap 5 breakpoints
-  static const Breakpoints bootstrap = Breakpoints(
-    xs: 0,
-    sm: 576,
-    md: 768,
-    lg: 992,
-    xl: 1200,
-    xxl: 1400,
-  );
+  static const Breakpoints bootstrap = Breakpoints();
 
   /// Tailwind CSS breakpoints
   static const Breakpoints tailwind = Breakpoints(
-    xs: 0,
     sm: 640,
-    md: 768,
     lg: 1024,
     xl: 1280,
     xxl: 1536,
@@ -62,7 +56,6 @@ class Breakpoints {
 
   /// Material Design breakpoints
   static const Breakpoints material = Breakpoints(
-    xs: 0,
     sm: 600,
     md: 960,
     lg: 1280,
@@ -72,9 +65,7 @@ class Breakpoints {
 
   /// Custom breakpoints for mobile-first design
   static const Breakpoints mobileFirst = Breakpoints(
-    xs: 0,
     sm: 480,
-    md: 768,
     lg: 1024,
     xl: 1440,
     xxl: 1920,
@@ -82,30 +73,40 @@ class Breakpoints {
 
   /// Gets the current breakpoint based on width
   Breakpoint getBreakpoint(double width) {
-    if (width >= xxl) return Breakpoint.xxl;
-    if (width >= xl) return Breakpoint.xl;
-    if (width >= lg) return Breakpoint.lg;
-    if (width >= md) return Breakpoint.md;
-    if (width >= sm) return Breakpoint.sm;
+    if (width >= xxl) {
+      return Breakpoint.xxl;
+    }
+    if (width >= xl) {
+      return Breakpoint.xl;
+    }
+    if (width >= lg) {
+      return Breakpoint.lg;
+    }
+    if (width >= md) {
+      return Breakpoint.md;
+    }
+    if (width >= sm) {
+      return Breakpoint.sm;
+    }
     return Breakpoint.xs;
   }
 
   /// Checks if width is at least the specified breakpoint
   bool isAtLeast(Breakpoint breakpoint, double width) {
-    final breakpointValue = _getBreakpointValue(breakpoint);
+    final double breakpointValue = _getBreakpointValue(breakpoint);
     return width >= breakpointValue;
   }
 
   /// Checks if width is less than the specified breakpoint
   bool isLessThan(Breakpoint breakpoint, double width) {
-    final breakpointValue = _getBreakpointValue(breakpoint);
+    final double breakpointValue = _getBreakpointValue(breakpoint);
     return width < breakpointValue;
   }
 
   /// Checks if width is between two breakpoints (inclusive)
   bool isBetween(Breakpoint min, Breakpoint max, double width) {
-    final minValue = _getBreakpointValue(min);
-    final maxValue = _getBreakpointValue(max);
+    final double minValue = _getBreakpointValue(min);
+    final double maxValue = _getBreakpointValue(max);
     return width >= minValue && width < maxValue;
   }
 

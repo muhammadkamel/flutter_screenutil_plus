@@ -8,7 +8,7 @@ void main() {
       // Configure ScreenUtilPlus for testing
       const data = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
       ScreenUtilPlus.configure(
         data: data,
@@ -21,15 +21,14 @@ void main() {
     testWidgets('adapts font size based on breakpoint', (tester) async {
       // XS breakpoint (320px)
       await tester.pumpWidget(
-        ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
+        const ScreenUtilPlusInit(
           child: MaterialApp(
             home: MediaQuery(
-              data: const MediaQueryData(
+              data: MediaQueryData(
                 size: Size(320, 568),
-                textScaler: TextScaler.linear(1.0),
+                textScaler: TextScaler.noScaling,
               ),
-              child: const AdaptiveText(
+              child: AdaptiveText(
                 'Test',
                 fontSizeXs: 12,
                 fontSizeMd: 16,
@@ -40,7 +39,7 @@ void main() {
         ),
       );
 
-      final text = tester.widget<Text>(find.byType(Text));
+      final Text text = tester.widget<Text>(find.byType(Text));
       final util = ScreenUtilPlus();
       expect(text.style?.fontSize, closeTo(12 * util.scaleText, 0.001));
     });
@@ -50,21 +49,20 @@ void main() {
     ) async {
       // MD breakpoint but only XS and LG defined
       await tester.pumpWidget(
-        ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
+        const ScreenUtilPlusInit(
           child: MaterialApp(
             home: MediaQuery(
-              data: const MediaQueryData(
+              data: MediaQueryData(
                 size: Size(768, 1024),
-                textScaler: TextScaler.linear(1.0),
+                textScaler: TextScaler.noScaling,
               ),
-              child: const AdaptiveText('Test', fontSizeXs: 12, fontSizeLg: 20),
+              child: AdaptiveText('Test', fontSizeXs: 12, fontSizeLg: 20),
             ),
           ),
         ),
       );
 
-      final text = tester.widget<Text>(find.byType(Text));
+      final Text text = tester.widget<Text>(find.byType(Text));
       final util = ScreenUtilPlus();
       // Should fall back to XS value (MD not defined, falls back to XS)
       expect(text.style?.fontSize, closeTo(12 * util.scaleText, 0.001));
@@ -72,15 +70,14 @@ void main() {
 
     testWidgets('adapts font weight based on breakpoint', (tester) async {
       await tester.pumpWidget(
-        ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
+        const ScreenUtilPlusInit(
           child: MaterialApp(
             home: MediaQuery(
-              data: const MediaQueryData(
+              data: MediaQueryData(
                 size: Size(1920, 1080),
-                textScaler: TextScaler.linear(1.0),
+                textScaler: TextScaler.noScaling,
               ),
-              child: const AdaptiveText(
+              child: AdaptiveText(
                 'Test',
                 fontSizeXs: 14,
                 fontWeightXs: FontWeight.normal,
@@ -91,19 +88,18 @@ void main() {
         ),
       );
 
-      final text = tester.widget<Text>(find.byType(Text));
+      final Text text = tester.widget<Text>(find.byType(Text));
       expect(text.style?.fontWeight, FontWeight.bold);
     });
 
     testWidgets('adapts color based on breakpoint', (tester) async {
       await tester.pumpWidget(
-        ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
+        const ScreenUtilPlusInit(
           child: MaterialApp(
             home: MediaQuery(
-              data: const MediaQueryData(
+              data: MediaQueryData(
                 size: Size(768, 1024),
-                textScaler: TextScaler.linear(1.0),
+                textScaler: TextScaler.noScaling,
               ),
               child: AdaptiveText(
                 'Test',
@@ -116,21 +112,20 @@ void main() {
         ),
       );
 
-      final text = tester.widget<Text>(find.byType(Text));
+      final Text text = tester.widget<Text>(find.byType(Text));
       expect(text.style?.color, Colors.red);
     });
 
     testWidgets('adapts line height based on breakpoint', (tester) async {
       await tester.pumpWidget(
-        ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
+        const ScreenUtilPlusInit(
           child: MaterialApp(
             home: MediaQuery(
-              data: const MediaQueryData(
+              data: MediaQueryData(
                 size: Size(992, 768),
-                textScaler: TextScaler.linear(1.0),
+                textScaler: TextScaler.noScaling,
               ),
-              child: const AdaptiveText(
+              child: AdaptiveText(
                 'Test',
                 fontSizeXs: 14,
                 lineHeightXs: 1.2,
@@ -141,21 +136,20 @@ void main() {
         ),
       );
 
-      final text = tester.widget<Text>(find.byType(Text));
+      final Text text = tester.widget<Text>(find.byType(Text));
       expect(text.style?.height, 1.8);
     });
 
     testWidgets('adapts letter spacing based on breakpoint', (tester) async {
       await tester.pumpWidget(
-        ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
+        const ScreenUtilPlusInit(
           child: MaterialApp(
             home: MediaQuery(
-              data: const MediaQueryData(
+              data: MediaQueryData(
                 size: Size(1200, 900),
-                textScaler: TextScaler.linear(1.0),
+                textScaler: TextScaler.noScaling,
               ),
-              child: const AdaptiveText(
+              child: AdaptiveText(
                 'Test',
                 fontSizeXs: 14,
                 letterSpacingXs: 0.5,
@@ -166,21 +160,20 @@ void main() {
         ),
       );
 
-      final text = tester.widget<Text>(find.byType(Text));
+      final Text text = tester.widget<Text>(find.byType(Text));
       expect(text.style?.letterSpacing, 1.5);
     });
 
     testWidgets('merges with base style', (tester) async {
       await tester.pumpWidget(
-        ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
+        const ScreenUtilPlusInit(
           child: MaterialApp(
             home: MediaQuery(
-              data: const MediaQueryData(
+              data: MediaQueryData(
                 size: Size(400, 800),
-                textScaler: TextScaler.linear(1.0),
+                textScaler: TextScaler.noScaling,
               ),
-              child: const AdaptiveText(
+              child: AdaptiveText(
                 'Test',
                 fontSizeXs: 14,
                 baseStyle: TextStyle(
@@ -193,16 +186,15 @@ void main() {
         ),
       );
 
-      final text = tester.widget<Text>(find.byType(Text));
+      final Text text = tester.widget<Text>(find.byType(Text));
       expect(text.style?.fontStyle, FontStyle.italic);
       expect(text.style?.decoration, TextDecoration.underline);
     });
 
     testWidgets('passes through text widget properties', (tester) async {
       await tester.pumpWidget(
-        ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
-          child: const MaterialApp(
+        const ScreenUtilPlusInit(
+          child: MaterialApp(
             home: AdaptiveText(
               'Test',
               fontSizeXs: 14,
@@ -214,7 +206,7 @@ void main() {
         ),
       );
 
-      final text = tester.widget<Text>(find.byType(Text));
+      final Text text = tester.widget<Text>(find.byType(Text));
       expect(text.textAlign, TextAlign.center);
       expect(text.maxLines, 2);
       expect(text.overflow, TextOverflow.ellipsis);
@@ -222,25 +214,20 @@ void main() {
 
     testWidgets('handles xxl breakpoint', (tester) async {
       await tester.pumpWidget(
-        ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
+        const ScreenUtilPlusInit(
           child: MaterialApp(
             home: MediaQuery(
-              data: const MediaQueryData(
+              data: MediaQueryData(
                 size: Size(1920, 1080),
-                textScaler: TextScaler.linear(1.0),
+                textScaler: TextScaler.noScaling,
               ),
-              child: const AdaptiveText(
-                'Test',
-                fontSizeXs: 12,
-                fontSizeXxl: 24,
-              ),
+              child: AdaptiveText('Test', fontSizeXs: 12, fontSizeXxl: 24),
             ),
           ),
         ),
       );
 
-      final text = tester.widget<Text>(find.byType(Text));
+      final Text text = tester.widget<Text>(find.byType(Text));
       final util = ScreenUtilPlus();
       expect(text.style?.fontSize, closeTo(24 * util.scaleText, 0.001));
     });
@@ -250,7 +237,7 @@ void main() {
     setUp(() {
       const data = MediaQueryData(
         size: Size(400, 800),
-        textScaler: TextScaler.linear(1.0),
+        textScaler: TextScaler.noScaling,
       );
       ScreenUtilPlus.configure(
         data: data,
@@ -263,18 +250,17 @@ void main() {
     testWidgets('creates adaptive text style', (tester) async {
       await tester.pumpWidget(
         ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
           child: MaterialApp(
             home: Builder(
               builder: (context) {
                 return MediaQuery(
                   data: const MediaQueryData(
                     size: Size(768, 1024),
-                    textScaler: TextScaler.linear(1.0),
+                    textScaler: TextScaler.noScaling,
                   ),
                   child: Builder(
                     builder: (context) {
-                      final style = context.adaptiveTextStyle(
+                      final TextStyle style = context.adaptiveTextStyle(
                         fontSizeXs: 12,
                         fontSizeMd: 16,
                         fontSizeLg: 20,
@@ -290,7 +276,7 @@ void main() {
         ),
       );
 
-      final text = tester.widget<Text>(find.byType(Text));
+      final Text text = tester.widget<Text>(find.byType(Text));
       final util = ScreenUtilPlus();
       expect(text.style?.fontSize, closeTo(16 * util.scaleText, 0.001));
     });
@@ -298,11 +284,10 @@ void main() {
     testWidgets('merges with base style in extension', (tester) async {
       await tester.pumpWidget(
         ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
           child: MaterialApp(
             home: Builder(
               builder: (context) {
-                final style = context.adaptiveTextStyle(
+                final TextStyle style = context.adaptiveTextStyle(
                   fontSizeXs: 14,
                   baseStyle: const TextStyle(
                     fontStyle: FontStyle.italic,
@@ -317,7 +302,7 @@ void main() {
         ),
       );
 
-      final text = tester.widget<Text>(find.byType(Text));
+      final Text text = tester.widget<Text>(find.byType(Text));
       expect(text.style?.fontStyle, FontStyle.italic);
       expect(text.style?.fontFamily, 'Roboto');
     });
@@ -325,18 +310,17 @@ void main() {
     testWidgets('handles all adaptive properties in extension', (tester) async {
       await tester.pumpWidget(
         ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
           child: MaterialApp(
             home: Builder(
               builder: (context) {
                 return MediaQuery(
                   data: const MediaQueryData(
                     size: Size(992, 768),
-                    textScaler: TextScaler.linear(1.0),
+                    textScaler: TextScaler.noScaling,
                   ),
                   child: Builder(
                     builder: (context) {
-                      final style = context.adaptiveTextStyle(
+                      final TextStyle style = context.adaptiveTextStyle(
                         fontSizeXs: 12,
                         fontSizeLg: 18,
                         lineHeightXs: 1.2,
@@ -358,7 +342,7 @@ void main() {
         ),
       );
 
-      final text = tester.widget<Text>(find.byType(Text));
+      final Text text = tester.widget<Text>(find.byType(Text));
       final util = ScreenUtilPlus();
 
       expect(text.style?.fontSize, closeTo(18 * util.scaleText, 0.001));

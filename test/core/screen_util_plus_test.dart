@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'home.test.dart';
+import '../home.test.dart';
 
 void main() {
   const smallerDeviceSize = Size(300, 600);
@@ -77,7 +77,7 @@ void main() {
 
   testWidgets('[Rebuilding]', (tester) async {
     final textFieldKey = UniqueKey();
-    final buildCountNotifier = ValueNotifier(0);
+    final ValueNotifier<int> buildCountNotifier = ValueNotifier(0);
     final focusNode = FocusNode();
 
     Finder textField() => find.byKey(textFieldKey);
@@ -125,7 +125,7 @@ void main() {
     expect(buildCountNotifier.value, 1);
 
     // Simulate keyboard
-    tester.view.viewInsets = FakeViewPadding(bottom: 20);
+    tester.view.viewInsets = const FakeViewPadding(bottom: 20);
 
     await tester.pumpAndSettle();
     expect(focusNode.hasFocus, true);

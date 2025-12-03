@@ -9,15 +9,18 @@ import 'responsive_query.dart';
 /// Provides a convenient way to get responsive values that adapt
 /// based on breakpoints, similar to CSS media queries.
 class AdaptiveValues {
-  final BuildContext context;
-  final Breakpoints breakpoints;
-
   AdaptiveValues._(this.context, this.breakpoints);
 
   /// Creates adaptive values from context
   factory AdaptiveValues.of(BuildContext context, {Breakpoints? breakpoints}) {
     return AdaptiveValues._(context, breakpoints ?? Breakpoints.bootstrap);
   }
+
+  /// The build context used for responsive queries.
+  final BuildContext context;
+
+  /// The breakpoints configuration used for responsive design.
+  final Breakpoints breakpoints;
 
   /// Gets responsive width value based on breakpoint
   ///
@@ -31,7 +34,7 @@ class AdaptiveValues {
   /// );
   /// ```
   double width({num? xs, num? sm, num? md, num? lg, num? xl, num? xxl}) {
-    final value = ResponsiveQuery.of(
+    final num value = ResponsiveQuery.of(
       context,
       breakpoints: breakpoints,
     ).value(xs: xs, sm: sm, md: md, lg: lg, xl: xl, xxl: xxl);
@@ -40,7 +43,7 @@ class AdaptiveValues {
 
   /// Gets responsive height value based on breakpoint
   double height({num? xs, num? sm, num? md, num? lg, num? xl, num? xxl}) {
-    final value = ResponsiveQuery.of(
+    final num value = ResponsiveQuery.of(
       context,
       breakpoints: breakpoints,
     ).value(xs: xs, sm: sm, md: md, lg: lg, xl: xl, xxl: xxl);
@@ -49,7 +52,7 @@ class AdaptiveValues {
 
   /// Gets responsive font size value based on breakpoint
   double fontSize({num? xs, num? sm, num? md, num? lg, num? xl, num? xxl}) {
-    final value = ResponsiveQuery.of(
+    final num value = ResponsiveQuery.of(
       context,
       breakpoints: breakpoints,
     ).value(xs: xs, sm: sm, md: md, lg: lg, xl: xl, xxl: xxl);
@@ -58,7 +61,7 @@ class AdaptiveValues {
 
   /// Gets responsive radius value based on breakpoint
   double radius({num? xs, num? sm, num? md, num? lg, num? xl, num? xxl}) {
-    final value = ResponsiveQuery.of(
+    final num value = ResponsiveQuery.of(
       context,
       breakpoints: breakpoints,
     ).value(xs: xs, sm: sm, md: md, lg: lg, xl: xl, xxl: xxl);
@@ -74,7 +77,7 @@ class AdaptiveValues {
     EdgeInsets? xl,
     EdgeInsets? xxl,
   }) {
-    final value = ResponsiveQuery.of(
+    final EdgeInsets value = ResponsiveQuery.of(
       context,
       breakpoints: breakpoints,
     ).value(xs: xs, sm: sm, md: md, lg: lg, xl: xl, xxl: xxl);

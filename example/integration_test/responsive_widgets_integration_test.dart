@@ -71,6 +71,11 @@ void main() {
     });
 
     testWidgets('RText automatically scales font size', (tester) async {
+      // Set screen size larger than design size to ensure scaling occurs
+      tester.view.physicalSize = const Size(800, 1200);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+
       await tester.pumpWidget(
         ScreenUtilPlusInit(
           designSize: const Size(360, 690),
@@ -78,12 +83,14 @@ void main() {
             return MaterialApp(home: child);
           },
           child: const Scaffold(
-            body: Column(
-              children: [
-                RText('Small Text', style: TextStyle(fontSize: 12)),
-                RText('Medium Text', style: TextStyle(fontSize: 16)),
-                RText('Large Text', style: TextStyle(fontSize: 24)),
-              ],
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  RText('Small Text', style: TextStyle(fontSize: 12)),
+                  RText('Medium Text', style: TextStyle(fontSize: 16)),
+                  RText('Large Text', style: TextStyle(fontSize: 24)),
+                ],
+              ),
             ),
           ),
         ),
@@ -651,10 +658,25 @@ void main() {
           child: const Scaffold(
             body: Column(
               children: [
-                RText('Bold Text', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                RText('Italic Text', style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic)),
-                RText('Colored Text', style: TextStyle(fontSize: 18, color: Colors.blue)),
-                RText('Underlined Text', style: TextStyle(fontSize: 16, decoration: TextDecoration.underline)),
+                RText(
+                  'Bold Text',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                RText(
+                  'Italic Text',
+                  style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
+                ),
+                RText(
+                  'Colored Text',
+                  style: TextStyle(fontSize: 18, color: Colors.blue),
+                ),
+                RText(
+                  'Underlined Text',
+                  style: TextStyle(
+                    fontSize: 16,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
               ],
             ),
           ),
@@ -681,9 +703,7 @@ void main() {
               width: 200,
               height: 100,
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.blue, Colors.purple],
-                ),
+                gradient: LinearGradient(colors: [Colors.blue, Colors.purple]),
               ),
               child: const Text('Gradient Container'),
             ),
@@ -733,9 +753,24 @@ void main() {
           child: Scaffold(
             body: ListView(
               children: [
-                RContainer(width: 200, height: 100, color: Colors.red, child: const Text('Item 1')),
-                RContainer(width: 200, height: 100, color: Colors.blue, child: const Text('Item 2')),
-                RContainer(width: 200, height: 100, color: Colors.green, child: const Text('Item 3')),
+                RContainer(
+                  width: 200,
+                  height: 100,
+                  color: Colors.red,
+                  child: const Text('Item 1'),
+                ),
+                RContainer(
+                  width: 200,
+                  height: 100,
+                  color: Colors.blue,
+                  child: const Text('Item 2'),
+                ),
+                RContainer(
+                  width: 200,
+                  height: 100,
+                  color: Colors.green,
+                  child: const Text('Item 3'),
+                ),
               ],
             ),
           ),
@@ -760,10 +795,30 @@ void main() {
             body: GridView.count(
               crossAxisCount: 2,
               children: [
-                RContainer(width: 100, height: 100, color: Colors.red, child: const Text('Grid 1')),
-                RContainer(width: 100, height: 100, color: Colors.blue, child: const Text('Grid 2')),
-                RContainer(width: 100, height: 100, color: Colors.green, child: const Text('Grid 3')),
-                RContainer(width: 100, height: 100, color: Colors.orange, child: const Text('Grid 4')),
+                RContainer(
+                  width: 100,
+                  height: 100,
+                  color: Colors.red,
+                  child: const Text('Grid 1'),
+                ),
+                RContainer(
+                  width: 100,
+                  height: 100,
+                  color: Colors.blue,
+                  child: const Text('Grid 2'),
+                ),
+                RContainer(
+                  width: 100,
+                  height: 100,
+                  color: Colors.green,
+                  child: const Text('Grid 3'),
+                ),
+                RContainer(
+                  width: 100,
+                  height: 100,
+                  color: Colors.orange,
+                  child: const Text('Grid 4'),
+                ),
               ],
             ),
           ),

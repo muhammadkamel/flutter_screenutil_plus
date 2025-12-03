@@ -8,15 +8,18 @@ import 'size_class.dart';
 /// Provides methods to check breakpoints and size classes,
 /// making it easy to create adaptive UIs.
 class ResponsiveQuery {
-  final BuildContext context;
-  final Breakpoints breakpoints;
-
   ResponsiveQuery._(this.context, this.breakpoints);
 
   /// Creates a responsive query from context
   factory ResponsiveQuery.of(BuildContext context, {Breakpoints? breakpoints}) {
     return ResponsiveQuery._(context, breakpoints ?? Breakpoints.bootstrap);
   }
+
+  /// The build context used for media queries.
+  final BuildContext context;
+
+  /// The breakpoints configuration used for responsive design.
+  final Breakpoints breakpoints;
 
   /// Gets the current screen width
   double get width => MediaQuery.of(context).size.width;

@@ -12,10 +12,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('ScreenUtil Plus Demo', style: TextStyle(fontSize: 20.sp)),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: Text('ScreenUtil Plus Demo'), centerTitle: true),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.w),
         child: Column(

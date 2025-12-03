@@ -10,7 +10,7 @@ class WidgetTest extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (_, c) {
-        final w = width(), h = height();
+        final double w = width(), h = height();
 
         if (c.biggest >= Size(w, h)) {
           return const Text('Test');

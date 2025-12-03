@@ -4,6 +4,20 @@ import 'package:flutter/material.dart';
 
 import '../core/screen_util_plus.dart';
 
+/// Extension on [num] to provide responsive sizing methods.
+///
+/// This extension adds convenient getters to numeric values for adapting
+/// dimensions, spacing, and font sizes based on screen size. All methods
+/// delegate to [ScreenUtilPlus] for the actual calculations.
+///
+/// Example usage:
+/// ```dart
+/// Container(
+///   width: 100.w,  // Width adapted to screen
+///   height: 50.h,  // Height adapted to screen
+///   child: Text('Hello', style: TextStyle(fontSize: 16.sp)),
+/// )
+/// ```
 extension SizeExtension on num {
   /// [ScreenUtilPlus.setWidth]
   double get w => ScreenUtilPlus().setWidth(this);
@@ -28,9 +42,20 @@ extension SizeExtension on num {
   /// I think that it is good for saving size balance on big sizes of screen.
   double get spMin => min(toDouble(), sp);
 
+  /// Returns the minimum of the original value and the scaled font size.
+  ///
+  /// This ensures that the font size never exceeds the original design value,
+  /// which is useful for maintaining size balance on larger screens.
+  ///
+  /// Deprecated: Use [spMin] instead.
   @Deprecated('use spMin instead')
   double get sm => min(toDouble(), sp);
 
+  /// Returns the maximum of the original value and the scaled font size.
+  ///
+  /// This ensures that the font size is at least as large as the original
+  /// design value, which can be useful for ensuring minimum readability
+  /// on smaller screens.
   double get spMax => max(toDouble(), sp);
 
   /// Multiple of screen width.
@@ -74,20 +99,45 @@ extension SizeExtension on num {
       ScreenUtilPlus().setVerticalSpacingDiagonal(this);
 }
 
+/// Extension on [EdgeInsets] to create responsive padding and margin values.
+///
+/// This extension provides methods to adapt edge insets based on screen size,
+/// ensuring consistent spacing across different devices. Each method uses
+/// a different scaling strategy (width, height, radius, diameter, or diagonal).
 extension EdgeInsetsExtension on EdgeInsets {
   /// Creates adapt insets using r [SizeExtension].
+  ///
+  /// Adapts all edge insets using the `.r` extension, which scales based on
+  /// the smaller of width or height. Ideal for maintaining consistent spacing
+  /// that works well for both portrait and landscape orientations.
   EdgeInsets get r =>
       copyWith(top: top.r, bottom: bottom.r, right: right.r, left: left.r);
 
+  /// Creates responsive insets using the `.dm` (diameter) extension.
+  ///
+  /// Adapts all edge insets using the diameter scaling method, which uses
+  /// the maximum of scale width and scale height.
   EdgeInsets get dm =>
       copyWith(top: top.dm, bottom: bottom.dm, right: right.dm, left: left.dm);
 
+  /// Creates responsive insets using the `.dg` (diagonal) extension.
+  ///
+  /// Adapts all edge insets using the diagonal scaling method, which uses
+  /// both width and height scaling factors.
   EdgeInsets get dg =>
       copyWith(top: top.dg, bottom: bottom.dg, right: right.dg, left: left.dg);
 
+  /// Creates responsive insets using the `.w` (width) extension.
+  ///
+  /// Adapts all edge insets based on screen width, ensuring consistent
+  /// horizontal scaling across different devices.
   EdgeInsets get w =>
       copyWith(top: top.w, bottom: bottom.w, right: right.w, left: left.w);
 
+  /// Creates responsive insets using the `.h` (height) extension.
+  ///
+  /// Adapts all edge insets based on screen height, ensuring consistent
+  /// vertical scaling across different devices.
   EdgeInsets get h =>
       copyWith(top: top.h, bottom: bottom.h, right: right.h, left: left.h);
 }
@@ -147,16 +197,41 @@ extension BorderRadiusExtension on BorderRadius {
   );
 }
 
+/// Extension on [Radius] to create responsive radius values.
+///
+/// This extension provides methods to adapt radius values based on screen size,
+/// ensuring consistent border radius appearance across different devices.
+/// Each method uses a different scaling strategy for the elliptical radius.
 extension RadiusExtension on Radius {
   /// Creates adapt Radius using r [SizeExtension].
+  ///
+  /// Adapts both x and y radius values using the `.r` extension, which scales
+  /// based on the smaller of width or height. Ideal for maintaining circular
+  /// or square shapes across different screen sizes.
   Radius get r => Radius.elliptical(x.r, y.r);
 
+  /// Creates responsive radius using the `.dm` (diameter) extension.
+  ///
+  /// Adapts both x and y radius values using the diameter scaling method,
+  /// which uses the maximum of scale width and scale height.
   Radius get dm => Radius.elliptical(x.dm, y.dm);
 
+  /// Creates responsive radius using the `.dg` (diagonal) extension.
+  ///
+  /// Adapts both x and y radius values using the diagonal scaling method,
+  /// which uses both width and height scaling factors.
   Radius get dg => Radius.elliptical(x.dg, y.dg);
 
+  /// Creates responsive radius using the `.w` (width) extension.
+  ///
+  /// Adapts both x and y radius values based on screen width, ensuring
+  /// consistent horizontal scaling.
   Radius get w => Radius.elliptical(x.w, y.w);
 
+  /// Creates responsive radius using the `.h` (height) extension.
+  ///
+  /// Adapts both x and y radius values based on screen height, ensuring
+  /// consistent vertical scaling.
   Radius get h => Radius.elliptical(x.h, y.h);
 }
 
