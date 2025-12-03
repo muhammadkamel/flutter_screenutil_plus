@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'home.test.dart';
+import '../home.test.dart';
 
 void main() {
   const smallerDeviceSize = Size(300, 600);
