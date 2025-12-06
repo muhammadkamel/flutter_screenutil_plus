@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilPlusInit(
-      designSize: const Size(360, 690), // Your design draft size
+      designSize: const Size(360, 690),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
@@ -390,19 +390,19 @@ ScreenUtilPlusInit(
 
 ### Properties
 
-| Property          | Type             | Default Value           | Description                                                                                                                                          |
-| ----------------- | ---------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| designSize        | Size             | Size(360,690)           | The size of the device screen in the design draft, in dp                                                                                             |
-| builder           | Function         | null                    | Return widget that uses the library in a property (ex: MaterialApp's theme)                                                                          |
-| child             | Widget           | null                    | A part of builder that its dependencies/properties don't use the library                                                                             |
-| rebuildFactor     | RebuildFactor    | RebuildFactors.size     | Function that takes old and new screen metrics and returns whether to rebuild or not when changes occur. See [RebuildFactors](#rebuild-factors)      |
-| splitScreenMode   | bool             | false                   | Support for split screen mode                                                                                                                        |
-| minTextAdapt      | bool             | false                   | Whether to adapt the text according to the minimum of width and height                                                                               |
-| ensureScreenSize  | bool             | false                   | Whether to wait for screen size to be initialized before building (useful for web/desktop)                                                           |
-| fontSizeResolver  | FontSizeResolver | FontSizeResolvers.width | Function that specifies how font size should be adapted. See [FontSizeResolvers](#font-size-resolvers)                                               |
+| Property          | Type             | Default Value           | Description                                                                                                                                        |
+| ----------------- | ---------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| designSize        | Size             | Size(360,690)           | The size of the device screen in the design draft, in dp                                                                                           |
+| builder           | Function         | null                    | Return widget that uses the library in a property (ex: MaterialApp's theme)                                                                        |
+| child             | Widget           | null                    | A part of builder that its dependencies/properties don't use the library                                                                           |
+| rebuildFactor     | RebuildFactor    | RebuildFactors.size     | Function that takes old and new screen metrics and returns whether to rebuild or not when changes occur. See [RebuildFactors](#rebuild-factors)    |
+| splitScreenMode   | bool             | false                   | Support for split screen mode                                                                                                                      |
+| minTextAdapt      | bool             | false                   | Whether to adapt the text according to the minimum of width and height                                                                             |
+| ensureScreenSize  | bool             | false                   | Whether to wait for screen size to be initialized before building (useful for web/desktop)                                                         |
+| fontSizeResolver  | FontSizeResolver | FontSizeResolvers.width | Function that specifies how font size should be adapted. See [FontSizeResolvers](#font-size-resolvers)                                             |
 | responsiveWidgets | Iterable<String> | null                    | List/Set of widget names that should be included in rebuilding tree. (See [How flutter_screenutil_plus marks a widget needs build](#rebuild-list)) |
-| enableScaleWH     | Function         | null                    | Function to enable/disable scaling of width and height                                                                                               |
-| enableScaleText   | Function         | null                    | Function to enable/disable scaling of text                                                                                                             |
+| enableScaleWH     | Function         | null                    | Function to enable/disable scaling of width and height                                                                                             |
+| enableScaleText   | Function         | null                    | Function to enable/disable scaling of text                                                                                                         |
 
 **Note : You must either provide builder, child or both.**
 
@@ -485,7 +485,7 @@ or
 
 ```dart
 ScreenUtilPlus.enableScale(
-  enableWH: () => false, 
+  enableWH: () => false,
   enableText: () => false
 );
 ```
@@ -514,46 +514,46 @@ switch (deviceType) {
 
 #### Extension Methods
 
-| Extension | Description | Example |
-|-----------|-------------|---------|
-| `.w` | Adapt to screen width | `100.w` |
-| `.h` | Adapt to screen height | `100.h` |
-| `.r` | Adapt to smaller of width/height | `100.r` |
-| `.dm` | Adapt to larger of width/height | `100.dm` |
-| `.dg` | Adapt based on diagonal | `100.dg` |
-| `.sp` | Responsive font size | `16.sp` |
-| `.spMin` | Minimum font size | `12.spMin` |
-| `.spMax` | Maximum font size | `16.spMax` |
-| `.sw` | Screen width | `1.sw` |
-| `.sh` | Screen height | `1.sh` |
+| Extension | Description                      | Example    |
+| --------- | -------------------------------- | ---------- |
+| `.w`      | Adapt to screen width            | `100.w`    |
+| `.h`      | Adapt to screen height           | `100.h`    |
+| `.r`      | Adapt to smaller of width/height | `100.r`    |
+| `.dm`     | Adapt to larger of width/height  | `100.dm`   |
+| `.dg`     | Adapt based on diagonal          | `100.dg`   |
+| `.sp`     | Responsive font size             | `16.sp`    |
+| `.spMin`  | Minimum font size                | `12.spMin` |
+| `.spMax`  | Maximum font size                | `16.spMax` |
+| `.sw`     | Screen width                     | `1.sw`     |
+| `.sh`     | Screen height                    | `1.sh`     |
 
 #### Context Extensions
 
-| Extension | Description | Example |
-|-----------|-------------|---------|
-| `context.breakpoint` | Current breakpoint | `context.breakpoint` |
-| `context.isAtLeast()` | Check if at least breakpoint | `context.isAtLeast(Breakpoint.md)` |
-| `context.isLessThan()` | Check if less than breakpoint | `context.isLessThan(Breakpoint.lg)` |
-| `context.isBetween()` | Check if between breakpoints | `context.isBetween(Breakpoint.sm, Breakpoint.lg)` |
-| `context.sizeClasses` | Get size classes | `context.sizeClasses` |
-| `context.adaptive()` | Get AdaptiveValues | `context.adaptive()` |
-| `context.responsive()` | Get ResponsiveQuery | `context.responsive()` |
+| Extension              | Description                   | Example                                           |
+| ---------------------- | ----------------------------- | ------------------------------------------------- |
+| `context.breakpoint`   | Current breakpoint            | `context.breakpoint`                              |
+| `context.isAtLeast()`  | Check if at least breakpoint  | `context.isAtLeast(Breakpoint.md)`                |
+| `context.isLessThan()` | Check if less than breakpoint | `context.isLessThan(Breakpoint.lg)`               |
+| `context.isBetween()`  | Check if between breakpoints  | `context.isBetween(Breakpoint.sm, Breakpoint.lg)` |
+| `context.sizeClasses`  | Get size classes              | `context.sizeClasses`                             |
+| `context.adaptive()`   | Get AdaptiveValues            | `context.adaptive()`                              |
+| `context.responsive()` | Get ResponsiveQuery           | `context.responsive()`                            |
 
 #### Widgets
 
-| Widget | Description |
-|--------|-------------|
-| `ScreenUtilPlusInit` | Initialize the library |
-| `RContainer` | Responsive Container |
-| `RPadding` | Responsive Padding |
-| `RSizedBox` | Responsive SizedBox |
-| `RText` | Responsive Text |
-| `AdaptiveContainer` | Breakpoint-aware Container |
-| `SimpleAdaptiveContainer` | Simplified adaptive container |
-| `AdaptiveText` | Breakpoint-aware Text |
-| `ResponsiveBuilder` | Builder for different breakpoints |
-| `SizeClassBuilder` | Builder for size classes |
-| `ConditionalBuilder` | Conditional rendering |
+| Widget                    | Description                       |
+| ------------------------- | --------------------------------- |
+| `ScreenUtilPlusInit`      | Initialize the library            |
+| `RContainer`              | Responsive Container              |
+| `RPadding`                | Responsive Padding                |
+| `RSizedBox`               | Responsive SizedBox               |
+| `RText`                   | Responsive Text                   |
+| `AdaptiveContainer`       | Breakpoint-aware Container        |
+| `SimpleAdaptiveContainer` | Simplified adaptive container     |
+| `AdaptiveText`            | Breakpoint-aware Text             |
+| `ResponsiveBuilder`       | Builder for different breakpoints |
+| `SizeClassBuilder`        | Builder for size classes          |
+| `ConditionalBuilder`      | Conditional rendering             |
 
 ### Performance Optimizations
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
+import 'package:flutter_screenutil_plus/src/core/_constants.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -179,7 +180,7 @@ void main() {
       );
 
       // This should use previously set values
-      ScreenUtilPlus.configure(minTextAdapt: false);
+      ScreenUtilPlus.configure(minTextAdapt: false, designSize: defaultSize);
 
       expect(ScreenUtilPlus().screenWidth, deviceSize.width);
     });
@@ -198,7 +199,7 @@ void main() {
       expect(ScreenUtilPlus().setSp(10), 30);
 
       // Clear the custom resolver
-      ScreenUtilPlus.configure();
+      ScreenUtilPlus.configure(designSize: defaultSize);
     });
 
     test('splitScreenMode should affect height scaling', () {

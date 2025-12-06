@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
+import 'package:flutter_screenutil_plus/src/core/_constants.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -12,7 +13,7 @@ void main() {
           size: Size(400, 800),
           textScaler: TextScaler.noScaling,
         ),
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );

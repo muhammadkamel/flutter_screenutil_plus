@@ -39,11 +39,6 @@ class ScreenUtilPlus {
 
   ScreenUtilPlus._();
 
-  /// The default design size used when no design size is specified.
-  ///
-  /// Defaults to `Size(360, 690)`, which represents a typical mobile device
-  /// screen size in dp.
-  static const Size defaultSize = Size(360, 690);
   static final ScreenUtilPlus _instance = ScreenUtilPlus._();
 
   static bool Function() _enableScaleWH = () => true;
@@ -55,9 +50,9 @@ class ScreenUtilPlus {
   /// Screen orientation
   late Orientation _orientation;
 
-  late bool _minTextAdapt;
+  bool _minTextAdapt = false;
   late MediaQueryData _data;
-  late bool _splitScreenMode;
+  bool _splitScreenMode = false;
 
   /// Optional custom font size resolver function.
   ///
@@ -160,7 +155,7 @@ class ScreenUtilPlus {
   ///   keeps the current resolver.
   static void configure({
     MediaQueryData? data,
-    Size? designSize,
+    required Size designSize,
     bool? splitScreenMode,
     bool? minTextAdapt,
     FontSizeResolver? fontSizeResolver,
@@ -173,11 +168,7 @@ class ScreenUtilPlus {
         data = _instance._data;
       }
 
-      if (designSize != null) {
-        _instance._uiSize = designSize;
-      } else {
-        designSize = _instance._uiSize;
-      }
+      _instance._uiSize = designSize;
     } catch (_) {
       throw StateError(
         'ScreenUtilPlus must be initialized with data and designSize. '
@@ -242,7 +233,7 @@ class ScreenUtilPlus {
   /// Initializes the library.
   static void init(
     BuildContext context, {
-    Size designSize = defaultSize,
+    required Size designSize,
     bool splitScreenMode = false,
     bool minTextAdapt = false,
     FontSizeResolver? fontSizeResolver,
@@ -272,7 +263,7 @@ class ScreenUtilPlus {
   /// - [fontSizeResolver]: Custom font size resolver function.
   static Future<void> ensureScreenSizeAndInit(
     BuildContext context, {
-    Size designSize = defaultSize,
+    required Size designSize,
     bool splitScreenMode = false,
     bool minTextAdapt = false,
     FontSizeResolver? fontSizeResolver,

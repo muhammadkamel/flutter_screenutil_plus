@@ -3,6 +3,7 @@ import 'dart:math' show max, min;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
+import 'package:flutter_screenutil_plus/src/core/_constants.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -13,7 +14,7 @@ void main() {
     });
 
     test('defaultSize should be Size(360, 690)', () {
-      expect(ScreenUtilPlus.defaultSize, const Size(360, 690));
+      expect(defaultSize, const Size(360, 690));
     });
 
     test('ScreenUtil is singleton', () {
@@ -24,7 +25,7 @@ void main() {
 
     test('configure throws StateError when not initialized', () {
       expect(
-        () => ScreenUtilPlus.configure(),
+        () => ScreenUtilPlus.configure(designSize: defaultSize),
         throwsA(
           isA<StateError>().having(
             (e) => e.message,
@@ -100,7 +101,7 @@ void main() {
       );
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -151,7 +152,7 @@ void main() {
       );
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -210,7 +211,7 @@ void main() {
           size: Size(400, 500),
           textScaler: TextScaler.noScaling,
         ),
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         splitScreenMode: true,
       );
       final util = ScreenUtilPlus();
@@ -224,7 +225,7 @@ void main() {
           size: Size(400, 800),
           textScaler: TextScaler.noScaling,
         ),
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
       );
       final util = ScreenUtilPlus();
@@ -237,7 +238,7 @@ void main() {
           size: Size(400, 800),
           textScaler: TextScaler.noScaling,
         ),
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: true,
       );
       final util = ScreenUtilPlus();
@@ -253,7 +254,7 @@ void main() {
       );
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -308,7 +309,7 @@ void main() {
           size: Size(400, 800),
           textScaler: TextScaler.noScaling,
         ),
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         fontSizeResolver: customResolver,
       );
 
@@ -326,7 +327,7 @@ void main() {
       );
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -425,7 +426,7 @@ void main() {
       );
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -462,7 +463,7 @@ void main() {
       );
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -490,7 +491,7 @@ void main() {
       );
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -533,7 +534,7 @@ void main() {
           size: Size(400, 800),
           textScaler: TextScaler.noScaling,
         ),
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         fontSizeResolver: (fontSize, instance) => fontSize * instance.scaleText,
         minTextAdapt: false,
         splitScreenMode: false,
@@ -686,7 +687,7 @@ void main() {
           size: Size(720, 1380), // Larger than design size
           textScaler: TextScaler.noScaling,
         ),
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -704,7 +705,7 @@ void main() {
           size: Size(720, 1380), // Larger than design size
           textScaler: TextScaler.noScaling,
         ),
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -719,7 +720,7 @@ void main() {
           size: Size(180, 345), // Smaller than design size
           textScaler: TextScaler.noScaling,
         ),
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -766,7 +767,7 @@ void main() {
       );
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -867,7 +868,7 @@ void main() {
       );
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -945,7 +946,7 @@ void main() {
       );
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -1040,7 +1041,7 @@ void main() {
       );
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -1205,7 +1206,7 @@ void main() {
       );
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -1302,7 +1303,7 @@ void main() {
       );
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -1463,7 +1464,7 @@ void main() {
           size: Size(800, 1600),
           textScaler: TextScaler.noScaling,
         ),
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -1524,6 +1525,7 @@ void main() {
     testWidgets('ScreenUtilInit initializes ScreenUtil', (tester) async {
       await tester.pumpWidget(
         ScreenUtilPlusInit(
+          designSize: defaultSize,
           child: MaterialApp(
             home: Builder(
               builder: (context) {
@@ -1542,6 +1544,7 @@ void main() {
     testWidgets('ScreenUtilInit with responsiveWidgets', (tester) async {
       await tester.pumpWidget(
         const ScreenUtilPlusInit(
+          designSize: defaultSize,
           responsiveWidgets: ['CustomWidget'],
           child: MaterialApp(home: SizedBox()),
         ),
@@ -1555,6 +1558,7 @@ void main() {
 
       await tester.pumpWidget(
         ScreenUtilPlusInit(
+          designSize: defaultSize,
           child: MaterialApp(
             home: ValueListenableBuilder<int>(
               valueListenable: buildCount,
@@ -1580,14 +1584,20 @@ void main() {
 
     testWidgets('ScreenUtilInit handles didChangeDependencies', (tester) async {
       await tester.pumpWidget(
-        const ScreenUtilPlusInit(child: MaterialApp(home: SizedBox())),
+        const ScreenUtilPlusInit(
+          designSize: defaultSize,
+          child: MaterialApp(home: SizedBox()),
+        ),
       );
 
       await tester.pumpAndSettle();
 
       // Change widget tree to trigger didChangeDependencies
       await tester.pumpWidget(
-        const ScreenUtilPlusInit(child: MaterialApp(home: Text('Changed'))),
+        const ScreenUtilPlusInit(
+          designSize: defaultSize,
+          child: MaterialApp(home: Text('Changed')),
+        ),
       );
 
       await tester.pumpAndSettle();
@@ -1597,6 +1607,7 @@ void main() {
     testWidgets('ScreenUtilInit with builder', (tester) async {
       await tester.pumpWidget(
         ScreenUtilPlusInit(
+          designSize: defaultSize,
           builder: (context, child) => MaterialApp(home: child),
           child: const SizedBox(),
         ),
@@ -1608,6 +1619,7 @@ void main() {
     testWidgets('ScreenUtilInit with splitScreenMode', (tester) async {
       await tester.pumpWidget(
         const ScreenUtilPlusInit(
+          designSize: defaultSize,
           splitScreenMode: true,
           child: MaterialApp(home: SizedBox()),
         ),
@@ -1619,6 +1631,7 @@ void main() {
     testWidgets('ScreenUtilInit with minTextAdapt', (tester) async {
       await tester.pumpWidget(
         const ScreenUtilPlusInit(
+          designSize: defaultSize,
           minTextAdapt: true,
           child: MaterialApp(home: SizedBox()),
         ),
@@ -1630,6 +1643,7 @@ void main() {
     testWidgets('ScreenUtilInit with ensureScreenSize', (tester) async {
       await tester.pumpWidget(
         const ScreenUtilPlusInit(
+          designSize: defaultSize,
           ensureScreenSize: true,
           child: MaterialApp(home: SizedBox()),
         ),
@@ -1700,7 +1714,7 @@ void main() {
       );
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -1810,7 +1824,7 @@ void main() {
             size: screenSize,
             textScaler: TextScaler.noScaling,
           ),
-          designSize: const Size(360, 690),
+          designSize: defaultSize,
           minTextAdapt: false,
           splitScreenMode: false,
         );
@@ -1848,7 +1862,7 @@ void main() {
         MaterialApp(
           home: Builder(
             builder: (context) {
-              ScreenUtilPlus.init(context);
+              ScreenUtilPlus.init(context, designSize: defaultSize);
               final util = ScreenUtilPlus();
               expect(util.screenWidth, greaterThan(0));
               return const SizedBox();
@@ -1865,7 +1879,10 @@ void main() {
         MaterialApp(
           home: Builder(
             builder: (context) {
-              ScreenUtilPlus.ensureScreenSizeAndInit(context);
+              ScreenUtilPlus.ensureScreenSizeAndInit(
+                context,
+                designSize: defaultSize,
+              );
               return const SizedBox();
             },
           ),
@@ -1884,7 +1901,7 @@ void main() {
       );
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -1895,10 +1912,7 @@ void main() {
             builder: (context) {
               ScreenUtilPlus.registerToBuild(context);
               // Reconfigure to trigger rebuild
-              ScreenUtilPlus.configure(
-                data: data,
-                designSize: const Size(360, 690),
-              );
+              ScreenUtilPlus.configure(data: data, designSize: defaultSize);
               return const SizedBox();
             },
           ),
@@ -1915,7 +1929,7 @@ void main() {
       );
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -1926,10 +1940,7 @@ void main() {
             builder: (context) {
               ScreenUtilPlus.registerToBuild(context, true);
               // Reconfigure to trigger rebuild
-              ScreenUtilPlus.configure(
-                data: data,
-                designSize: const Size(360, 690),
-              );
+              ScreenUtilPlus.configure(data: data, designSize: defaultSize);
               return const SizedBox();
             },
           ),
@@ -1946,7 +1957,7 @@ void main() {
       );
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -1982,7 +1993,7 @@ void main() {
       );
       ScreenUtilPlus.configure(
         data: initialData,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -2006,7 +2017,7 @@ void main() {
       );
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -2016,6 +2027,7 @@ void main() {
         data: data,
         minTextAdapt: false,
         splitScreenMode: false,
+        designSize: defaultSize,
       );
 
       final util = ScreenUtilPlus();
@@ -2030,7 +2042,7 @@ void main() {
       );
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -2044,6 +2056,7 @@ void main() {
         fontSizeResolver: customResolver,
         minTextAdapt: false,
         splitScreenMode: false,
+        designSize: defaultSize,
       );
 
       final util = ScreenUtilPlus();
@@ -2057,7 +2070,7 @@ void main() {
       );
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
       );
 
@@ -2065,6 +2078,7 @@ void main() {
         data: data,
         minTextAdapt: true,
         splitScreenMode: false,
+        designSize: defaultSize,
       );
 
       final util = ScreenUtilPlus();
@@ -2078,7 +2092,7 @@ void main() {
       );
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         splitScreenMode: false,
       );
 
@@ -2086,6 +2100,7 @@ void main() {
         data: data,
         splitScreenMode: true,
         minTextAdapt: false,
+        designSize: defaultSize,
       );
 
       final util = ScreenUtilPlus();
@@ -2105,7 +2120,7 @@ void main() {
 
       ScreenUtilPlus.configure(
         data: initialData,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -2130,7 +2145,7 @@ void main() {
       // Configure with identical metrics - should NOT trigger rebuild.
       ScreenUtilPlus.configure(
         data: initialData,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -2203,7 +2218,7 @@ void main() {
       );
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -2350,7 +2365,7 @@ void main() {
 
       ScreenUtilPlus.configure(
         data: initialData,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -2380,7 +2395,7 @@ void main() {
 
       ScreenUtilPlus.configure(
         data: updatedData,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -2399,7 +2414,7 @@ void main() {
 
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -2443,7 +2458,7 @@ void main() {
 
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -2468,7 +2483,7 @@ void main() {
       // Change splitScreenMode - should trigger rebuild
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: true,
       );
@@ -2487,7 +2502,7 @@ void main() {
 
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -2512,7 +2527,7 @@ void main() {
       // Change minTextAdapt - should trigger rebuild
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: true,
         splitScreenMode: false,
       );
@@ -2533,7 +2548,7 @@ void main() {
 
         ScreenUtilPlus.configure(
           data: portraitData,
-          designSize: const Size(360, 690),
+          designSize: defaultSize,
           minTextAdapt: false,
           splitScreenMode: false,
         );
@@ -2563,7 +2578,7 @@ void main() {
 
         ScreenUtilPlus.configure(
           data: landscapeData,
-          designSize: const Size(360, 690),
+          designSize: defaultSize,
           minTextAdapt: false,
           splitScreenMode: false,
         );
@@ -2584,7 +2599,7 @@ void main() {
 
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -2604,7 +2619,7 @@ void main() {
 
         ScreenUtilPlus.configure(
           data: data,
-          designSize: const Size(360, 690),
+          designSize: defaultSize,
           minTextAdapt: false,
           splitScreenMode: false,
         );
@@ -2623,7 +2638,7 @@ void main() {
 
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -2642,7 +2657,7 @@ void main() {
       );
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -2708,7 +2723,7 @@ void main() {
       );
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -2744,7 +2759,7 @@ void main() {
           size: Size(400, 800),
           textScaler: TextScaler.noScaling,
         ),
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         fontSizeResolver: customResolver,
         minTextAdapt: false,
         splitScreenMode: false,
@@ -2784,7 +2799,10 @@ void main() {
         // Now try to call ensureScreenSizeAndInit with unmounted context
         // This should not throw and should not call init
         if (testContext != null && !testContext!.mounted) {
-          await ScreenUtilPlus.ensureScreenSizeAndInit(testContext!);
+          await ScreenUtilPlus.ensureScreenSizeAndInit(
+            testContext!,
+            designSize: defaultSize,
+          );
           // Should complete without error
           expect(true, isTrue);
         }
@@ -2801,7 +2819,7 @@ void main() {
 
       ScreenUtilPlus.configure(
         data: initialData,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -2811,7 +2829,7 @@ void main() {
       expect(util1.scaleWidth, closeTo(400 / 360, 0.001));
 
       // Configure with all null - should use existing values
-      ScreenUtilPlus.configure();
+      ScreenUtilPlus.configure(designSize: defaultSize);
 
       final util2 = ScreenUtilPlus();
       expect(util2.screenWidth, 400);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
+import 'package:flutter_screenutil_plus/src/core/_constants.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -12,7 +13,7 @@ void main() {
       );
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -22,6 +23,7 @@ void main() {
       // XS breakpoint (320px)
       await tester.pumpWidget(
         const ScreenUtilPlusInit(
+          designSize: defaultSize,
           child: MaterialApp(
             home: MediaQuery(
               data: MediaQueryData(
@@ -50,6 +52,7 @@ void main() {
       // MD breakpoint but only XS and LG defined
       await tester.pumpWidget(
         const ScreenUtilPlusInit(
+          designSize: defaultSize,
           child: MaterialApp(
             home: MediaQuery(
               data: MediaQueryData(
@@ -71,6 +74,7 @@ void main() {
     testWidgets('adapts font weight based on breakpoint', (tester) async {
       await tester.pumpWidget(
         const ScreenUtilPlusInit(
+          designSize: defaultSize,
           child: MaterialApp(
             home: MediaQuery(
               data: MediaQueryData(
@@ -95,6 +99,7 @@ void main() {
     testWidgets('adapts color based on breakpoint', (tester) async {
       await tester.pumpWidget(
         const ScreenUtilPlusInit(
+          designSize: defaultSize,
           child: MaterialApp(
             home: MediaQuery(
               data: MediaQueryData(
@@ -119,6 +124,7 @@ void main() {
     testWidgets('adapts line height based on breakpoint', (tester) async {
       await tester.pumpWidget(
         const ScreenUtilPlusInit(
+          designSize: defaultSize,
           child: MaterialApp(
             home: MediaQuery(
               data: MediaQueryData(
@@ -143,6 +149,7 @@ void main() {
     testWidgets('adapts letter spacing based on breakpoint', (tester) async {
       await tester.pumpWidget(
         const ScreenUtilPlusInit(
+          designSize: defaultSize,
           child: MaterialApp(
             home: MediaQuery(
               data: MediaQueryData(
@@ -167,6 +174,7 @@ void main() {
     testWidgets('merges with base style', (tester) async {
       await tester.pumpWidget(
         const ScreenUtilPlusInit(
+          designSize: defaultSize,
           child: MaterialApp(
             home: MediaQuery(
               data: MediaQueryData(
@@ -194,6 +202,7 @@ void main() {
     testWidgets('passes through text widget properties', (tester) async {
       await tester.pumpWidget(
         const ScreenUtilPlusInit(
+          designSize: defaultSize,
           child: MaterialApp(
             home: AdaptiveText(
               'Test',
@@ -215,6 +224,7 @@ void main() {
     testWidgets('handles xxl breakpoint', (tester) async {
       await tester.pumpWidget(
         const ScreenUtilPlusInit(
+          designSize: defaultSize,
           child: MaterialApp(
             home: MediaQuery(
               data: MediaQueryData(
@@ -241,7 +251,7 @@ void main() {
       );
       ScreenUtilPlus.configure(
         data: data,
-        designSize: const Size(360, 690),
+        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -250,6 +260,7 @@ void main() {
     testWidgets('creates adaptive text style', (tester) async {
       await tester.pumpWidget(
         ScreenUtilPlusInit(
+          designSize: defaultSize,
           child: MaterialApp(
             home: Builder(
               builder: (context) {
@@ -284,6 +295,7 @@ void main() {
     testWidgets('merges with base style in extension', (tester) async {
       await tester.pumpWidget(
         ScreenUtilPlusInit(
+          designSize: defaultSize,
           child: MaterialApp(
             home: Builder(
               builder: (context) {
@@ -310,6 +322,7 @@ void main() {
     testWidgets('handles all adaptive properties in extension', (tester) async {
       await tester.pumpWidget(
         ScreenUtilPlusInit(
+          designSize: defaultSize,
           child: MaterialApp(
             home: Builder(
               builder: (context) {

@@ -11,7 +11,7 @@
 ///
 /// ```dart
 /// ScreenUtilPlusInit(
-///   designSize: const Size(360, 690),
+///   designSize: defaultSize,
 ///   builder: (context, child) {
 ///     return MaterialApp(home: child);
 ///   },

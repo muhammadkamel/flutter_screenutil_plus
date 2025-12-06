@@ -42,7 +42,7 @@ class ScreenUtilPlusInit extends StatefulWidget {
     this.builder,
     this.child,
     this.rebuildFactor = RebuildFactors.size,
-    this.designSize = ScreenUtilPlus.defaultSize,
+    required this.designSize,
     this.splitScreenMode = false,
     this.minTextAdapt = false,
     this.ensureScreenSize = false,

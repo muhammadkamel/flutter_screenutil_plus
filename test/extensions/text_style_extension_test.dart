@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
+import 'package:flutter_screenutil_plus/src/core/_constants.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -11,7 +12,7 @@ void main() {
     );
     ScreenUtilPlus.configure(
       data: data,
-      designSize: const Size(360, 690),
+      designSize: defaultSize,
       minTextAdapt: false,
       splitScreenMode: false,
     );
@@ -260,7 +261,7 @@ void main() {
         );
         ScreenUtilPlus.configure(
           data: largeScreenData,
-          designSize: const Size(360, 690),
+          designSize: defaultSize,
           minTextAdapt: false,
           splitScreenMode: false,
         );
@@ -282,7 +283,7 @@ void main() {
         );
         ScreenUtilPlus.configure(
           data: smallScreenData,
-          designSize: const Size(360, 690),
+          designSize: defaultSize,
           minTextAdapt: false,
           splitScreenMode: false,
         );

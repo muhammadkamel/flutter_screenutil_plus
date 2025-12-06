@@ -3,6 +3,8 @@ import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
+const Size defaultSize = Size(360, 690);
+
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
@@ -17,7 +19,7 @@ void main() {
 
       await tester.pumpWidget(
         ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
+          designSize: defaultSize,
           builder: (context, child) {
             return MaterialApp(home: child);
           },
@@ -52,7 +54,7 @@ void main() {
 
       await tester.pumpWidget(
         ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
+          designSize: defaultSize,
           builder: (context, child) {
             return MaterialApp(home: child);
           },
@@ -81,7 +83,7 @@ void main() {
     ) async {
       await tester.pumpWidget(
         ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
+          designSize: defaultSize,
           builder: (context, child) {
             return MaterialApp(home: child);
           },
@@ -111,7 +113,7 @@ void main() {
     ) async {
       await tester.pumpWidget(
         ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
+          designSize: defaultSize,
           builder: (context, child) {
             return MaterialApp(home: child);
           },
@@ -146,7 +148,7 @@ void main() {
 
       await tester.pumpWidget(
         ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
+          designSize: defaultSize,
           builder: (context, child) {
             return MaterialApp(home: child);
           },
@@ -169,7 +171,7 @@ void main() {
     testWidgets('SimpleAdaptiveContainer with all breakpoints', (tester) async {
       await tester.pumpWidget(
         ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
+          designSize: defaultSize,
           builder: (context, child) {
             return MaterialApp(home: child);
           },
@@ -210,7 +212,7 @@ void main() {
 
       await tester.pumpWidget(
         ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
+          designSize: defaultSize,
           builder: (context, child) {
             return MaterialApp(home: child);
           },
@@ -240,7 +242,7 @@ void main() {
 
       await tester.pumpWidget(
         ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
+          designSize: defaultSize,
           builder: (context, child) {
             return MaterialApp(home: child);
           },
@@ -269,7 +271,7 @@ void main() {
     ) async {
       await tester.pumpWidget(
         ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
+          designSize: defaultSize,
           builder: (context, child) {
             return MaterialApp(home: child);
           },
@@ -295,7 +297,7 @@ void main() {
     ) async {
       await tester.pumpWidget(
         ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
+          designSize: defaultSize,
           builder: (context, child) {
             return MaterialApp(home: child);
           },
@@ -322,7 +324,7 @@ void main() {
     ) async {
       await tester.pumpWidget(
         ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
+          designSize: defaultSize,
           builder: (context, child) {
             return MaterialApp(home: child);
           },
@@ -349,7 +351,7 @@ void main() {
     ) async {
       await tester.pumpWidget(
         ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
+          designSize: defaultSize,
           builder: (context, child) {
             return MaterialApp(home: child);
           },
@@ -374,7 +376,7 @@ void main() {
     testWidgets('AdaptiveText with baseStyle', (tester) async {
       await tester.pumpWidget(
         ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
+          designSize: defaultSize,
           builder: (context, child) {
             return MaterialApp(home: child);
           },
@@ -400,7 +402,7 @@ void main() {
     testWidgets('AdaptiveText with all text properties', (tester) async {
       await tester.pumpWidget(
         ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
+          designSize: defaultSize,
           builder: (context, child) {
             return MaterialApp(home: child);
           },
@@ -436,7 +438,7 @@ void main() {
 
       await tester.pumpWidget(
         ScreenUtilPlusInit(
-          designSize: const Size(360, 690),
+          designSize: defaultSize,
           builder: (context, child) {
             return MaterialApp(home: child);
           },
