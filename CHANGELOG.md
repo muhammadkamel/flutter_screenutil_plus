@@ -1,7 +1,18 @@
 <!-- markdownlint-disable MD024 -->
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
+
+## [1.2.2] - 2025-12-07
+
+### Changed
+
+- **Revert**: `designSize` parameter in `ScreenUtilPlus.init` and `ScreenUtilPlusInit` is now **required** again. The previous change to make it optional was reverted to ensure explicit configuration.
+
+### Fixed
+
+- **Crash Fix**: Fixed `LateInitializationError` in `ScreenUtilPlus.configure` when called with null parameters before initialization. Added default values for internal flags to prevent this crash.
 
 ## [1.2.1] - 2025-12-03
 
@@ -41,24 +52,27 @@ All notable changes to this project will be documented in this file.
   - `Breakpoint` enum (xs, sm, md, lg, xl, xxl)
   - Context extensions for easy breakpoint checking (`context.breakpoint`, `context.isAtLeast()`, etc.)
   - Breakpoint comparison methods (`isAtLeast()`, `isLessThan()`, `isBetween()`, `isExactly()`)
-  
 - **SwiftUI-like Size Classes**: Added size class system for adaptive layouts
+
   - `SizeClass` enum (compact, regular) for horizontal and vertical dimensions
   - `SizeClasses` class with helper methods
   - Context extensions (`context.sizeClasses`, `context.horizontalSizeClass`, etc.)
   - Customizable threshold for size class determination
 
 - **Responsive Query Utilities**: Added utilities for responsive design queries
+
   - `ResponsiveQuery` class for breakpoint-based value selection
   - `AdaptiveValues` class for responsive sizing with breakpoints (width, height, fontSize, radius, padding, margin)
   - Context extensions for convenient access
   - Value selection with automatic fallback to larger/smaller breakpoints
 
 - **Adaptive Text Styles**: Added extensions for creating adaptive text styles
+
   - `AdaptiveTextStyleExtension` on `BuildContext` for breakpoint-based text styles
   - `TextStyleExtension` on `TextStyle` with responsive methods (`.r`, `withLineHeight()`, `withAutoLineHeight()`, `withLineHeightFromFigma()`)
 
 - **Adaptive Widgets**: Added new responsive widgets
+
   - `AdaptiveContainer` and `SimpleAdaptiveContainer` - Containers that adapt properties based on breakpoints
   - `AdaptiveText` - Text widget that adapts style properties based on breakpoints
   - `ResponsiveBuilder` - Builder widget for different breakpoints with fallback chain
@@ -66,6 +80,7 @@ All notable changes to this project will be documented in this file.
   - `ConditionalBuilder` - Conditional rendering based on breakpoint conditions
 
 - **Comprehensive Test Coverage**: Added extensive test suite
+
   - Integration tests for all adaptive features
   - Unit tests for breakpoints, size classes, responsive queries, and adaptive values
   - Widget tests for all adaptive widgets
