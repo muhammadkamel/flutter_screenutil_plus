@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
-import 'package:flutter_screenutil_plus/src/core/_constants.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('ScreenUtilPlus Coverage Tests', () {
-    const designSize = Size(360, 690);
     const deviceSize = Size(720, 1380);
 
     setUp(() {
@@ -14,7 +12,6 @@ void main() {
 
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: deviceSize),
-        designSize: designSize,
         minTextAdapt: true,
         splitScreenMode: false,
       );
@@ -26,7 +23,6 @@ void main() {
 
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: deviceSize),
-        designSize: designSize,
         minTextAdapt: true,
         splitScreenMode: false,
       );
@@ -73,7 +69,6 @@ void main() {
       // Trigger a configuration change to test rebuild
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: Size(800, 1400)),
-        designSize: designSize,
       );
 
       await tester.pump();
@@ -114,7 +109,6 @@ void main() {
       // Trigger a configuration change
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: Size(800, 1400)),
-        designSize: designSize,
       );
 
       await tester.pump();
@@ -134,10 +128,7 @@ void main() {
 
     test('enableScale should control scaling', () {
       // setUp already enables scaling, so we verify that first
-      ScreenUtilPlus.configure(
-        data: const MediaQueryData(size: deviceSize),
-        designSize: designSize,
-      );
+      ScreenUtilPlus.configure(data: const MediaQueryData(size: deviceSize));
       final double initialScale = ScreenUtilPlus().scaleWidth;
       expect(initialScale, greaterThan(1));
 
@@ -146,7 +137,6 @@ void main() {
 
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: deviceSize),
-        designSize: designSize,
         minTextAdapt: false, // Use scaleWidth for text, which is now 1
       );
 
@@ -161,10 +151,7 @@ void main() {
       // Re-enable scaling
       ScreenUtilPlus.enableScale(enableWH: () => true, enableText: () => true);
 
-      ScreenUtilPlus.configure(
-        data: const MediaQueryData(size: deviceSize),
-        designSize: designSize,
-      );
+      ScreenUtilPlus.configure(data: const MediaQueryData(size: deviceSize));
 
       expect(ScreenUtilPlus().scaleWidth, greaterThan(1));
     });
@@ -174,13 +161,10 @@ void main() {
       // after clearing the instance state (we can't actually clear it, so we test
       // that calling configure with partial data uses previous values)
 
-      ScreenUtilPlus.configure(
-        data: const MediaQueryData(size: deviceSize),
-        designSize: designSize,
-      );
+      ScreenUtilPlus.configure(data: const MediaQueryData(size: deviceSize));
 
       // This should use previously set values
-      ScreenUtilPlus.configure(minTextAdapt: false, designSize: defaultSize);
+      ScreenUtilPlus.configure(minTextAdapt: false);
 
       expect(ScreenUtilPlus().screenWidth, deviceSize.width);
     });
@@ -192,21 +176,19 @@ void main() {
 
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: deviceSize),
-        designSize: designSize,
         fontSizeResolver: customResolver,
       );
 
       expect(ScreenUtilPlus().setSp(10), 30);
 
       // Clear the custom resolver
-      ScreenUtilPlus.configure(designSize: defaultSize);
+      ScreenUtilPlus.configure();
     });
 
     test('splitScreenMode should affect height scaling', () {
       // Without split screen mode
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: Size(360, 400)), // Short screen
-        designSize: designSize,
         splitScreenMode: false,
       );
 
@@ -215,7 +197,6 @@ void main() {
       // With split screen mode (uses max(screenHeight, 700))
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: Size(360, 400)),
-        designSize: designSize,
         splitScreenMode: true,
       );
 
@@ -232,7 +213,6 @@ void main() {
       // With minTextAdapt = true, uses min(scaleWidth, scaleHeight)
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: Size(800, 1000)),
-        designSize: designSize,
         minTextAdapt: true,
       );
 
@@ -241,7 +221,6 @@ void main() {
       // With minTextAdapt = false, uses scaleWidth
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: Size(800, 1000)),
-        designSize: designSize,
         minTextAdapt: false,
       );
 
@@ -256,7 +235,6 @@ void main() {
       // Portrait
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: Size(360, 690)),
-        designSize: designSize,
       );
 
       expect(ScreenUtilPlus().orientation, Orientation.portrait);
@@ -264,7 +242,6 @@ void main() {
       // Landscape
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: Size(690, 360)),
-        designSize: designSize,
       );
 
       expect(ScreenUtilPlus().orientation, Orientation.landscape);
@@ -276,7 +253,6 @@ void main() {
           size: deviceSize,
           padding: EdgeInsets.only(top: 44, bottom: 34),
         ),
-        designSize: designSize,
       );
 
       expect(ScreenUtilPlus().statusBarHeight, 44);
@@ -286,7 +262,6 @@ void main() {
     test('pixelRatio should return device pixel ratio', () {
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: deviceSize, devicePixelRatio: 3.0),
-        designSize: designSize,
       );
 
       expect(ScreenUtilPlus().pixelRatio, 3.0);
@@ -298,17 +273,13 @@ void main() {
           size: deviceSize,
           textScaler: TextScaler.linear(1.5),
         ),
-        designSize: designSize,
       );
 
       expect(ScreenUtilPlus().textScaleFactor, 1.5);
     });
 
     test('All spacing methods should return correct SizedBox', () {
-      ScreenUtilPlus.configure(
-        data: const MediaQueryData(size: deviceSize),
-        designSize: designSize,
-      );
+      ScreenUtilPlus.configure(data: const MediaQueryData(size: deviceSize));
 
       expect(ScreenUtilPlus().setVerticalSpacing(100).height, 200);
       expect(ScreenUtilPlus().setVerticalSpacingFromWidth(100).height, 200);
@@ -324,10 +295,7 @@ void main() {
     test('enableScale with only text disabled should work', () {
       ScreenUtilPlus.enableScale(enableWH: () => true, enableText: () => false);
 
-      ScreenUtilPlus.configure(
-        data: const MediaQueryData(size: deviceSize),
-        designSize: designSize,
-      );
+      ScreenUtilPlus.configure(data: const MediaQueryData(size: deviceSize));
 
       expect(ScreenUtilPlus().scaleWidth, greaterThan(1));
       expect(ScreenUtilPlus().scaleText, 1);
@@ -337,7 +305,6 @@ void main() {
       // Small screen
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: Size(360, 690)),
-        designSize: designSize,
       );
       expect(ScreenUtilPlus().scaleWidth, 1);
       expect(ScreenUtilPlus().scaleHeight, 1);
@@ -345,17 +312,13 @@ void main() {
       // Large screen
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: Size(1080, 2070)),
-        designSize: designSize,
       );
       expect(ScreenUtilPlus().scaleWidth, 3);
       expect(ScreenUtilPlus().scaleHeight, 3);
     });
 
     test('screenWidth and screenHeight should return correct values', () {
-      ScreenUtilPlus.configure(
-        data: const MediaQueryData(size: deviceSize),
-        designSize: designSize,
-      );
+      ScreenUtilPlus.configure(data: const MediaQueryData(size: deviceSize));
 
       expect(ScreenUtilPlus().screenWidth, 720);
       expect(ScreenUtilPlus().screenHeight, 1380);

@@ -52,7 +52,12 @@ class ScreenUtilPlus {
   Orientation _orientation = Orientation.portrait;
 
   bool _minTextAdapt = false;
-  MediaQueryData _data = const MediaQueryData();
+
+  /// The [MediaQueryData] from the device.
+  ///
+  /// Initialize with default size to avoid null checks or 0 size issues
+  /// before [configure] or [init] is called.
+  MediaQueryData _data = const MediaQueryData(size: defaultSize);
   bool _splitScreenMode = false;
 
   /// Optional custom font size resolver function.
@@ -156,7 +161,7 @@ class ScreenUtilPlus {
   ///   keeps the current resolver.
   static void configure({
     MediaQueryData? data,
-    required Size designSize,
+    Size designSize = defaultSize,
     bool? splitScreenMode,
     bool? minTextAdapt,
     FontSizeResolver? fontSizeResolver,
@@ -225,7 +230,7 @@ class ScreenUtilPlus {
   /// Initializes the library.
   static void init(
     BuildContext context, {
-    required Size designSize,
+    Size designSize = defaultSize,
     bool splitScreenMode = false,
     bool minTextAdapt = false,
     FontSizeResolver? fontSizeResolver,
@@ -255,7 +260,7 @@ class ScreenUtilPlus {
   /// - [fontSizeResolver]: Custom font size resolver function.
   static Future<void> ensureScreenSizeAndInit(
     BuildContext context, {
-    required Size designSize,
+    Size designSize = defaultSize,
     bool splitScreenMode = false,
     bool minTextAdapt = false,
     FontSizeResolver? fontSizeResolver,

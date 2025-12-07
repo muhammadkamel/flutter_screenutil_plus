@@ -13,7 +13,7 @@ void main() {
           textScaler: TextScaler.noScaling,
         );
 
-        ScreenUtilPlus.configure(data: data, designSize: defaultSize);
+        ScreenUtilPlus.configure(data: data);
 
         final util = ScreenUtilPlus();
         // Since device size matches default design size (360, 690), scale should be 1.0
@@ -26,7 +26,7 @@ void main() {
           textScaler: TextScaler.noScaling,
         );
 
-        ScreenUtilPlus.configure(data: data2, designSize: defaultSize);
+        ScreenUtilPlus.configure(data: data2);
 
         // Should correlate to defaultSize (360, 690)
         expect(util.scaleWidth, 2.0);
@@ -39,7 +39,7 @@ void main() {
     ) async {
       await tester.pumpWidget(
         ScreenUtilPlusInit(
-          designSize: defaultSize,
+          // designSize: defaultSize, // Optional now
           builder: (context, child) {
             return MaterialApp(
               home: Builder(

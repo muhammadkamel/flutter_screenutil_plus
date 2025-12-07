@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
-import 'package:flutter_screenutil_plus/src/core/_constants.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   setUp(() {
     ScreenUtilPlus.configure(
       data: const MediaQueryData(size: Size(800, 600)),
-      designSize: defaultSize,
       minTextAdapt: true,
       splitScreenMode: false,
     );
@@ -22,7 +20,6 @@ void main() {
       // Configure ScreenUtilPlus for this specific test size
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: Size(400, 800)),
-        designSize: defaultSize,
         minTextAdapt: true,
         splitScreenMode: false,
       );
@@ -57,7 +54,6 @@ void main() {
       // Configure ScreenUtilPlus for this specific test size
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: Size(800, 600)),
-        designSize: defaultSize,
         minTextAdapt: true,
         splitScreenMode: false,
       );
@@ -93,7 +89,6 @@ void main() {
       // Configure ScreenUtilPlus for this specific test size
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: Size(800, 600)),
-        designSize: defaultSize,
         minTextAdapt: true,
         splitScreenMode: false,
       );
@@ -130,7 +125,6 @@ void main() {
       // Configure ScreenUtilPlus for this specific test size
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: Size(400, 800)),
-        designSize: defaultSize,
         minTextAdapt: true,
         splitScreenMode: false,
       );
@@ -251,7 +245,6 @@ void main() {
       // Configure ScreenUtilPlus for this specific test size
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: Size(500, 800)),
-        designSize: defaultSize,
         minTextAdapt: true,
         splitScreenMode: false,
       );
@@ -348,7 +341,6 @@ void main() {
       // Configure ScreenUtilPlus for this specific test size
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: Size(800, 600)),
-        designSize: defaultSize,
         minTextAdapt: true,
         splitScreenMode: false,
       );
@@ -387,7 +379,6 @@ void main() {
       // Configure ScreenUtilPlus for this specific test size
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: Size(1000, 600)),
-        designSize: defaultSize,
         minTextAdapt: true,
         splitScreenMode: false,
       );
@@ -492,7 +483,6 @@ void main() {
       // Configure ScreenUtilPlus for this specific test size
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: Size(500, 800)),
-        designSize: defaultSize,
         minTextAdapt: true,
         splitScreenMode: false,
       );
@@ -532,7 +522,6 @@ void main() {
       // Configure ScreenUtilPlus for this specific test size
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: Size(1500, 600)),
-        designSize: defaultSize,
         minTextAdapt: true,
         splitScreenMode: false,
       );

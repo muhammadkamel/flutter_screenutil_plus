@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
-import 'package:flutter_screenutil_plus/src/core/_constants.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -11,7 +10,6 @@ void main() {
           size: Size(400, 800),
           textScaler: TextScaler.noScaling,
         ),
-        designSize: defaultSize,
         minTextAdapt: false,
         splitScreenMode: false,
       );
@@ -196,7 +194,6 @@ void main() {
 
         await tester.pumpWidget(
           ScreenUtilPlusInit(
-            designSize: defaultSize,
             child: MaterialApp(
               home: Scaffold(
                 body: Center(
@@ -298,7 +295,6 @@ void main() {
 
         await tester.pumpWidget(
           ScreenUtilPlusInit(
-            designSize: defaultSize,
             child: MaterialApp(
               home: Scaffold(
                 body: Center(
@@ -393,7 +389,6 @@ void main() {
 
         await tester.pumpWidget(
           ScreenUtilPlusInit(
-            designSize: defaultSize,
             child: MaterialApp(
               home: Scaffold(
                 body: Row(
@@ -521,7 +516,6 @@ void main() {
 
       await tester.pumpWidget(
         ScreenUtilPlusInit(
-          designSize: defaultSize,
           child: MaterialApp(
             home: Scaffold(
               body: Center(
@@ -593,7 +587,6 @@ void main() {
               size: sizeData['size']! as Size,
               textScaler: TextScaler.noScaling,
             ),
-            designSize: defaultSize,
             minTextAdapt: false,
             splitScreenMode: false,
           );
@@ -617,7 +610,6 @@ void main() {
               size: sizeData['size']! as Size,
               textScaler: TextScaler.noScaling,
             ),
-            designSize: defaultSize,
             minTextAdapt: false,
             splitScreenMode: false,
           );
@@ -641,7 +633,6 @@ void main() {
               size: sizeData['size']! as Size,
               textScaler: TextScaler.noScaling,
             ),
-            designSize: defaultSize,
             minTextAdapt: false,
             splitScreenMode: false,
           );
@@ -665,7 +656,6 @@ void main() {
               size: sizeData['size']! as Size,
               textScaler: TextScaler.noScaling,
             ),
-            designSize: defaultSize,
             minTextAdapt: false,
             splitScreenMode: false,
           );
@@ -697,7 +687,6 @@ void main() {
             size: screenSize,
             textScaler: TextScaler.noScaling,
           ),
-          designSize: defaultSize,
           minTextAdapt: false,
           splitScreenMode: false,
         );
@@ -707,7 +696,6 @@ void main() {
 
         await tester.pumpWidget(
           ScreenUtilPlusInit(
-            designSize: defaultSize,
             child: MaterialApp(
               home: Scaffold(
                 body: Row(
@@ -811,7 +799,6 @@ void main() {
             size: screenSize,
             textScaler: TextScaler.noScaling,
           ),
-          designSize: defaultSize,
           minTextAdapt: false,
           splitScreenMode: false,
         );
@@ -878,7 +865,6 @@ void main() {
             size: screenSize,
             textScaler: TextScaler.noScaling,
           ),
-          designSize: defaultSize,
           minTextAdapt: false,
           splitScreenMode: false,
         );

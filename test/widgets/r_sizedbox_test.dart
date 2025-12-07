@@ -5,13 +5,11 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('RSizedBox', () {
-    const designSize = Size(360, 690);
     const deviceSize = Size(720, 1380); // 2x scale
 
     setUp(() {
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: deviceSize),
-        designSize: designSize,
         minTextAdapt: true,
         splitScreenMode: false,
       );

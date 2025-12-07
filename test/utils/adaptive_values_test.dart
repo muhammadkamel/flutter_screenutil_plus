@@ -48,12 +48,10 @@ void main() {
     });
 
     testWidgets('width returns responsive width value', (tester) async {
-      const designSize = Size(360, 690);
       const deviceSize = Size(720, 1380);
 
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: deviceSize),
-        designSize: designSize,
         minTextAdapt: true,
         splitScreenMode: false,
       );
@@ -78,12 +76,10 @@ void main() {
     });
 
     testWidgets('width falls back to larger breakpoints', (tester) async {
-      const designSize = Size(360, 690);
       const deviceSize = Size(720, 1380);
 
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: deviceSize),
-        designSize: designSize,
         minTextAdapt: true,
         splitScreenMode: false,
       );
@@ -107,12 +103,10 @@ void main() {
     });
 
     testWidgets('height returns responsive height value', (tester) async {
-      const designSize = Size(360, 690);
       const deviceSize = Size(720, 1380);
 
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: deviceSize),
-        designSize: designSize,
         minTextAdapt: true,
         splitScreenMode: false,
       );
@@ -137,12 +131,10 @@ void main() {
     });
 
     testWidgets('fontSize returns responsive font size value', (tester) async {
-      const designSize = Size(360, 690);
       const deviceSize = Size(720, 1380);
 
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: deviceSize),
-        designSize: designSize,
         minTextAdapt: true,
         splitScreenMode: false,
       );
@@ -167,12 +159,10 @@ void main() {
     });
 
     testWidgets('radius returns responsive radius value', (tester) async {
-      const designSize = Size(360, 690);
       const deviceSize = Size(720, 1380);
 
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: deviceSize),
-        designSize: designSize,
         minTextAdapt: true,
         splitScreenMode: false,
       );
@@ -286,12 +276,10 @@ void main() {
     });
 
     testWidgets('supports all breakpoint sizes', (tester) async {
-      const designSize = Size(360, 690);
       const deviceSize = Size(720, 1380);
 
       ScreenUtilPlus.configure(
         data: const MediaQueryData(size: deviceSize),
-        designSize: designSize,
         minTextAdapt: true,
         splitScreenMode: false,
       );

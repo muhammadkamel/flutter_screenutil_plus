@@ -10,6 +10,7 @@ import '../utils/font_size_resolvers.dart';
 import '../utils/rebuild_factor.dart';
 import '../utils/rebuild_factors.dart';
 import '../utils/screen_util_init_builder.dart';
+import '_constants.dart';
 import 'screen_util_plus.dart';
 
 /// A helper widget that initializes [ScreenUtilPlus] and provides responsive
@@ -42,7 +43,7 @@ class ScreenUtilPlusInit extends StatefulWidget {
     this.builder,
     this.child,
     this.rebuildFactor = RebuildFactors.size,
-    required this.designSize,
+    this.designSize = defaultSize,
     this.splitScreenMode = false,
     this.minTextAdapt = false,
     this.ensureScreenSize = false,
