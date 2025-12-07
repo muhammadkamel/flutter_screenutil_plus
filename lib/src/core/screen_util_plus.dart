@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 import 'package:flutter/widgets.dart';
 
+import '../core/_constants.dart';
 import '../utils/device_type.dart';
 import '../utils/media_query_extension.dart';
 
@@ -45,13 +46,13 @@ class ScreenUtilPlus {
   static bool Function() _enableScaleText = () => true;
 
   /// Size of the phone in UI Design, in dp
-  late Size _uiSize;
+  Size _uiSize = defaultSize;
 
   /// Screen orientation
-  late Orientation _orientation;
+  Orientation _orientation = Orientation.portrait;
 
   bool _minTextAdapt = false;
-  late MediaQueryData _data;
+  MediaQueryData _data = const MediaQueryData();
   bool _splitScreenMode = false;
 
   /// Optional custom font size resolver function.
@@ -161,20 +162,11 @@ class ScreenUtilPlus {
     FontSizeResolver? fontSizeResolver,
   }) {
     // Get or set data
-    try {
-      if (data != null) {
-        _instance._data = data;
-      } else {
-        data = _instance._data;
-      }
-
-      _instance._uiSize = designSize;
-    } catch (_) {
-      throw StateError(
-        'ScreenUtilPlus must be initialized with data and designSize. '
-        'Use ScreenUtilPlus.init() or ScreenUtilPlusInit widget first.',
-      );
+    if (data != null) {
+      _instance._data = data;
     }
+
+    _instance._uiSize = designSize;
 
     // Capture previous state for change detection
     final _ScreenMetrics? previousMetrics = _instance._metrics;

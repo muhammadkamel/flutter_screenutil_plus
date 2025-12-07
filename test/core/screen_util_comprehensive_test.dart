@@ -23,19 +23,16 @@ void main() {
       expect(instance1, same(instance2));
     });
 
-    test('configure throws StateError when not initialized', () {
-      expect(
-        () => ScreenUtilPlus.configure(designSize: defaultSize),
-        throwsA(
-          isA<StateError>().having(
-            (e) => e.message,
-            'message',
-            contains(
-              'ScreenUtilPlus must be initialized with data and designSize',
-            ),
-          ),
-        ),
-      );
+    test('configure uses default data when not initialized', () {
+      ScreenUtilPlus.configure(designSize: defaultSize);
+      final util = ScreenUtilPlus();
+      // Should use default MediaQueryData (Size.zero, scale 1.0)
+      expect(util.screenWidth, 0);
+      expect(util.screenHeight, 0);
+      // scaleWidth would be 0 / 360 = 0
+      expect(util.scaleWidth, 0);
+      // scaleHeight would be 0 / 690 = 0
+      expect(util.scaleHeight, 0);
     });
 
     test('configure with valid data', () {
