@@ -4,6 +4,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.0] - 2025-12-07
+
+### Added
+
+- **Default Initialization**: `ScreenUtilPlus` fields now initialize with default values (`defaultSize` of 360x690) instead of empty/zero values, preventing issues when accessed before explicit configuration.
+- **Optional Configuration**: `designSize` parameter in `init`, `configure`, and `ScreenUtilPlusInit` is now optional, defaulting to 360x690. This allows for simpler setup when using standard defaults.
+
 ## [1.2.2] - 2025-12-07
 
 ### Changed
