@@ -101,7 +101,7 @@ class ScreenUtilPlus {
   ///       );
   ///     },
   ///   )
-  /// ```
+  ///   ```
   static Future<void> ensureScreenSize([
     ui.FlutterView? window,
     Duration duration = const Duration(milliseconds: 10),

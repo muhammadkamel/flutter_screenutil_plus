@@ -238,32 +238,27 @@ class SimpleAdaptiveContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final adaptive = AdaptiveContainer(
-      width: {
-        if (widthXs != null) Breakpoint.xs: widthXs!,
-        if (widthSm != null) Breakpoint.sm: widthSm!,
-        if (widthMd != null) Breakpoint.md: widthMd!,
-        if (widthLg != null) Breakpoint.lg: widthLg!,
-        if (widthXl != null) Breakpoint.xl: widthXl!,
-      },
-      height: {
-        if (heightXs != null) Breakpoint.xs: heightXs!,
-        if (heightSm != null) Breakpoint.sm: heightSm!,
-        if (heightMd != null) Breakpoint.md: heightMd!,
-        if (heightLg != null) Breakpoint.lg: heightLg!,
-        if (heightXl != null) Breakpoint.xl: heightXl!,
-      },
-      padding: {
-        if (paddingXs != null)
-          Breakpoint.xs: EdgeInsets.all(paddingXs!.toDouble()),
-        if (paddingSm != null)
-          Breakpoint.sm: EdgeInsets.all(paddingSm!.toDouble()),
-        if (paddingMd != null)
-          Breakpoint.md: EdgeInsets.all(paddingMd!.toDouble()),
-        if (paddingLg != null)
-          Breakpoint.lg: EdgeInsets.all(paddingLg!.toDouble()),
-        if (paddingXl != null)
-          Breakpoint.xl: EdgeInsets.all(paddingXl!.toDouble()),
-      },
+      width: _createBreakpointMap(
+        xs: widthXs,
+        sm: widthSm,
+        md: widthMd,
+        lg: widthLg,
+        xl: widthXl,
+      ),
+      height: _createBreakpointMap(
+        xs: heightXs,
+        sm: heightSm,
+        md: heightMd,
+        lg: heightLg,
+        xl: heightXl,
+      ),
+      padding: _createBreakpointMap(
+        xs: paddingXs != null ? EdgeInsets.all(paddingXs!.toDouble()) : null,
+        sm: paddingSm != null ? EdgeInsets.all(paddingSm!.toDouble()) : null,
+        md: paddingMd != null ? EdgeInsets.all(paddingMd!.toDouble()) : null,
+        lg: paddingLg != null ? EdgeInsets.all(paddingLg!.toDouble()) : null,
+        xl: paddingXl != null ? EdgeInsets.all(paddingXl!.toDouble()) : null,
+      ),
       color: color,
       decoration: decoration,
       breakpoints: breakpoints,
@@ -271,5 +266,24 @@ class SimpleAdaptiveContainer extends StatelessWidget {
     );
 
     return adaptive;
+  }
+
+  Map<Breakpoint, T>? _createBreakpointMap<T>({
+    T? xs,
+    T? sm,
+    T? md,
+    T? lg,
+    T? xl,
+  }) {
+    if (xs == null && sm == null && md == null && lg == null && xl == null) {
+      return null;
+    }
+    return {
+      if (xs != null) Breakpoint.xs: xs,
+      if (sm != null) Breakpoint.sm: sm,
+      if (md != null) Breakpoint.md: md,
+      if (lg != null) Breakpoint.lg: lg,
+      if (xl != null) Breakpoint.xl: xl,
+    };
   }
 }

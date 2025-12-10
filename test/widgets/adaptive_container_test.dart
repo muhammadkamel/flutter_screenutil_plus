@@ -622,6 +622,25 @@ void main() {
       expect(container.constraints, null);
       expect(container.padding, null);
       expect(container.margin, null);
+      expect(container.margin, null);
+    });
+
+    testWidgets('handles all nulls internally', (tester) async {
+      // This verifies that the internal helper returns null when all inputs are null,
+      // resulting in a standard Container with no AdaptiveContainer behavior overhead.
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: MediaQuery(
+            data: MediaQueryData(size: Size(800, 600)),
+            child: SimpleAdaptiveContainer(child: Text('Test')),
+          ),
+        ),
+      );
+
+      final Container container = tester.widget(find.byType(Container));
+      // No extra constraints or padding should be applied
+      expect(container.constraints, null);
+      expect(container.padding, null);
     });
   });
 }

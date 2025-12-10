@@ -151,6 +151,10 @@ class _ScreenUtilPlusInitState extends State<ScreenUtilPlusInit>
   }
 
   MediaQueryData? _getMediaQueryData() {
+    final MediaQueryData? mediaQuery = MediaQuery.maybeOf(context);
+    if (mediaQuery != null) {
+      return mediaQuery;
+    }
     final FlutterView? view = View.maybeOf(context);
     return view != null ? MediaQueryData.fromView(view) : null;
   }
