@@ -93,6 +93,8 @@ class _HomePageState extends State<HomePage> {
                 Expanded(
                   child: Text(
                     'NEW: CSS & SwiftUI-like adaptive UI features!',
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
                     style: TextStyle(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w600,

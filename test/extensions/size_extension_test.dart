@@ -102,18 +102,33 @@ void main() {
       );
 
       // .r -> scale 2
-      expect(constraints.r.minWidth, 20);
-      expect(constraints.r.maxWidth, 40);
+      final BoxConstraints r = constraints.r;
+      expect(r.minWidth, 20);
+      expect(r.maxWidth, 40);
+      expect(r.minHeight, 20);
+      expect(r.maxHeight, 40);
 
-      // .hw -> width uses w (2), height uses h (2)
-      expect(constraints.hw.minWidth, 20);
-      expect(constraints.hw.minHeight, 20);
+      // .hw -> width uses w (2), height uses h (2) - equivalent here
+      final BoxConstraints hw = constraints.hw;
+      expect(hw.minWidth, 20);
+      expect(hw.maxWidth, 40);
+      expect(hw.minHeight, 20);
+      expect(hw.maxHeight, 40);
 
       // .w -> scale 2
-      expect(constraints.w.minWidth, 20);
+      final BoxConstraints w = constraints.w;
+      expect(w.minWidth, 20);
+      expect(w.maxWidth, 40);
+      expect(w.minHeight, 20);
+      expect(w.maxHeight, 40);
 
       // .h -> scale 2
-      expect(constraints.h.minHeight, 20);
+      final BoxConstraints h = constraints.h;
+      expect(h.minHeight, 20);
+      expect(h.maxHeight, 40);
+      // Also check other dimensions scaled by h
+      expect(h.minWidth, 20);
+      expect(h.maxWidth, 40);
     });
 
     group('Edge Cases', () {

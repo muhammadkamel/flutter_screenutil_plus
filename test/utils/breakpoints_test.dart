@@ -181,6 +181,39 @@ void main() {
         Breakpoint.xxl,
       ]);
     });
+
+    test('getValue returns correct value from configuration', () {
+      const breakpoints = Breakpoints(
+        xs: 10,
+        sm: 20,
+        md: 30,
+        lg: 40,
+        xl: 50,
+        xxl: 60,
+      );
+
+      expect(Breakpoint.xs.getValue(breakpoints), 10);
+      expect(Breakpoint.sm.getValue(breakpoints), 20);
+      expect(Breakpoint.md.getValue(breakpoints), 30);
+      expect(Breakpoint.lg.getValue(breakpoints), 40);
+      expect(Breakpoint.xl.getValue(breakpoints), 50);
+      expect(Breakpoint.xxl.getValue(breakpoints), 60);
+    });
+  });
+
+  group('Equality', () {
+    test('Breakpoints are equal if values are same', () {
+      const Breakpoints b1 = Breakpoints.bootstrap;
+      const Breakpoints b2 = Breakpoints.bootstrap;
+      expect(b1, b2);
+      expect(b1.hashCode, b2.hashCode);
+    });
+
+    test('Breakpoints are not equal if values differ', () {
+      const Breakpoints b1 = Breakpoints.bootstrap;
+      const Breakpoints b2 = Breakpoints.tailwind;
+      expect(b1, isNot(b2));
+    });
   });
 
   group('BreakpointExtension', () {

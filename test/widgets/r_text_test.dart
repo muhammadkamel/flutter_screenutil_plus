@@ -68,6 +68,51 @@ void main() {
       expect(text.maxLines, 2);
     });
 
+    testWidgets('preserves all constructor parameters', (tester) async {
+      const locale = Locale('en', 'US');
+      const MaterialColor selectionColor = Colors.green;
+      const semanticsLabel = 'Label';
+      const softWrap = false;
+      const TextOverflow overflow = TextOverflow.fade;
+      const textScaler = TextScaler.linear(1.5);
+      const TextWidthBasis textWidthBasis = TextWidthBasis.longestLine;
+      const textHeightBehavior = TextHeightBehavior(
+        applyHeightToFirstAscent: false,
+      );
+      const strutStyle = StrutStyle(fontSize: 12);
+      const TextDirection textDirection = TextDirection.rtl;
+
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: RText(
+            'Hello',
+            locale: locale,
+            selectionColor: selectionColor,
+            semanticsLabel: semanticsLabel,
+            softWrap: softWrap,
+            overflow: overflow,
+            textScaler: textScaler,
+            textWidthBasis: textWidthBasis,
+            textHeightBehavior: textHeightBehavior,
+            strutStyle: strutStyle,
+            textDirection: textDirection,
+          ),
+        ),
+      );
+
+      final Text text = tester.widget<Text>(find.byType(Text));
+      expect(text.locale, locale);
+      expect(text.selectionColor, selectionColor);
+      expect(text.semanticsLabel, semanticsLabel);
+      expect(text.softWrap, softWrap);
+      expect(text.overflow, overflow);
+      expect(text.textScaler, textScaler);
+      expect(text.textWidthBasis, textWidthBasis);
+      expect(text.textHeightBehavior, textHeightBehavior);
+      expect(text.strutStyle, strutStyle);
+      expect(text.textDirection, textDirection);
+    });
+
     testWidgets('scales line height proportionally with font size', (
       tester,
     ) async {

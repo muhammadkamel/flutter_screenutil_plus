@@ -132,6 +132,29 @@ void main() {
       expect(renderBox.additionalConstraints.minHeight, 200);
     });
 
+    testWidgets(
+      'RSizedBox should update constraints when switching from square to rectangle',
+      (tester) async {
+        await tester.pumpWidget(
+          const MaterialApp(home: RSizedBox.square(dimension: 100)),
+        );
+        RenderConstrainedBox renderBox = tester.renderObject(
+          find.byType(RSizedBox),
+        );
+        // Square: 100.r -> 200
+        expect(renderBox.additionalConstraints.minWidth, 200);
+        expect(renderBox.additionalConstraints.minHeight, 200);
+
+        await tester.pumpWidget(
+          const MaterialApp(home: RSizedBox(width: 300, height: 50)),
+        );
+        renderBox = tester.renderObject(find.byType(RSizedBox));
+        // Rectangle: 300.w -> 600, 50.h -> 100
+        expect(renderBox.additionalConstraints.minWidth, 600);
+        expect(renderBox.additionalConstraints.minHeight, 100);
+      },
+    );
+
     testWidgets('RSizedBox with null dimensions should be unconstrained', (
       tester,
     ) async {

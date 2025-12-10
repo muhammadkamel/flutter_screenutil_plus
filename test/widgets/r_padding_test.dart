@@ -115,6 +115,30 @@ void main() {
         expect(insets.end, 60);
         expect(insets.bottom, 80);
       });
+
+      test('only with no parameters should result in zero values', () {
+        final insets = REdgeInsetsDirectional.only();
+        expect(insets.start, 0);
+        expect(insets.top, 0);
+        expect(insets.end, 0);
+        expect(insets.bottom, 0);
+      });
+    });
+
+    group('REdgeInsets Additional Coverage', () {
+      test('all with zero should be zero', () {
+        final insets = REdgeInsets.all(0);
+        expect(insets.left, 0);
+        expect(insets.top, 0);
+        expect(insets.right, 0);
+        expect(insets.bottom, 0);
+      });
+
+      test('only default values', () {
+        final insets = REdgeInsets.only(left: 10);
+        expect(insets.left, 20);
+        expect(insets.right, 0);
+      });
     });
 
     group('RPadding Widget', () {

@@ -39,4 +39,38 @@ void main() {
       expect(FontSizeResolvers.diagonal(10, ScreenUtilPlus()), 40);
     });
   });
+
+  group('FontSizeResolvers Asymmetric', () {
+    // Width: 720 / 360 = 2.0
+    // Height: 690 / 690 = 1.0
+    const deviceSize = Size(720, 690);
+
+    setUp(() {
+      ScreenUtilPlus.configure(
+        data: const MediaQueryData(size: deviceSize),
+        minTextAdapt: true,
+        splitScreenMode: false,
+      );
+    });
+
+    test('width resolver should follow width scale (2.0)', () {
+      expect(FontSizeResolvers.width(10, ScreenUtilPlus()), 20);
+    });
+
+    test('height resolver should follow height scale (1.0)', () {
+      expect(FontSizeResolvers.height(10, ScreenUtilPlus()), 10);
+    });
+
+    test('radius resolver should follow min scale (1.0)', () {
+      expect(FontSizeResolvers.radius(10, ScreenUtilPlus()), 10);
+    });
+
+    test('diameter resolver should follow max scale (2.0)', () {
+      expect(FontSizeResolvers.diameter(10, ScreenUtilPlus()), 20);
+    });
+
+    test('diagonal resolver should combine scales (2.0 * 1.0)', () {
+      expect(FontSizeResolvers.diagonal(10, ScreenUtilPlus()), 20);
+    });
+  });
 }

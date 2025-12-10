@@ -619,6 +619,32 @@ void main() {
       expect(find.text('Infinity SizedBox'), findsOneWidget);
     });
 
+    testWidgets('RSizedBox variants (square, vertical, horizontal, fromSize)', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        ScreenUtilPlusInit(
+          designSize: const Size(360, 690),
+          builder: (context, child) {
+            return MaterialApp(home: child);
+          },
+          child: Scaffold(
+            body: Column(
+              children: [
+                const RSizedBox.square(dimension: 50),
+                const RSizedBox.vertical(10),
+                const RSizedBox.horizontal(20),
+                RSizedBox.fromSize(size: const Size(30, 30)),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+      expect(find.byType(RSizedBox), findsWidgets);
+    });
+
     testWidgets('RContainer with BoxConstraints min/max', (tester) async {
       await tester.pumpWidget(
         ScreenUtilPlusInit(

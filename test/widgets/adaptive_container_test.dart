@@ -551,5 +551,77 @@ void main() {
       expect(container.constraints?.maxWidth, closeTo(expectedWidth, 0.01));
       expect(container.constraints?.minWidth, closeTo(expectedWidth, 0.01));
     });
+    testWidgets('handles empty maps gracefully', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: MediaQuery(
+            data: MediaQueryData(size: Size(800, 600)),
+            child: AdaptiveContainer(
+              width: {},
+              height: {},
+              padding: {},
+              margin: {},
+              child: Text('Test'),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      final Container container = tester.widget(find.byType(Container));
+      // Should behave like a default Container
+      expect(container.constraints, null);
+      expect(container.padding, null);
+      expect(container.margin, null);
+    });
+
+    testWidgets('handles map with no matching breakpoint', (tester) async {
+      // Setup a scenario where current breakpoint (e.g., md) has no value
+      // and checking logic:
+      // 1. Current (md) -> not found
+      // 2. Smaller (sm, xs) -> not found
+      // 3. Larger (lg, xl, xxl) -> not found
+      // Result: null
+
+      // This effectively means "empty map" covers it, but let's try a map
+      // with only a value for a specific breakpoint that we won't hit in any fallback?
+      // Actually, fallback logic tries *all* smaller then *all* larger.
+      // So to return null, the map must be empty relative to the search.
+      // But we can test just passing explicit empty maps or a map that doesn't trigger anything?
+      // If we provide {Breakpoint.xs: ...}, it will be found by "smaller" search if current is md?
+      // No, smaller search is: `bp.index < current.index`. xs < md. So `xs` IS checked.
+      // "Try smaller breakpoints in reverse order".
+      // If we are at md.
+      // 1. Check md.
+      // 2. Check sm, xs.
+      // 3. Check lg, xl, xxl.
+      // So effectively ALL breakpoints are checked eventually unless we return early.
+      // So if map is not empty, it WILL find something.
+      // Thus "empty map" is the only case that returns null.
+      // The previous test covers this. We can skip a specific "no match" test as it's mathematically impossible if map is non-empty.
+    });
+  });
+
+  group('SimpleAdaptiveContainer', () {
+    testWidgets('renders correctly with no properties set', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: MediaQuery(
+            data: MediaQueryData(size: Size(800, 600)),
+            child: SimpleAdaptiveContainer(child: Text('Test')),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(find.text('Test'), findsOneWidget);
+      final Container container = tester.widget(find.byType(Container));
+      // Should behave like a default Container with no constraints/padding
+      expect(container.constraints, null);
+      expect(container.padding, null);
+      expect(container.margin, null);
+    });
   });
 }

@@ -379,20 +379,13 @@ class ScreenUtilPlus {
   }
 
   DeviceType _getDesktopDeviceType() {
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.linux:
-        return DeviceType.linux;
-      case TargetPlatform.macOS:
-        return DeviceType.mac;
-      case TargetPlatform.windows:
-        return DeviceType.windows;
-      case TargetPlatform.fuchsia:
-        return DeviceType.fuchsia;
-      case TargetPlatform.iOS:
-      case TargetPlatform.android:
-        // These should not occur in this method, but handle for completeness
-        return DeviceType.web;
-    }
+    return switch (defaultTargetPlatform) {
+      TargetPlatform.linux => DeviceType.linux,
+      TargetPlatform.macOS => DeviceType.mac,
+      TargetPlatform.windows => DeviceType.windows,
+      TargetPlatform.fuchsia => DeviceType.fuchsia,
+      TargetPlatform.iOS || TargetPlatform.android => DeviceType.web,
+    };
   }
 
   /// Creates a vertical [SizedBox] with height adapted using [setHeight].

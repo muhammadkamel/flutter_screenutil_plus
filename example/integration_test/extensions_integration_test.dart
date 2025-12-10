@@ -7,6 +7,78 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   group('Extensions Integration Tests', () {
+    testWidgets('SizeExtension (num) returns correct values', (tester) async {
+      await tester.pumpWidget(
+        ScreenUtilPlusInit(
+          designSize: const Size(360, 690),
+          builder: (context, child) {
+            return MaterialApp(
+              home: Builder(
+                builder: (context) {
+                  return Column(
+                    children: [
+                      Container(
+                        key: const Key('c1'),
+                        width: 100.w,
+                        height: 100.h,
+                        color: Colors.red,
+                      ),
+                      Container(
+                        key: const Key('c2'),
+                        width: 50.r,
+                        height: 50.r,
+                        color: Colors.blue,
+                      ),
+                      Container(
+                        width: 10.sp,
+                        height: 10.dm,
+                        color: Colors.green,
+                      ),
+                    ],
+                  );
+                },
+              ),
+            );
+          },
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('c1')), findsOneWidget);
+      expect(find.byKey(const Key('c2')), findsOneWidget);
+    });
+
+    testWidgets(
+      'SizeExtension (EdgeInsets/BorderRadius) returns correct values',
+      (tester) async {
+        await tester.pumpWidget(
+          ScreenUtilPlusInit(
+            designSize: const Size(360, 690),
+            builder: (context, child) {
+              return MaterialApp(
+                home: Builder(
+                  builder: (context) {
+                    return Container(
+                      padding: const EdgeInsets.all(10).w,
+                      margin: const EdgeInsets.all(10).r,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10).w,
+                      ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10).r,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              );
+            },
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(find.byType(Container), findsWidgets);
+      },
+    );
     testWidgets('AdaptiveValues.width returns responsive width', (
       tester,
     ) async {

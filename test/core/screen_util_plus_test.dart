@@ -131,4 +131,89 @@ void main() {
     expect(focusNode.hasFocus, true);
     expect(buildCountNotifier.value, 1);
   });
+
+  group('[Core Functionality]', () {
+    testWidgets('registerToBuild rebuilds widget', (tester) async {
+      var buildCount = 0;
+      await tester.pumpWidget(
+        ScreenUtilPlusInit(
+          designSize: uiSize,
+          child: MaterialApp(
+            home: Builder(
+              builder: (context) {
+                ScreenUtilPlus.registerToBuild(context);
+                buildCount++;
+                return const SizedBox();
+              },
+            ),
+          ),
+        ),
+      );
+
+      expect(buildCount, 1);
+
+      // Trigger a metric change which calls _rebuildRegisteredElements
+      // We can force it by calling configure with different data
+      ScreenUtilPlus.configure(
+        data: const MediaQueryData(size: Size(100, 100)),
+        designSize: uiSize,
+      );
+
+      await tester.pumpAndSettle();
+      expect(buildCount, 2);
+    });
+
+    testWidgets('deviceType returns mobile by default', (tester) async {
+      await tester.pumpWidget(
+        MediaQuery(
+          data: const MediaQueryData(size: Size(360, 690)),
+          child: Directionality(
+            textDirection: TextDirection.ltr,
+            child: Builder(
+              builder: (context) {
+                expect(ScreenUtilPlus().deviceType(context), DeviceType.mobile);
+                return const SizedBox();
+              },
+            ),
+          ),
+        ),
+      );
+    });
+
+    testWidgets('deviceType returns tablet on large screens', (tester) async {
+      // Tablet size
+      const tabletSize = Size(1200, 1600);
+
+      await tester.pumpWidget(
+        MediaQuery(
+          data: const MediaQueryData(size: tabletSize),
+          child: Directionality(
+            textDirection: TextDirection.ltr,
+            child: Builder(
+              builder: (context) {
+                expect(ScreenUtilPlus().deviceType(context), DeviceType.tablet);
+                return const SizedBox();
+              },
+            ),
+          ),
+        ),
+      );
+    });
+
+    test('enableScale toggles scaling', () {
+      ScreenUtilPlus.enableScale(
+        enableWH: () => false,
+        enableText: () => false,
+      );
+      expect(ScreenUtilPlus().scaleWidth, 1.0);
+      expect(ScreenUtilPlus().scaleText, 1.0);
+
+      ScreenUtilPlus.enableScale(enableWH: () => true, enableText: () => true);
+    });
+
+    test('ensureScreenSize completes', () async {
+      await ScreenUtilPlus.ensureScreenSize();
+      // Success if no timeout/error using implicit view in test env
+    });
+  });
 }

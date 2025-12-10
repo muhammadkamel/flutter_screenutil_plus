@@ -639,6 +639,83 @@ void main() {
       // With threshold 400, 500px width should be regular
       expect(find.text('Regular Layout'), findsOneWidget);
     });
+
+    testWidgets(
+      'builder takes priority over horizontal/vertical/compact/regular',
+      (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: MediaQuery(
+              data: const MediaQueryData(size: Size(800, 600)),
+              child: SizeClassBuilder(
+                builder: (c, s) => const Text('Builder'),
+                horizontal: (c, s) => const Text('Horizontal'),
+                vertical: (c, s) => const Text('Vertical'),
+                compact: (c) => const Text('Compact'),
+                regular: (c) => const Text('Regular'),
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(find.text('Builder'), findsOneWidget);
+      },
+    );
+
+    testWidgets('horizontal takes priority over vertical/compact/regular', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: MediaQuery(
+            data: const MediaQueryData(size: Size(800, 600)),
+            child: SizeClassBuilder(
+              horizontal: (c, s) => const Text('Horizontal'),
+              vertical: (c, s) => const Text('Vertical'),
+              compact: (c) => const Text('Compact'),
+              regular: (c) => const Text('Regular'),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('Horizontal'), findsOneWidget);
+    });
+
+    testWidgets('vertical takes priority over compact/regular', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: MediaQuery(
+            data: const MediaQueryData(size: Size(800, 600)),
+            child: SizeClassBuilder(
+              vertical: (c, s) => const Text('Vertical'),
+              compact: (c) => const Text('Compact'),
+              regular: (c) => const Text('Regular'),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('Vertical'), findsOneWidget);
+    });
+
+    testWidgets('regular takes priority over compact if regular size class', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: MediaQuery(
+            data: const MediaQueryData(size: Size(800, 600)),
+            child: SizeClassBuilder(
+              regular: (c) => const Text('Regular'),
+              compact: (c) => const Text('Compact'),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('Regular'), findsOneWidget);
+    });
   });
 
   group('ConditionalBuilder', () {

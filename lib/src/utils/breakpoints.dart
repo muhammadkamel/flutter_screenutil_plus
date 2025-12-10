@@ -1,3 +1,5 @@
+import 'package:equatable/equatable.dart';
+
 /// Breakpoint definitions similar to CSS media queries.
 ///
 /// Defines standard breakpoints for responsive design:
@@ -6,7 +8,7 @@
 /// - md: Medium devices (tablets)
 /// - lg: Large devices (desktops)
 /// - xl: Extra large devices (large desktops)
-class Breakpoints {
+class Breakpoints extends Equatable {
   /// Creates a [Breakpoints] instance with custom breakpoint values.
   ///
   /// All breakpoints default to standard Bootstrap 5 values if not specified.
@@ -73,59 +75,35 @@ class Breakpoints {
 
   /// Gets the current breakpoint based on width
   Breakpoint getBreakpoint(double width) {
-    if (width >= xxl) {
-      return Breakpoint.xxl;
-    }
-    if (width >= xl) {
-      return Breakpoint.xl;
-    }
-    if (width >= lg) {
-      return Breakpoint.lg;
-    }
-    if (width >= md) {
-      return Breakpoint.md;
-    }
-    if (width >= sm) {
-      return Breakpoint.sm;
-    }
-    return Breakpoint.xs;
+    return switch (width) {
+      _ when width >= xxl => Breakpoint.xxl,
+      _ when width >= xl => Breakpoint.xl,
+      _ when width >= lg => Breakpoint.lg,
+      _ when width >= md => Breakpoint.md,
+      _ when width >= sm => Breakpoint.sm,
+      _ => Breakpoint.xs,
+    };
   }
 
   /// Checks if width is at least the specified breakpoint
   bool isAtLeast(Breakpoint breakpoint, double width) {
-    final double breakpointValue = _getBreakpointValue(breakpoint);
-    return width >= breakpointValue;
+    return width >= breakpoint.getValue(this);
   }
 
   /// Checks if width is less than the specified breakpoint
   bool isLessThan(Breakpoint breakpoint, double width) {
-    final double breakpointValue = _getBreakpointValue(breakpoint);
-    return width < breakpointValue;
+    return width < breakpoint.getValue(this);
   }
 
   /// Checks if width is between two breakpoints (inclusive)
   bool isBetween(Breakpoint min, Breakpoint max, double width) {
-    final double minValue = _getBreakpointValue(min);
-    final double maxValue = _getBreakpointValue(max);
+    final double minValue = min.getValue(this);
+    final double maxValue = max.getValue(this);
     return width >= minValue && width < maxValue;
   }
 
-  double _getBreakpointValue(Breakpoint breakpoint) {
-    switch (breakpoint) {
-      case Breakpoint.xs:
-        return xs;
-      case Breakpoint.sm:
-        return sm;
-      case Breakpoint.md:
-        return md;
-      case Breakpoint.lg:
-        return lg;
-      case Breakpoint.xl:
-        return xl;
-      case Breakpoint.xxl:
-        return xxl;
-    }
-  }
+  @override
+  List<Object?> get props => [xs, sm, md, lg, xl, xxl];
 }
 
 /// Breakpoint enum representing different screen sizes
@@ -146,7 +124,19 @@ enum Breakpoint {
   xl,
 
   /// 2XL devices (extra large desktops)
-  xxl,
+  xxl;
+
+  /// Get value based on [Breakpoints] configuration
+  double getValue(Breakpoints breakpoints) {
+    return switch (this) {
+      Breakpoint.xs => breakpoints.xs,
+      Breakpoint.sm => breakpoints.sm,
+      Breakpoint.md => breakpoints.md,
+      Breakpoint.lg => breakpoints.lg,
+      Breakpoint.xl => breakpoints.xl,
+      Breakpoint.xxl => breakpoints.xxl,
+    };
+  }
 }
 
 /// Extension on [Breakpoint] for convenient comparisons
