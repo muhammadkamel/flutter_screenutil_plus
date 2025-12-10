@@ -4,6 +4,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.1] - 2025-12-10
+
+### Changed
+
+- **Refactoring**: Core logic improvements for better maintainability and performance.
+  - Simplified `ScreenUtilPlus` singleton and initialization logic.
+  - Optimized `AdaptiveContainer` property handling.
+- **Robustness**: Improved `ScreenUtilPlusInit` to robustly handle nested `MediaQuery` data, falling back to `View.maybeOf` only when necessary.
+
+### Added
+
+- **Tests**: Added dedicated tests for initialization fallback logic to ensure correct behavior in various widget tree configurations.
+
 ## [1.3.0] - 2025-12-07
 
 ### Added
