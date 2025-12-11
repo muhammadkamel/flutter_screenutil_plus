@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 import 'package:flutter/widgets.dart';
 
 import '../core/_constants.dart';
+import '../extensions/context_extension.dart';
 import '../utils/device_type.dart';
 import '../utils/media_query_extension.dart';
 
@@ -235,9 +236,9 @@ class ScreenUtilPlus {
     bool minTextAdapt = false,
     FontSizeResolver? fontSizeResolver,
   }) {
-    final ui.FlutterView? view = View.maybeOf(context);
+    final MediaQueryData? mediaQueryData = context.mediaQueryData;
     return configure(
-      data: view != null ? MediaQueryData.fromView(view) : null,
+      data: mediaQueryData,
       designSize: designSize,
       splitScreenMode: splitScreenMode,
       minTextAdapt: minTextAdapt,
@@ -359,10 +360,11 @@ class ScreenUtilPlus {
       return DeviceType.web;
     }
 
-    final MediaQueryData mediaQuery = MediaQuery.of(context);
-    final double screenWidth = mediaQuery.size.width;
-    final double screenHeight = mediaQuery.size.height;
-    final Orientation orientation = mediaQuery.orientation;
+    final MediaQueryData? mediaQuery = context.mediaQueryData;
+    final double screenWidth = mediaQuery?.size.width ?? 0;
+    final double screenHeight = mediaQuery?.size.height ?? 0;
+    final Orientation orientation =
+        mediaQuery?.orientation ?? Orientation.portrait;
 
     final bool isMobilePlatform =
         defaultTargetPlatform == TargetPlatform.iOS ||

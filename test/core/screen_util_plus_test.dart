@@ -92,7 +92,9 @@ void main() {
               builder: (context) {
                 buildCountNotifier.value += 1;
 
-                assert(uiSize.width.w == MediaQuery.of(context).size.width);
+                assert(
+                  uiSize.width.w == MediaQuery.maybeOf(context)?.size.width,
+                );
 
                 return SizedBox(
                   width: 1.sw,
