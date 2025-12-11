@@ -27,7 +27,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  flutter_screenutil_plus: ^1.2.0
+  flutter_screenutil_plus: ^1.3.2
 ```
 
 Then run:

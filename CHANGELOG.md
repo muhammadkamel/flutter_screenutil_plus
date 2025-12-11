@@ -4,6 +4,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.2] - 2025-12-11
+
+### Fixed
+
+- **Robustness**: Resolved zero-screen-dimension issues by implementing a unified `ScreenUtilContextExtension`. This ensures consistent fallback to `View.maybeOf(context)` across all utilities (`size_class.dart`, `responsive_query.dart`, etc.) when `MediaQuery` is unavailable.
+
 ## [1.3.1] - 2025-12-10
 
 ### Changed
