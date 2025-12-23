@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+import '../extensions/context_extension.dart';
 import 'breakpoints.dart';
 import 'size_class.dart';
 
@@ -21,18 +22,21 @@ class ResponsiveQuery {
   /// The breakpoints configuration used for responsive design.
   final Breakpoints breakpoints;
 
+  /// The [MediaQueryData] from the context.
+  MediaQueryData? get mediaQuery => context.mediaQueryData;
+
   /// Gets the current screen width
-  double get width => MediaQuery.of(context).size.width;
+  double get width => mediaQuery?.size.width ?? 0;
 
   /// Gets the current screen height
-  double get height => MediaQuery.of(context).size.height;
+  double get height => mediaQuery?.size.height ?? 0;
 
   /// Gets the current breakpoint
   Breakpoint get breakpoint => breakpoints.getBreakpoint(width);
 
   /// Gets the current size classes
   SizeClasses get sizeClasses =>
-      SizeClasses.fromMediaQuery(MediaQuery.of(context));
+      SizeClasses.fromMediaQuery(mediaQuery ?? const MediaQueryData());
 
   /// Checks if current width is at least the specified breakpoint
   bool isAtLeast(Breakpoint breakpoint) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../flutter_screenutil_plus.dart';
 
 /// A responsive text widget that automatically scales font size.
@@ -78,6 +79,9 @@ class RText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Register dependency on ScreenUtilPlusScope for efficient reactivity
+    context.su;
+
     TextStyle? responsiveStyle = style;
 
     if (responsiveStyle != null) {

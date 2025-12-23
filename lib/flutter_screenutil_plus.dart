@@ -46,7 +46,10 @@ library;
 // Core classes
 export 'src/core/screen_util_plus.dart';
 export 'src/core/screen_util_plus_init.dart';
+export 'src/core/screen_util_plus_scope.dart';
 export 'src/extensions/adaptive_text_style.dart';
+export 'src/extensions/context_extension.dart';
+export 'src/extensions/responsive_size_context.dart';
 // Extensions
 export 'src/extensions/size_extension.dart';
 export 'src/extensions/text_style_extension.dart';

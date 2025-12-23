@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
 
+import '../extensions/context_extension.dart';
+
 /// Size class system similar to SwiftUI's size classes.
 ///
 /// Size classes provide a way to describe the approximate size of a view
@@ -98,7 +100,7 @@ class SizeClasses {
 extension SizeClassExtension on BuildContext {
   /// Gets the current size classes from MediaQuery
   SizeClasses get sizeClasses {
-    final MediaQueryData mediaQuery = MediaQuery.of(this);
+    final MediaQueryData mediaQuery = mediaQueryData ?? const MediaQueryData();
     return SizeClasses.fromMediaQuery(mediaQuery);
   }
 

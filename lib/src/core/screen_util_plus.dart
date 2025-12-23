@@ -6,8 +6,10 @@ import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 import 'package:flutter/widgets.dart';
 
 import '../core/_constants.dart';
+import '../extensions/context_extension.dart';
 import '../utils/device_type.dart';
 import '../utils/media_query_extension.dart';
+import 'screen_util_plus_scope.dart';
 
 /// A function type for resolving font sizes based on the original font size
 /// and the [ScreenUtilPlus] instance.
@@ -41,6 +43,11 @@ class ScreenUtilPlus {
   ScreenUtilPlus._();
 
   static final ScreenUtilPlus _instance = ScreenUtilPlus._();
+
+  /// Returns the nearest [ScreenUtilPlus] instance and registers the
+  /// context for rebuilds when metrics change.
+  static ScreenUtilPlus of(BuildContext context) =>
+      ScreenUtilPlusScope.of(context);
 
   static bool Function() _enableScaleWH = () => true;
   static bool Function() _enableScaleText = () => true;
@@ -125,6 +132,9 @@ class ScreenUtilPlus {
 
   Set<Element>? _elementsToRebuild;
   _ScreenMetrics? _metrics;
+
+  /// Gets the current screen metrics for comparison in [InheritedWidget].
+  Object? get metrics => _metrics;
 
   /// ### Experimental
   /// Registers the current page and all its descendants to rebuild.
@@ -235,9 +245,9 @@ class ScreenUtilPlus {
     bool minTextAdapt = false,
     FontSizeResolver? fontSizeResolver,
   }) {
-    final ui.FlutterView? view = View.maybeOf(context);
+    final MediaQueryData? mediaQueryData = context.mediaQueryData;
     return configure(
-      data: view != null ? MediaQueryData.fromView(view) : null,
+      data: mediaQueryData,
       designSize: designSize,
       splitScreenMode: splitScreenMode,
       minTextAdapt: minTextAdapt,
@@ -359,10 +369,11 @@ class ScreenUtilPlus {
       return DeviceType.web;
     }
 
-    final MediaQueryData mediaQuery = MediaQuery.of(context);
-    final double screenWidth = mediaQuery.size.width;
-    final double screenHeight = mediaQuery.size.height;
-    final Orientation orientation = mediaQuery.orientation;
+    final MediaQueryData? mediaQuery = context.mediaQueryData;
+    final double screenWidth = mediaQuery?.size.width ?? 0;
+    final double screenHeight = mediaQuery?.size.height ?? 0;
+    final Orientation orientation =
+        mediaQuery?.orientation ?? Orientation.portrait;
 
     final bool isMobilePlatform =
         defaultTargetPlatform == TargetPlatform.iOS ||

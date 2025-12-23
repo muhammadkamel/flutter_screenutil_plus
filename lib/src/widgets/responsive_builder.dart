@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+import '../extensions/context_extension.dart';
 import '../utils/breakpoints.dart';
 import '../utils/responsive_query.dart';
 import '../utils/size_class.dart';
@@ -122,7 +123,7 @@ class SizeClassBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sizeClasses = SizeClasses.fromMediaQuery(
-      MediaQuery.of(context),
+      context.mediaQueryData ?? const MediaQueryData(),
       threshold: threshold,
     );
 
