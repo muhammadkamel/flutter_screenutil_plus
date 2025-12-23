@@ -16,6 +16,10 @@ class MyApp extends StatelessWidget {
       designSize: const Size(360, 690),
       minTextAdapt: true,
       splitScreenMode: true,
+      autoRebuild: false,
+      // NEW: Set autoRebuild to false for better performance
+      // When false, only widgets using context.su or R-widgets will rebuild
+      // autoRebuild: false,
       // Use builder only if you need to use library outside ScreenUtilPlusInit context
       builder: (context, child) {
         return MaterialApp(

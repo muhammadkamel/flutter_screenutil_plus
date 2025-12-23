@@ -9,6 +9,7 @@ import '../core/_constants.dart';
 import '../extensions/context_extension.dart';
 import '../utils/device_type.dart';
 import '../utils/media_query_extension.dart';
+import 'screen_util_plus_scope.dart';
 
 /// A function type for resolving font sizes based on the original font size
 /// and the [ScreenUtilPlus] instance.
@@ -42,6 +43,11 @@ class ScreenUtilPlus {
   ScreenUtilPlus._();
 
   static final ScreenUtilPlus _instance = ScreenUtilPlus._();
+
+  /// Returns the nearest [ScreenUtilPlus] instance and registers the
+  /// context for rebuilds when metrics change.
+  static ScreenUtilPlus of(BuildContext context) =>
+      ScreenUtilPlusScope.of(context);
 
   static bool Function() _enableScaleWH = () => true;
   static bool Function() _enableScaleText = () => true;
@@ -126,6 +132,9 @@ class ScreenUtilPlus {
 
   Set<Element>? _elementsToRebuild;
   _ScreenMetrics? _metrics;
+
+  /// Gets the current screen metrics for comparison in [InheritedWidget].
+  Object? get metrics => _metrics;
 
   /// ### Experimental
   /// Registers the current page and all its descendants to rebuild.

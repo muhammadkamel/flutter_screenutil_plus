@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
+import 'package:flutter_screenutil_plus_example/scope_demo_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -103,6 +104,30 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ],
+            ),
+          ),
+          10.verticalSpace,
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ScopeDemoPage(),
+                  ),
+                );
+              },
+              icon: Icon(Icons.widgets, size: 18.sp),
+              label: Text(
+                'View InheritedWidget Demo',
+                style: TextStyle(fontSize: 14.sp),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.purple.shade600,
+                foregroundColor: Colors.white,
+                padding: EdgeInsets.symmetric(vertical: 12.h),
+              ),
             ),
           ),
         ],

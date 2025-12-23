@@ -13,13 +13,15 @@
 ## ✨ Features
 
 - 📱 **Responsive Scaling**: Automatic scaling of width, height, font size, and more
-- 🎯 **CSS-like Breakpoints**: Media query-style breakpoints (Bootstrap, Tailwind, Material Design)
+- ⚡ **InheritedWidget-Based Scope**: Efficient, targeted rebuilds with `ScreenUtilPlusScope`
+- 🎯 **Context-Aware Extensions**: New `context.w()`, `context.h()`, `context.sp()` for optimal performance
+- 🎨 **CSS-like Breakpoints**: Media query-style breakpoints (Bootstrap, Tailwind, Material Design)
 - 📐 **SwiftUI-like Size Classes**: Compact/Regular size classes for adaptive layouts
-- 🎨 **Adaptive Widgets**: Breakpoint-aware containers, text, and builders
-- 🚀 **Performance Optimized**: Intelligent rebuild detection with Equatable
+- 🧩 **Adaptive Widgets**: Breakpoint-aware containers, text, and builders
+- 🚀 **Performance Optimized**: Intelligent rebuild detection with optional `autoRebuild: false`
 - 🎭 **Responsive Theme**: Automatic text style scaling in themes
 - 📦 **Zero Configuration**: Works out of the box with sensible defaults
-- 🧪 **Well Tested**: 98.3% code coverage with 500+ tests
+- 🧪 **Well Tested**: 99.2% code coverage with 619 tests
 
 ## 📦 Installation
 
@@ -27,7 +29,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  flutter_screenutil_plus: ^1.3.2
+  flutter_screenutil_plus: ^1.4.0
 ```
 
 Then run:
@@ -82,6 +84,106 @@ Container(
   ),
 )
 ```
+
+### 2. Use Responsive Extensions
+
+```dart
+Container(
+  width: 100.w,   // Responsive width
+  height: 50.h,   // Responsive height
+  padding: EdgeInsets.all(16.r), // Responsive padding
+  child: Text(
+    'Hello World',
+    style: TextStyle(fontSize: 16.sp), // Responsive font
+  ),
+)
+```
+
+### 3. **NEW in v1.4.0**: Context-Aware Extensions (Recommended)
+
+For better performance with `autoRebuild: false`, use context-aware extensions:
+
+```dart
+Container(
+  width: context.w(100),   // Context-aware width
+  height: context.h(50),   // Context-aware height
+  padding: context.edgeInsets(all: 16), // Context-aware padding
+  child: Text(
+    'Hello World',
+    style: TextStyle(fontSize: context.sp(16)), // Context-aware font
+  ),
+)
+```
+
+## 🚀 Performance Optimization (v1.4.0)
+
+### InheritedWidget-Based Scope
+
+Version 1.4.0 introduces `ScreenUtilPlusScope` for efficient, targeted rebuilds:
+
+```dart
+ScreenUtilPlusInit(
+  designSize: const Size(360, 690),
+  autoRebuild: false,  // 🎯 NEW: Disable automatic tree-wide rebuilds
+  builder: (context, child) {
+    return MaterialApp(
+      home: child,
+    );
+  },
+  child: HomePage(),
+)
+```
+
+**Benefits of `autoRebuild: false`:**
+
+- ⚡ **Significantly faster** - Only widgets that need responsive values rebuild
+- 🎯 **Targeted updates** - Only widgets using `context.w()`, `context.su`, or R-widgets rebuild
+- 🔄 **Backward compatible** - Defaults to `true` for existing apps
+
+### Context-Aware Extensions
+
+When using `autoRebuild: false`, use context-aware extensions for optimal performance:
+
+```dart
+// ✅ Recommended with autoRebuild: false
+context.w(100)          // Scale width
+context.h(50)           // Scale height
+context.r(20)           // Scale radius
+context.sp(16)          // Scale font size
+context.spMin(12)       // Scale font with minimum
+context.dg(100)         // Scale diagonal
+context.dm(100)         // Scale diameter
+
+// Spacing helpers
+context.verticalSpace(20)      // Vertical spacing
+context.horizontalSpace(20)    // Horizontal spacing
+
+// Complex values
+context.edgeInsets(all: 16)    // Scaled EdgeInsets
+context.edgeInsets(             // Custom EdgeInsets
+  horizontal: 16,
+  vertical: 8,
+)
+context.borderRadius(all: 12)  // Scaled BorderRadius
+
+// Access ScreenUtilPlus instance
+final su = context.su;         // Get ScreenUtilPlus instance
+```
+
+### Migration to Context-Aware Extensions
+
+```dart
+// ❌ Old way (still works, but rebuilds entire tree)
+Container(width: 100.w, height: 50.h)
+
+// ✅ New way (efficient with autoRebuild: false)
+Container(width: context.w(100), height: context.h(50))
+```
+
+**When to use each:**
+
+- **`autoRebuild: true`** (default): Use `.w`, `.h`, `.sp` extensions - simpler syntax
+- **`autoRebuild: false`**: Use `context.w()`, `context.h()`, `context.sp()` - better performance
 
 ## 📚 Core Features
 
@@ -393,6 +495,7 @@ ScreenUtilPlusInit(
 | Property          | Type             | Default Value           | Description                                                                                                                                        |
 | ----------------- | ---------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
 | designSize        | Size             | Size(360,690)           | The size of the device screen in the design draft, in dp                                                                                           |
+| autoRebuild       | bool             | true                    | **NEW in v1.4.0**: When false, only widgets using context-aware extensions or `context.su` rebuild on screen changes (improves performance)        |
 | builder           | Function         | null                    | Return widget that uses the library in a property (ex: MaterialApp's theme)                                                                        |
 | child             | Widget           | null                    | A part of builder that its dependencies/properties don't use the library                                                                           |
 | rebuildFactor     | RebuildFactor    | RebuildFactors.size     | Function that takes old and new screen metrics and returns whether to rebuild or not when changes occur. See [RebuildFactors](#rebuild-factors)    |
@@ -529,15 +632,32 @@ switch (deviceType) {
 
 #### Context Extensions
 
-| Extension              | Description                   | Example                                           |
-| ---------------------- | ----------------------------- | ------------------------------------------------- |
-| `context.breakpoint`   | Current breakpoint            | `context.breakpoint`                              |
-| `context.isAtLeast()`  | Check if at least breakpoint  | `context.isAtLeast(Breakpoint.md)`                |
-| `context.isLessThan()` | Check if less than breakpoint | `context.isLessThan(Breakpoint.lg)`               |
-| `context.isBetween()`  | Check if between breakpoints  | `context.isBetween(Breakpoint.sm, Breakpoint.lg)` |
-| `context.sizeClasses`  | Get size classes              | `context.sizeClasses`                             |
-| `context.adaptive()`   | Get AdaptiveValues            | `context.adaptive()`                              |
-| `context.responsive()` | Get ResponsiveQuery           | `context.responsive()`                            |
+| Extension                   | Description                   | Example                                           |
+| --------------------------- | ----------------------------- | ------------------------------------------------- |
+| **Context-Aware (v1.4.0)**  |                               |                                                   |
+| `context.w(value)`          | Scale width                   | `context.w(100)`                                  |
+| `context.h(value)`          | Scale height                  | `context.h(50)`                                   |
+| `context.r(value)`          | Scale radius                  | `context.r(20)`                                   |
+| `context.sp(value)`         | Scale font size               | `context.sp(16)`                                  |
+| `context.spMin(value)`      | Scale font with minimum       | `context.spMin(12)`                               |
+| `context.dg(value)`         | Scale diagonal                | `context.dg(100)`                                 |
+| `context.dm(value)`         | Scale diameter                | `context.dm(100)`                                 |
+| `context.verticalSpace()`   | Create vertical spacing       | `context.verticalSpace(20)`                       |
+| `context.horizontalSpace()` | Create horizontal spacing     | `context.horizontalSpace(20)`                     |
+| `context.edgeInsets()`      | Create scaled EdgeInsets      | `context.edgeInsets(all: 16)`                     |
+| `context.borderRadius()`    | Create scaled BorderRadius    | `context.borderRadius(all: 12)`                   |
+| `context.su`                | Get ScreenUtilPlus instance   | `context.su`                                      |
+| **Breakpoints**             |                               |                                                   |
+| `context.breakpoint`        | Current breakpoint            | `context.breakpoint`                              |
+| `context.isAtLeast()`       | Check if at least breakpoint  | `context.isAtLeast(Breakpoint.md)`                |
+| `context.isLessThan()`      | Check if less than breakpoint | `context.isLessThan(Breakpoint.lg)`               |
+| `context.isBetween()`       | Check if between breakpoints  | `context.isBetween(Breakpoint.sm, Breakpoint.lg)` |
+| **Size Classes**            |                               |                                                   |
+| `context.sizeClasses`       | Get size classes              | `context.sizeClasses`                             |
+| **Utilities**               |                               |                                                   |
+| `context.adaptive()`        | Get AdaptiveValues            | `context.adaptive()`                              |
+| `context.responsive()`      | Get ResponsiveQuery           | `context.responsive()`                            |
+| `context.mediaQueryData`    | Get MediaQueryData            | `context.mediaQueryData`                          |
 
 #### Widgets
 

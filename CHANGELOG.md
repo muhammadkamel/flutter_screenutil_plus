@@ -4,11 +4,88 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.3.2] - 2025-12-11
+## [1.4.0] - 2025-12-23
 
-### Fixed
+### Added
 
-- **Robustness**: Resolved zero-screen-dimension issues by implementing a unified `ScreenUtilContextExtension`. This ensures consistent fallback to `View.maybeOf(context)` across all utilities (`size_class.dart`, `responsive_query.dart`, etc.) when `MediaQuery` is unavailable.
+- **InheritedWidget-Based Scope**: Introduced `ScreenUtilPlusScope` for efficient, targeted rebuilds
+
+  - New `autoRebuild` parameter in `ScreenUtilPlusInit` (defaults to `true` for backward compatibility)
+  - When `autoRebuild: false`, only widgets that explicitly depend on `ScreenUtilPlusScope` rebuild
+  - Significantly improves performance by avoiding unnecessary tree-wide rebuilds
+  - Accessible via `ScreenUtilPlus.of(context)` or `context.su`
+
+- **Context-Aware Extensions**: New `ResponsiveSizeContext` extension on `BuildContext`
+
+  - `context.w(value)` - Scale width
+  - `context.h(value)` - Scale height
+  - `context.r(value)` - Scale radius
+  - `context.sp(value)` - Scale font size
+  - `context.spMin(value)` - Scale font size with minimum
+  - `context.dg(value)` - Scale diagonal
+  - `context.dm(value)` - Scale diameter
+  - `context.verticalSpace(value)` - Create vertical spacing
+  - `context.horizontalSpace(value)` - Create horizontal spacing
+  - `context.edgeInsets(...)` - Create scaled EdgeInsets
+  - `context.borderRadius(...)` - Create scaled BorderRadius
+  - These extensions work efficiently with `autoRebuild: false` by registering InheritedWidget dependencies
+
+- **Example App Enhancements**:
+
+  - New `ScopeDemoPage` showcasing `ScreenUtilPlusScope` features and performance benefits
+  - Interactive demo comparing rebuild behavior with `autoRebuild` on/off
+  - Visual demonstrations of context-aware extensions
+
+- **Comprehensive Test Coverage**:
+  - Added 25+ new tests across 6 new test files
+  - Achieved **99.2% code coverage** (1574/1586 lines) with **619 total tests**
+  - New test files:
+    - `screen_util_plus_scope_test.dart` - InheritedWidget functionality
+    - `responsive_size_context_test.dart` - Context-aware extensions
+    - `context_extension_test.dart` - Context extension methods
+    - `adaptive_text_style_test.dart` - Adaptive text styles including xxl breakpoint
+    - `screen_util_plus_desktop_test.dart` - Desktop platform support
+    - `screen_util_plus_edge_cases_test.dart` - Edge case scenarios
+
+### Changed
+
+- **Simplified Context Extension**: Refactored `mediaQueryData` getter in `ScreenUtilContextExtension`
+
+  - Removed unreachable `View.maybeOf` fallback for cleaner code
+  - Now simply returns `MediaQuery.maybeOf(this)`
+  - Achieved 100% test coverage for this file
+
+- **R-Widgets Enhancement**: Updated `RContainer` and `RText` to be context-aware
+
+  - Now use `context.su` to register InheritedWidget dependencies
+  - Benefit from efficient rebuilds when `autoRebuild: false`
+
+- **Code Quality Improvements**:
+  - Removed unused imports across multiple files
+  - Added explicit braces to single-line if statements for better readability
+  - Improved code formatting and consistency
+
+### Performance
+
+- **Rebuild Optimization**: With `autoRebuild: false`, only widgets that explicitly use:
+
+  - `ScreenUtilPlus.of(context)` or `context.su`
+  - Context-aware extensions (`context.w()`, `context.h()`, etc.)
+  - R-widgets (`RContainer`, `RText`, etc.)
+
+  will rebuild when screen metrics change, significantly reducing unnecessary rebuilds
+
+### Migration Guide
+
+For existing users, no changes are required. The default behavior (`autoRebuild: true`) maintains backward compatibility.
+
+To opt into the new performance optimizations:
+
+1. Set `autoRebuild: false` in `ScreenUtilPlusInit`
+2. Use context-aware extensions (`context.w()`) instead of num extensions (`100.w`)
+3. Or use R-widgets (`RContainer`, `RText`) which are already context-aware
+
+See the new `ScopeDemoPage` in the example app for a complete demonstration.
 
 ## [1.3.1] - 2025-12-10
 

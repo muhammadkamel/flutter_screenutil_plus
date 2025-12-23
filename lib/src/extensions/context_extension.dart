@@ -1,15 +1,16 @@
 import 'package:flutter/widgets.dart';
 
-/// Extension on [BuildContext] to provide robust access to [MediaQueryData].
+import '../core/screen_util_plus.dart';
+
+/// Extension on [BuildContext] to provide robust access to [MediaQueryData]
+/// and [ScreenUtilPlus].
 extension ScreenUtilContextExtension on BuildContext {
-  /// Robustly retrieves MediaQueryData.
-  /// Checks MediaQuery.maybeOf(context) first.
-  /// If null, checks View.maybeOf(context).
-  /// Returns null if neither are available.
-  MediaQueryData? get mediaQueryData {
-    return MediaQuery.maybeOf(this) ??
-        (View.maybeOf(this) != null
-            ? MediaQueryData.fromView(View.maybeOf(this)!)
-            : null);
-  }
+  /// Retrieves MediaQueryData from the nearest MediaQuery ancestor.
+  ///
+  /// Returns null if no MediaQuery is found in the widget tree.
+  MediaQueryData? get mediaQueryData => MediaQuery.maybeOf(this);
+
+  /// Returns the nearest [ScreenUtilPlus] instance and registers this
+  /// context for rebuilds when screen metrics change.
+  ScreenUtilPlus get su => ScreenUtilPlus.of(this);
 }

@@ -12,6 +12,7 @@ import '../utils/rebuild_factors.dart';
 import '../utils/screen_util_init_builder.dart';
 import '_constants.dart';
 import 'screen_util_plus.dart';
+import 'screen_util_plus_scope.dart';
 
 /// A helper widget that initializes [ScreenUtilPlus] and provides responsive
 /// screen utilities for Flutter applications.
@@ -51,6 +52,7 @@ class ScreenUtilPlusInit extends StatefulWidget {
     this.enableScaleText,
     this.responsiveWidgets,
     this.fontSizeResolver = FontSizeResolvers.width,
+    this.autoRebuild = true,
   });
 
   /// Optional builder function that receives the [BuildContext] and [child]
@@ -95,7 +97,17 @@ class ScreenUtilPlusInit extends StatefulWidget {
   /// Optional list of widget type names that should be marked for rebuilding
   /// when screen metrics change. If `null`, all widgets (except Flutter
   /// framework widgets and private widgets) will be rebuilt.
+  /// framework widgets and private widgets) will be rebuilt.
   final Iterable<String>? responsiveWidgets;
+
+  /// Whether to automatically rebuild the entire widget tree when screen
+  /// metrics change.
+  ///
+  /// Defaults to `true` for backward compatibility. Setting this to `false`
+  /// can significantly improve performance, but you must ensure that
+  /// responsive widgets depend on [ScreenUtilPlusScope] (either by using
+  /// the R-widgets or by calling [ScreenUtilPlus.of(context)]).
+  final bool autoRebuild;
 
   @override
   State<ScreenUtilPlusInit> createState() => _ScreenUtilPlusInitState();
@@ -199,7 +211,9 @@ class _ScreenUtilPlusInitState extends State<ScreenUtilPlusInit>
     if (shouldUpdate) {
       setState(() {
         _mediaQueryData = newData;
-        _updateTree(context as Element);
+        if (widget.autoRebuild) {
+          _updateTree(context as Element);
+        }
         callback?.call();
       });
     }
@@ -224,15 +238,24 @@ class _ScreenUtilPlusInitState extends State<ScreenUtilPlusInit>
 
     _configureScreenUtil(mediaQueryData);
 
+    final Widget result =
+        widget.builder?.call(context, widget.child) ?? widget.child!;
+
     if (!widget.ensureScreenSize) {
-      return widget.builder?.call(context, widget.child) ?? widget.child!;
+      return ScreenUtilPlusScope(
+        metrics: ScreenUtilPlus().metrics,
+        child: result,
+      );
     }
 
     return FutureBuilder<void>(
       future: _screenSizeCompleter.future,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          return widget.builder?.call(context, widget.child) ?? widget.child!;
+          return ScreenUtilPlusScope(
+            metrics: ScreenUtilPlus().metrics,
+            child: result,
+          );
         }
         return const SizedBox.shrink();
       },
