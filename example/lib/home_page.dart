@@ -27,6 +27,8 @@ class _HomePageState extends State<HomePage> {
             20.verticalSpace,
             _buildResponsiveBuilderDemo(),
             20.verticalSpace,
+            _buildResponsiveGridDemo(),
+            20.verticalSpace,
             _buildAdaptiveContainerDemo(),
             20.verticalSpace,
             _buildAdaptiveValuesDemo(),
@@ -618,6 +620,69 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildResponsiveGridDemo() {
+    return Container(
+      width: double.infinity,
+      padding: REdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.pink.shade50,
+        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(color: Colors.pink.shade200, width: 2.w),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.grid_view, color: Colors.pink.shade700, size: 24.sp),
+              10.horizontalSpace,
+              Text(
+                'ResponsiveGrid',
+                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          10.verticalSpace,
+          Text(
+            'A 12-column grid system that adapts to different breakpoints.',
+            style: TextStyle(fontSize: 14.sp, color: Colors.grey.shade600),
+          ),
+          15.verticalSpace,
+          ResponsiveGrid(
+            spacing: 12.w,
+            runSpacing: 12.h,
+            children: List.generate(
+              6,
+              (index) => ResponsiveGridItem(
+                xs: 12, // 1 column on mobile (12/12)
+                sm: 6, // 2 columns on small tablets (6/12)
+                md: 4, // 3 columns on tablets (4/12)
+                lg: 3, // 4 columns on desktop (3/12)
+                child: Container(
+                  height: 100.h,
+                  decoration: BoxDecoration(
+                    color: Colors.pink.shade100,
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Item $index',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.pink.shade900,
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ),
           ),

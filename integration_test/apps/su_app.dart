@@ -11,7 +11,6 @@ class SUApp extends StatelessWidget {
     return ScreenUtilInit(
       designSize: const Size(390, 844),
       minTextAdapt: true,
-      splitScreenMode: false,
       builder: (context, child) {
         return const MaterialApp(home: SUHomePage());
       },
@@ -47,9 +46,8 @@ class _SUHomePageState extends State<SUHomePage> {
 }
 
 class SUDeepTree extends StatelessWidget {
-  final int depth;
-
   const SUDeepTree({super.key, required this.depth});
+  final int depth;
 
   @override
   Widget build(BuildContext context) {
