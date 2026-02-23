@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../extensions/size_extension.dart';
 import '../utils/breakpoints.dart';
 import '../utils/responsive_query.dart';
 
@@ -35,7 +34,11 @@ class AdaptiveContainer extends StatelessWidget {
     this.transform,
     this.breakpoints,
     this.color,
-  });
+  }) : assert(
+         color == null || decoration == null,
+         'Cannot provide both a color and a decoration\n'
+         'To provide both, use "decoration: BoxDecoration(color: color)".',
+       );
 
   /// Width values for different breakpoints
   final Map<Breakpoint, num>? width;
@@ -78,12 +81,12 @@ class AdaptiveContainer extends StatelessWidget {
     // Get values for current breakpoint, falling back to smaller breakpoints
     double? resolvedWidth;
     if (width != null) {
-      resolvedWidth = _getValueForBreakpoint(width!, breakpoint)?.w;
+      resolvedWidth = _getValueForBreakpoint(width!, breakpoint)?.toDouble();
     }
 
     double? resolvedHeight;
     if (height != null) {
-      resolvedHeight = _getValueForBreakpoint(height!, breakpoint)?.h;
+      resolvedHeight = _getValueForBreakpoint(height!, breakpoint)?.toDouble();
     }
 
     EdgeInsets? resolvedPadding;
@@ -172,11 +175,20 @@ class SimpleAdaptiveContainer extends StatelessWidget {
     this.paddingMd,
     this.paddingLg,
     this.paddingXl,
+    this.marginXs,
+    this.marginSm,
+    this.marginMd,
+    this.marginLg,
+    this.marginXl,
     this.child,
     this.color,
     this.decoration,
     this.breakpoints,
-  });
+  }) : assert(
+         color == null || decoration == null,
+         'Cannot provide both a color and a decoration\n'
+         'To provide both, use "decoration: BoxDecoration(color: color)".',
+       );
 
   /// Width for extra small screens
   final num? widthXs;
@@ -209,19 +221,34 @@ class SimpleAdaptiveContainer extends StatelessWidget {
   final num? heightXl;
 
   /// Padding for extra small screens
-  final num? paddingXs;
+  final EdgeInsets? paddingXs;
 
   /// Padding for small screens
-  final num? paddingSm;
+  final EdgeInsets? paddingSm;
 
   /// Padding for medium screens
-  final num? paddingMd;
+  final EdgeInsets? paddingMd;
 
   /// Padding for large screens
-  final num? paddingLg;
+  final EdgeInsets? paddingLg;
 
   /// Padding for extra large screens
-  final num? paddingXl;
+  final EdgeInsets? paddingXl;
+
+  /// Margin for extra small screens
+  final EdgeInsets? marginXs;
+
+  /// Margin for small screens
+  final EdgeInsets? marginSm;
+
+  /// Margin for medium screens
+  final EdgeInsets? marginMd;
+
+  /// Margin for large screens
+  final EdgeInsets? marginLg;
+
+  /// Margin for extra large screens
+  final EdgeInsets? marginXl;
 
   /// Child widget
   final Widget? child;
@@ -253,11 +280,18 @@ class SimpleAdaptiveContainer extends StatelessWidget {
         xl: heightXl,
       ),
       padding: _createBreakpointMap(
-        xs: paddingXs != null ? EdgeInsets.all(paddingXs!.toDouble()) : null,
-        sm: paddingSm != null ? EdgeInsets.all(paddingSm!.toDouble()) : null,
-        md: paddingMd != null ? EdgeInsets.all(paddingMd!.toDouble()) : null,
-        lg: paddingLg != null ? EdgeInsets.all(paddingLg!.toDouble()) : null,
-        xl: paddingXl != null ? EdgeInsets.all(paddingXl!.toDouble()) : null,
+        xs: paddingXs,
+        sm: paddingSm,
+        md: paddingMd,
+        lg: paddingLg,
+        xl: paddingXl,
+      ),
+      margin: _createBreakpointMap(
+        xs: marginXs,
+        sm: marginSm,
+        md: marginMd,
+        lg: marginLg,
+        xl: marginXl,
       ),
       color: color,
       decoration: decoration,
@@ -279,11 +313,11 @@ class SimpleAdaptiveContainer extends StatelessWidget {
       return null;
     }
     return {
-      if (xs != null) Breakpoint.xs: xs,
-      if (sm != null) Breakpoint.sm: sm,
-      if (md != null) Breakpoint.md: md,
-      if (lg != null) Breakpoint.lg: lg,
-      if (xl != null) Breakpoint.xl: xl,
+      Breakpoint.xs: ?xs,
+      Breakpoint.sm: ?sm,
+      Breakpoint.md: ?md,
+      Breakpoint.lg: ?lg,
+      Breakpoint.xl: ?xl,
     };
   }
 }

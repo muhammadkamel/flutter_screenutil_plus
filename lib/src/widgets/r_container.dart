@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../extensions/context_extension.dart';
 import '../extensions/size_extension.dart';
 
 /// A responsive container widget that automatically scales dimensions.
@@ -68,9 +67,6 @@ class RContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Register dependency on ScreenUtilPlusScope for efficient reactivity
-    context.su;
-
     return Container(
       key: key,
       alignment: alignment,

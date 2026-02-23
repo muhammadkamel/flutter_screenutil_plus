@@ -23,7 +23,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(
         tester.widget<Container>(find.byType(Container)).constraints?.minWidth,
-        100.w,
+        100.0,
       );
 
       // Case 2: Fallback to smaller (current LG, value at MD)
@@ -39,7 +39,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(
         tester.widget<Container>(find.byType(Container)).constraints?.minWidth,
-        100.w,
+        100.0,
       );
 
       // Case 3: Fallback to larger (current XS, value at MD)
@@ -55,7 +55,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(
         tester.widget<Container>(find.byType(Container)).constraints?.minWidth,
-        100.w,
+        100.0,
       );
 
       // Case 4: No value
@@ -87,8 +87,8 @@ void main() {
               widthXl: 50,
               heightXs: 10,
               heightSm: 20,
-              paddingXs: 10,
-              paddingMd: 30,
+              paddingXs: EdgeInsets.all(10),
+              paddingMd: EdgeInsets.all(30),
               color: Colors.red,
             ),
           ),

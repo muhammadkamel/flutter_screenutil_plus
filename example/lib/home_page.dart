@@ -658,9 +658,9 @@ class _HomePageState extends State<HomePage> {
             widthXs: double.infinity,
             widthMd: 400,
             widthLg: 600,
-            paddingXs: 12,
-            paddingMd: 20,
-            paddingLg: 24,
+            paddingXs: const EdgeInsets.all(12),
+            paddingMd: const EdgeInsets.all(20),
+            paddingLg: const EdgeInsets.all(24),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [Colors.amber.shade400, Colors.orange.shade400],

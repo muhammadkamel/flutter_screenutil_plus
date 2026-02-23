@@ -395,7 +395,7 @@ class ScreenUtilPlus {
       TargetPlatform.macOS => DeviceType.mac,
       TargetPlatform.windows => DeviceType.windows,
       TargetPlatform.fuchsia => DeviceType.fuchsia,
-      TargetPlatform.iOS || TargetPlatform.android => DeviceType.web,
+      TargetPlatform.iOS || TargetPlatform.android => DeviceType.mobile,
     };
   }
 

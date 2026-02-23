@@ -40,10 +40,9 @@ void main() {
 
       expect(find.text('Test'), findsOneWidget);
       final Container container = tester.widget(find.byType(Container));
-      // Width is scaled: 100 * (400/360) = 111.11...
-      const double expectedWidth = 100 * (400 / 360);
-      expect(container.constraints?.maxWidth, closeTo(expectedWidth, 0.01));
-      expect(container.constraints?.minWidth, closeTo(expectedWidth, 0.01));
+      const double expectedWidth = 100;
+      expect(container.constraints?.maxWidth, expectedWidth);
+      expect(container.constraints?.minWidth, expectedWidth);
     });
 
     testWidgets('renders with height for current breakpoint', (tester) async {
@@ -73,10 +72,9 @@ void main() {
       await tester.pumpAndSettle();
 
       final Container container = tester.widget(find.byType(Container));
-      // Height is scaled: 200 * (600/690) = 173.91...
-      const double expectedHeight = 200 * (600 / 690);
-      expect(container.constraints?.maxHeight, closeTo(expectedHeight, 0.01));
-      expect(container.constraints?.minHeight, closeTo(expectedHeight, 0.01));
+      const double expectedHeight = 200;
+      expect(container.constraints?.maxHeight, expectedHeight);
+      expect(container.constraints?.minHeight, expectedHeight);
     });
 
     testWidgets('falls back to smaller breakpoint when current not found', (
@@ -109,10 +107,10 @@ void main() {
 
       final Container container = tester.widget(find.byType(Container));
       // At md breakpoint, should fall back to sm (smaller)
-      // Width is scaled: 150 * (800/360) = 333.33...
-      const double expectedWidth = 150 * (800 / 360);
-      expect(container.constraints?.maxWidth, closeTo(expectedWidth, 0.01));
-      expect(container.constraints?.minWidth, closeTo(expectedWidth, 0.01));
+      // Width is NOT scaled anymore.
+      const double expectedWidth = 150;
+      expect(container.constraints?.maxWidth, expectedWidth);
+      expect(container.constraints?.minWidth, expectedWidth);
     });
 
     testWidgets('falls back to larger breakpoint when no smaller found', (
@@ -145,10 +143,9 @@ void main() {
 
       final Container container = tester.widget(find.byType(Container));
       // At xs breakpoint, no smaller breakpoints, should use lg
-      // Width is scaled: 300 * (400/360) = 333.33...
-      const double expectedWidth = 300 * (400 / 360);
-      expect(container.constraints?.maxWidth, closeTo(expectedWidth, 0.01));
-      expect(container.constraints?.minWidth, closeTo(expectedWidth, 0.01));
+      const double expectedWidth = 300;
+      expect(container.constraints?.maxWidth, expectedWidth);
+      expect(container.constraints?.minWidth, expectedWidth);
     });
 
     testWidgets('renders with padding for current breakpoint', (tester) async {
@@ -268,10 +265,9 @@ void main() {
 
       final Container container = tester.widget(find.byType(Container));
       // With custom breakpoints, 500px should match sm
-      // Width is scaled: 200 * (500/360) = 277.78...
-      const double expectedWidth = 200 * (500 / 360);
-      expect(container.constraints?.maxWidth, closeTo(expectedWidth, 0.01));
-      expect(container.constraints?.minWidth, closeTo(expectedWidth, 0.01));
+      const double expectedWidth = 200;
+      expect(container.constraints?.maxWidth, expectedWidth);
+      expect(container.constraints?.minWidth, expectedWidth);
     });
 
     testWidgets('renders with alignment', (tester) async {
@@ -365,10 +361,9 @@ void main() {
       expect(find.text('Test'), findsOneWidget);
       final Container container = tester.widget(find.byType(Container));
       // At md breakpoint, should use widthMd
-      // Width is scaled: 200 * (800/360) = 444.44...
-      const double expectedWidth = 200 * (800 / 360);
-      expect(container.constraints?.maxWidth, closeTo(expectedWidth, 0.01));
-      expect(container.constraints?.minWidth, closeTo(expectedWidth, 0.01));
+      const double expectedWidth = 200;
+      expect(container.constraints?.maxWidth, expectedWidth);
+      expect(container.constraints?.minWidth, expectedWidth);
     });
 
     testWidgets('renders with height properties', (tester) async {
@@ -402,10 +397,9 @@ void main() {
 
       final Container container = tester.widget(find.byType(Container));
       // At lg breakpoint, should use heightLg
-      // Height is scaled: 300 * (600/690) = 260.87...
-      const double expectedHeight = 300 * (600 / 690);
-      expect(container.constraints?.maxHeight, closeTo(expectedHeight, 0.01));
-      expect(container.constraints?.minHeight, closeTo(expectedHeight, 0.01));
+      const double expectedHeight = 300;
+      expect(container.constraints?.maxHeight, expectedHeight);
+      expect(container.constraints?.minHeight, expectedHeight);
     });
 
     testWidgets('renders with padding properties', (tester) async {
@@ -418,9 +412,9 @@ void main() {
           home: MediaQuery(
             data: MediaQueryData(size: Size(600, 800)),
             child: SimpleAdaptiveContainer(
-              paddingXs: 8,
-              paddingSm: 12,
-              paddingMd: 16,
+              paddingXs: EdgeInsets.all(8),
+              paddingSm: EdgeInsets.all(12),
+              paddingMd: EdgeInsets.all(16),
               child: Text('Test'),
             ),
           ),
@@ -508,10 +502,9 @@ void main() {
 
       final Container container = tester.widget(find.byType(Container));
       // With custom breakpoints, 500px should match sm
-      // Width is scaled: 200 * (500/360) = 277.78...
-      const double expectedWidth = 200 * (500 / 360);
-      expect(container.constraints?.maxWidth, closeTo(expectedWidth, 0.01));
-      expect(container.constraints?.minWidth, closeTo(expectedWidth, 0.01));
+      const double expectedWidth = 200;
+      expect(container.constraints?.maxWidth, expectedWidth);
+      expect(container.constraints?.minWidth, expectedWidth);
     });
 
     testWidgets('handles all breakpoint sizes', (tester) async {
@@ -546,10 +539,9 @@ void main() {
 
       final Container container = tester.widget(find.byType(Container));
       // At xxl breakpoint, should fall back to xl
-      // Width is scaled: 250 * (1500/360) = 1041.67...
-      const double expectedWidth = 250 * (1500 / 360);
-      expect(container.constraints?.maxWidth, closeTo(expectedWidth, 0.01));
-      expect(container.constraints?.minWidth, closeTo(expectedWidth, 0.01));
+      const double expectedWidth = 250;
+      expect(container.constraints?.maxWidth, expectedWidth);
+      expect(container.constraints?.minWidth, expectedWidth);
     });
     testWidgets('handles empty maps gracefully', (tester) async {
       await tester.pumpWidget(

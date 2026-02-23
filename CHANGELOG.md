@@ -4,6 +4,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.0] - 2026-02-23
+
+### Added
+
+- **Benchmark Suite**: Added a comprehensive suite of microbenchmarks and integration benchmarks. The suite measures layout calculation overhead, deep tree frame build times, scrolling raster times, and orientation rebuilds. Automatically compares execution times against standard native layouts and `flutter_screenutil`.
+- **ResponsiveGrid Widget**: Introduced a new `ResponsiveGrid` widget for easily creating adaptive layouts relying on device constraints.
+
+### Changed
+
+- **Performance Refactoring**: Removed the `SU` mixin and the `ScreenUtilPlusInit` tree-walking mechanisms to eliminate severe widget rebuilding bottlenecks, significantly improving scaling efficiencies across deep widget cascades.
+- **Scaling Fixes**: Fixed layout resolution in `AdaptiveValues` to prevent elements from being unintentionally double-scaled.
+
 ## [1.4.0] - 2025-12-23
 
 ### Added

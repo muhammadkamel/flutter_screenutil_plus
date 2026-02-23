@@ -1,18 +1,9 @@
 import 'dart:async';
-import 'dart:collection';
 
 import 'package:flutter/widgets.dart';
 
-import '../extensions/context_extension.dart';
-import '../internal/_flutter_widgets.dart';
-import '../mixins/screenutil_mixin.dart';
-import '../utils/font_size_resolvers.dart';
-import '../utils/rebuild_factor.dart';
-import '../utils/rebuild_factors.dart';
-import '../utils/screen_util_init_builder.dart';
+import '../../flutter_screenutil_plus.dart';
 import '_constants.dart';
-import 'screen_util_plus.dart';
-import 'screen_util_plus_scope.dart';
 
 /// A helper widget that initializes [ScreenUtilPlus] and provides responsive
 /// screen utilities for Flutter applications.
@@ -50,7 +41,6 @@ class ScreenUtilPlusInit extends StatefulWidget {
     this.ensureScreenSize = false,
     this.enableScaleWH,
     this.enableScaleText,
-    this.responsiveWidgets,
     this.fontSizeResolver = FontSizeResolvers.width,
     this.autoRebuild = true,
   });
@@ -94,19 +84,10 @@ class ScreenUtilPlusInit extends StatefulWidget {
   /// The [Size] of the device in the design draft, in dp.
   final Size designSize;
 
-  /// Optional list of widget type names that should be marked for rebuilding
-  /// when screen metrics change. If `null`, all widgets (except Flutter
-  /// framework widgets and private widgets) will be rebuilt.
-  /// framework widgets and private widgets) will be rebuilt.
-  final Iterable<String>? responsiveWidgets;
-
-  /// Whether to automatically rebuild the entire widget tree when screen
-  /// metrics change.
+  /// Whether to automatically rebuild the widget tree when screen metrics change.
   ///
-  /// Defaults to `true` for backward compatibility. Setting this to `false`
-  /// can significantly improve performance, but you must ensure that
-  /// responsive widgets depend on [ScreenUtilPlusScope] (either by using
-  /// the R-widgets or by calling [ScreenUtilPlus.of(context)]).
+  /// Defaults to `true` for backward compatibility. Note that this rebuilds
+  /// widgets that depend on [ScreenUtilPlusScope].
   final bool autoRebuild;
 
   @override
@@ -115,7 +96,6 @@ class ScreenUtilPlusInit extends StatefulWidget {
 
 class _ScreenUtilPlusInitState extends State<ScreenUtilPlusInit>
     with WidgetsBindingObserver {
-  final _canMarkedToBuild = HashSet<String>();
   MediaQueryData? _mediaQueryData;
   final WidgetsBinding _binding = WidgetsBinding.instance;
   final _screenSizeCompleter = Completer<void>();
@@ -123,10 +103,6 @@ class _ScreenUtilPlusInitState extends State<ScreenUtilPlusInit>
   @override
   void initState() {
     super.initState();
-
-    if (widget.responsiveWidgets != null) {
-      _canMarkedToBuild.addAll(widget.responsiveWidgets!);
-    }
 
     ScreenUtilPlus.enableScale(
       enableWH: widget.enableScaleWH,
@@ -166,38 +142,6 @@ class _ScreenUtilPlusInitState extends State<ScreenUtilPlusInit>
     return context.mediaQueryData;
   }
 
-  bool _shouldMarkForBuild(Element element) {
-    final widgetName = element.widget.runtimeType.toString();
-
-    // Always rebuild if widget uses SU mixin
-    if (element.widget is SU) {
-      return true;
-    }
-
-    // Rebuild if explicitly in responsive widgets list
-    if (_canMarkedToBuild.contains(widgetName)) {
-      return true;
-    }
-
-    // Don't rebuild Flutter widgets or private widgets
-    if (widgetName.startsWith('_') || flutterWidgets.contains(widgetName)) {
-      return false;
-    }
-
-    return true;
-  }
-
-  void _markNeedsBuildIfAllowed(Element element) {
-    if (_shouldMarkForBuild(element)) {
-      element.markNeedsBuild();
-    }
-  }
-
-  void _updateTree(Element el) {
-    _markNeedsBuildIfAllowed(el);
-    el.visitChildren(_updateTree);
-  }
-
   void _revalidate([void Function()? callback]) {
     final MediaQueryData? newData = _getMediaQueryData();
     if (newData == null) {
@@ -211,9 +155,6 @@ class _ScreenUtilPlusInitState extends State<ScreenUtilPlusInit>
     if (shouldUpdate) {
       setState(() {
         _mediaQueryData = newData;
-        if (widget.autoRebuild) {
-          _updateTree(context as Element);
-        }
         callback?.call();
       });
     }

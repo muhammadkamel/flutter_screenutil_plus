@@ -65,8 +65,7 @@ void main() {
                 final adaptive = AdaptiveValues.of(context);
                 final double width = adaptive.width(xs: 100, sm: 200, md: 300);
                 // At xs breakpoint (< 576px), should use xs value (100)
-                // Then apply .w scaling: 100 * (720/360) = 200
-                expect(width, 200);
+                expect(width, 100);
                 return const SizedBox();
               },
             ),
@@ -93,7 +92,7 @@ void main() {
                 final adaptive = AdaptiveValues.of(context);
                 // At xs breakpoint, no xs value, should fall back to sm
                 final double width = adaptive.width(sm: 200, md: 300);
-                expect(width, 400); // 200 * 2
+                expect(width, 200);
                 return const SizedBox();
               },
             ),
@@ -120,8 +119,7 @@ void main() {
                 final adaptive = AdaptiveValues.of(context);
                 final double height = adaptive.height(md: 100, lg: 200);
                 // At md breakpoint, should use md value (100)
-                // Then apply .h scaling: 100 * (1380/690) = 200
-                expect(height, 200);
+                expect(height, 100);
                 return const SizedBox();
               },
             ),
@@ -148,8 +146,7 @@ void main() {
                 final adaptive = AdaptiveValues.of(context);
                 final double fontSize = adaptive.fontSize(lg: 16, xl: 20);
                 // At lg breakpoint, should use lg value (16)
-                // Then apply .sp scaling
-                expect(fontSize, greaterThan(0));
+                expect(fontSize, 16);
                 return const SizedBox();
               },
             ),
@@ -176,8 +173,7 @@ void main() {
                 final adaptive = AdaptiveValues.of(context);
                 final double radius = adaptive.radius(sm: 8, md: 12);
                 // At sm breakpoint, should use sm value (8)
-                // Then apply .r scaling
-                expect(radius, greaterThan(0));
+                expect(radius, 8);
                 return const SizedBox();
               },
             ),
@@ -300,7 +296,7 @@ void main() {
                   xxl: 300,
                 );
                 // At xxl breakpoint, should use xxl value (300)
-                expect(width, 600); // 300 * 2
+                expect(width, 300);
                 return const SizedBox();
               },
             ),

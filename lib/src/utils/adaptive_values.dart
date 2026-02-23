@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
 
-import '../extensions/size_extension.dart';
 import 'breakpoints.dart';
 import 'responsive_query.dart';
 
@@ -38,7 +37,7 @@ class AdaptiveValues {
       context,
       breakpoints: breakpoints,
     ).value(xs: xs, sm: sm, md: md, lg: lg, xl: xl, xxl: xxl);
-    return value.w;
+    return value.toDouble();
   }
 
   /// Gets responsive height value based on breakpoint
@@ -47,7 +46,7 @@ class AdaptiveValues {
       context,
       breakpoints: breakpoints,
     ).value(xs: xs, sm: sm, md: md, lg: lg, xl: xl, xxl: xxl);
-    return value.h;
+    return value.toDouble();
   }
 
   /// Gets responsive font size value based on breakpoint
@@ -56,7 +55,7 @@ class AdaptiveValues {
       context,
       breakpoints: breakpoints,
     ).value(xs: xs, sm: sm, md: md, lg: lg, xl: xl, xxl: xxl);
-    return value.sp;
+    return value.toDouble();
   }
 
   /// Gets responsive radius value based on breakpoint
@@ -65,7 +64,7 @@ class AdaptiveValues {
       context,
       breakpoints: breakpoints,
     ).value(xs: xs, sm: sm, md: md, lg: lg, xl: xl, xxl: xxl);
-    return value.r;
+    return value.toDouble();
   }
 
   /// Gets responsive padding based on breakpoint

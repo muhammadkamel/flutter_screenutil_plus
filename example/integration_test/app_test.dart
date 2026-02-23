@@ -283,7 +283,6 @@ void main() {
         ScreenUtilPlusInit(
           designSize: const Size(360, 690),
           rebuildFactor: RebuildFactors.size,
-          responsiveWidgets: ['_BuildCounterWidget'],
           builder: (context, child) {
             return MaterialApp(home: child);
           },
@@ -388,7 +387,6 @@ void main() {
           ScreenUtilPlusInit(
             designSize: const Size(360, 690),
             rebuildFactor: RebuildFactors.orientation,
-            responsiveWidgets: ['_BuildCounterWidget'],
             builder: (context, child) {
               return MaterialApp(home: child);
             },
@@ -418,7 +416,6 @@ void main() {
         ScreenUtilPlusInit(
           designSize: const Size(360, 690),
           rebuildFactor: RebuildFactors.change,
-          responsiveWidgets: ['_BuildCounterWidget'],
           builder: (context, child) {
             return MaterialApp(home: child);
           },
@@ -445,7 +442,6 @@ void main() {
         ScreenUtilPlusInit(
           designSize: const Size(360, 690),
           rebuildFactor: RebuildFactors.always,
-          responsiveWidgets: ['_BuildCounterWidget'],
           builder: (context, child) {
             return MaterialApp(home: child);
           },
@@ -476,7 +472,6 @@ void main() {
         ScreenUtilPlusInit(
           designSize: const Size(360, 690),
           rebuildFactor: RebuildFactors.none,
-          responsiveWidgets: ['_BuildCounterWidget'],
           builder: (context, child) {
             return MaterialApp(home: child);
           },
@@ -506,7 +501,6 @@ void main() {
           ScreenUtilPlusInit(
             designSize: const Size(360, 690),
             rebuildFactor: RebuildFactors.sizeAndViewInsets,
-            responsiveWidgets: ['_BuildCounterWidget'],
             builder: (context, child) {
               return MaterialApp(home: child);
             },

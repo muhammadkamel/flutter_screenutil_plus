@@ -79,9 +79,6 @@ class RText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Register dependency on ScreenUtilPlusScope for efficient reactivity
-    context.su;
-
     TextStyle? responsiveStyle = style;
 
     if (responsiveStyle != null) {

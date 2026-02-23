@@ -54,7 +54,6 @@ export 'src/extensions/responsive_size_context.dart';
 export 'src/extensions/size_extension.dart';
 export 'src/extensions/text_style_extension.dart';
 // Mixins
-export 'src/mixins/screenutil_mixin.dart';
 // Theme
 export 'src/theme/responsive_theme.dart';
 export 'src/utils/adaptive_values.dart';
@@ -77,3 +76,4 @@ export 'src/widgets/r_padding.dart';
 export 'src/widgets/r_sizedbox.dart';
 export 'src/widgets/r_text.dart';
 export 'src/widgets/responsive_builder.dart';
+export 'src/widgets/responsive_grid.dart';

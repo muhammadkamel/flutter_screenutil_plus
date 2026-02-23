@@ -1509,12 +1509,11 @@ void main() {
       await tester.pumpAndSettle();
     });
 
-    testWidgets('ScreenUtilInit with responsiveWidgets', (tester) async {
+    testWidgets('ScreenUtilInit without child responsive widgets', (
+      tester,
+    ) async {
       await tester.pumpWidget(
-        const ScreenUtilPlusInit(
-          responsiveWidgets: ['CustomWidget'],
-          child: MaterialApp(home: SizedBox()),
-        ),
+        const ScreenUtilPlusInit(child: MaterialApp(home: SizedBox())),
       );
 
       await tester.pumpAndSettle();
@@ -1525,14 +1524,19 @@ void main() {
 
       await tester.pumpWidget(
         ScreenUtilPlusInit(
-          child: MaterialApp(
-            home: ValueListenableBuilder<int>(
-              valueListenable: buildCount,
-              builder: (context, count, child) {
-                buildCount.value = count + 1;
-                return const SizedBox();
-              },
-            ),
+          child: Builder(
+            builder: (context) {
+              context.su; // MUST register dependency
+              return MaterialApp(
+                home: ValueListenableBuilder<int>(
+                  valueListenable: buildCount,
+                  builder: (context, count, child) {
+                    buildCount.value = count + 1;
+                    return const SizedBox();
+                  },
+                ),
+              );
+            },
           ),
         ),
       );
