@@ -17,6 +17,7 @@
 - 🎯 **Context-Aware Extensions**: New `context.w()`, `context.h()`, `context.sp()` for optimal performance
 - 🎨 **CSS-like Breakpoints**: Media query-style breakpoints (Bootstrap, Tailwind, Material Design)
 - 📐 **SwiftUI-like Size Classes**: Compact/Regular size classes for adaptive layouts
+- 🪟 **LayoutScope (v1.6.0)**: Container-aware breakpoints for sidebars, split panes, and nested layouts
 - 🧩 **Adaptive Widgets**: Breakpoint-aware containers, text, and builders
 - 🚀 **Performance Optimized**: Intelligent rebuild detection with optional `autoRebuild: false`
 - 🎭 **Responsive Theme**: Automatic text style scaling in themes
@@ -29,7 +30,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  flutter_screenutil_plus: ^1.4.0
+  flutter_screenutil_plus: ^1.6.0
 ```
 
 Then run:
@@ -301,6 +302,25 @@ ResponsiveBuilder(
   xl: (context) => LargeDesktopLayout(),
 )
 ```
+
+### LayoutScope (container-aware)
+
+Wrap a pane so responsive APIs use **local constraints** instead of the full viewport. Outside a `LayoutScope`, behavior is unchanged.
+
+```dart
+// Sidebar / detail pane on a large screen
+SizedBox(
+  width: 320,
+  child: LayoutScope(
+    child: ResponsiveBuilder(
+      xs: (_) => const CompactView(),
+      md: (_) => const ExpandedView(),
+    ),
+  ),
+);
+```
+
+`ResponsiveQuery`, `ResponsiveBuilder`, `SizeClassBuilder`, `AdaptiveContainer`, and `ResponsiveGrid` all pick up the nearest `LayoutScope` automatically.
 
 ### AdaptiveContainer
 
@@ -664,6 +684,7 @@ switch (deviceType) {
 | Widget                    | Description                       |
 | ------------------------- | --------------------------------- |
 | `ScreenUtilPlusInit`      | Initialize the library            |
+| `LayoutScope`             | Container-aware responsive metrics |
 | `RContainer`              | Responsive Container              |
 | `RPadding`                | Responsive Padding                |
 | `RSizedBox`               | Responsive SizedBox               |
@@ -797,3 +818,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 Made with ❤️ by Muhammad Kamel
+

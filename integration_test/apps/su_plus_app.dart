@@ -8,11 +8,10 @@ class SUPlusApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilPlusInit(
-      designSize: const Size(390, 844),
+    return const ScreenUtilPlusInit(
+      designSize: Size(390, 844),
       minTextAdapt: true,
-      splitScreenMode: false,
-      child: const MaterialApp(home: SUPlusHomePage()),
+      child: MaterialApp(home: SUPlusHomePage()),
     );
   }
 }
@@ -45,9 +44,8 @@ class _SUPlusHomePageState extends State<SUPlusHomePage> {
 }
 
 class SUPlusDeepTree extends StatelessWidget {
-  final int depth;
-
   const SUPlusDeepTree({super.key, required this.depth});
+  final int depth;
 
   @override
   Widget build(BuildContext context) {
@@ -88,8 +86,8 @@ class SUPlusList extends StatelessWidget {
           child: Container(
             height: 50.h,
             color: index.isEven
-                ? Colors.red.withOpacity(0.1)
-                : Colors.green.withOpacity(0.1),
+                ? Colors.red.withValues(alpha: 0.1)
+                : Colors.green.withValues(alpha: 0.1),
             child: Row(
               children: [
                 SizedBox(width: 10.w),

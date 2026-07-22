@@ -24,9 +24,9 @@ class _StandardHomePageState extends State<StandardHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final mq = MediaQuery.of(context);
-    final widthRatio = mq.size.width / _designSize.width;
-    final heightRatio = mq.size.height / _designSize.height;
+    final MediaQueryData mq = MediaQuery.of(context);
+    final double widthRatio = mq.size.width / _designSize.width;
+    final double heightRatio = mq.size.height / _designSize.height;
 
     // Standard scaling formulas manually crafted for the benchmark
     double scaleW(double w) => w * widthRatio;
@@ -57,11 +57,6 @@ class _StandardHomePageState extends State<StandardHomePage> {
 }
 
 class StandardDeepTree extends StatelessWidget {
-  final int depth;
-  final double Function(double) scaleW;
-  final double Function(double) scaleH;
-  final double Function(double) scaleSp;
-
   const StandardDeepTree({
     super.key,
     required this.depth,
@@ -69,6 +64,10 @@ class StandardDeepTree extends StatelessWidget {
     required this.scaleH,
     required this.scaleSp,
   });
+  final int depth;
+  final double Function(double) scaleW;
+  final double Function(double) scaleH;
+  final double Function(double) scaleSp;
 
   @override
   Widget build(BuildContext context) {
@@ -101,16 +100,15 @@ class StandardDeepTree extends StatelessWidget {
 }
 
 class StandardList extends StatelessWidget {
-  final double Function(double) scaleW;
-  final double Function(double) scaleH;
-  final double Function(double) scaleSp;
-
   const StandardList({
     super.key,
     required this.scaleW,
     required this.scaleH,
     required this.scaleSp,
   });
+  final double Function(double) scaleW;
+  final double Function(double) scaleH;
+  final double Function(double) scaleSp;
 
   @override
   Widget build(BuildContext context) {
@@ -123,8 +121,8 @@ class StandardList extends StatelessWidget {
           child: Container(
             height: scaleH(50),
             color: index.isEven
-                ? Colors.red.withOpacity(0.1)
-                : Colors.green.withOpacity(0.1),
+                ? Colors.red.withValues(alpha: 0.1)
+                : Colors.green.withValues(alpha: 0.1),
             child: Row(
               children: [
                 SizedBox(width: scaleW(10)),

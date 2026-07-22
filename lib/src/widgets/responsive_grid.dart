@@ -1,12 +1,13 @@
 import 'package:flutter/widgets.dart';
 
+import '../core/layout_scope.dart';
 import '../utils/breakpoints.dart';
 import '../utils/responsive_query.dart';
 
 /// A 12-column responsive layout grid that adapts to different screen sizes.
 ///
-/// Uses [ResponsiveQuery] to determine the current [Breakpoint] and
-/// configures the column span for each item based on the current breakpoint.
+/// Wraps its content in a [LayoutScope] so column spans and item widths are
+/// resolved from the same local constraints (not the viewport alone).
 class ResponsiveGrid extends StatelessWidget {
   /// Creates a responsive grid layout.
   ///
@@ -41,52 +42,35 @@ class ResponsiveGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final double maxWidth = constraints.maxWidth;
-        final Breakpoint currentBreakpoint = ResponsiveQuery.of(
-          context,
-        ).breakpoint;
+    return LayoutScope(
+      child: Builder(
+        builder: (BuildContext context) {
+          final query = ResponsiveQuery.of(context);
+          final double maxWidth = query.width;
+          final Breakpoint currentBreakpoint = query.breakpoint;
 
-        return Wrap(
-          spacing: spacing,
-          runSpacing: runSpacing,
-          alignment: alignment,
-          runAlignment: runAlignment,
-          crossAxisAlignment: crossAxisAlignment,
-          children: children.map((item) {
-            final int span = _getSpanForBreakpoint(item, currentBreakpoint);
+          return Wrap(
+            spacing: spacing,
+            runSpacing: runSpacing,
+            alignment: alignment,
+            runAlignment: runAlignment,
+            crossAxisAlignment: crossAxisAlignment,
+            children: children.map((ResponsiveGridItem item) {
+              final int span = _getSpanForBreakpoint(item, currentBreakpoint);
+              // Fit `span/12` of the row so that items totaling 12 columns plus
+              // Wrap spacing fill [maxWidth] exactly (avoids negative widths when
+              // spacing is large relative to the container).
+              final double itemWidth =
+                  (maxWidth + spacing) * span / 12.0 - spacing;
 
-            // 12 column grid system
-            // Calculate the width for a single column, considering the spacing.
-            // If there are 'n' items in a row, there are 'n-1' spacings.
-            // The maximum number of items in a row is 12 (if all span 1).
-            // So, the total width for 12 columns, including 11 spacings, is maxWidth.
-            // (12 * columnWidth) + (11 * spacing) = maxWidth
-            // columnWidth = (maxWidth - (11 * spacing)) / 12
-            // However, the Wrap widget handles the spacing.
-            // So, we just need to calculate the width of the item itself.
-            // The Wrap widget will then add the spacing between these items.
-            // The total width available for the items in a run is maxWidth.
-            // If we have 'N' items in a run, and 'N-1' spacings,
-            // the total width consumed by items is maxWidth - (N-1)*spacing.
-            // Each item's width should be proportional to its span.
-            // A simpler approach is to calculate the width of a single "grid unit"
-            // and multiply by the span.
-            // The Wrap widget will then add the spacing.
-            // The total width available for the content of the items in a row
-            // is maxWidth minus the total spacing that will be applied in that row.
-            final double totalContentWidth = maxWidth - (11 * spacing);
-            final double columnUnitWidth = totalContentWidth / 12;
-            final double itemWidth = columnUnitWidth * span;
-
-            return SizedBox(
-              width: itemWidth.clamp(0.0, double.infinity),
-              child: item.child,
-            );
-          }).toList(),
-        );
-      },
+              return SizedBox(
+                width: itemWidth.clamp(0.0, maxWidth),
+                child: item.child,
+              );
+            }).toList(),
+          );
+        },
+      ),
     );
   }
 

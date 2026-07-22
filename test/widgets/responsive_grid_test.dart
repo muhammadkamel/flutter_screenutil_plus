@@ -116,5 +116,84 @@ void main() {
       // 1/4th of 1300 is 325
       expect(size.width, 325);
     });
+
+    testWidgets('uses container width for breakpoint not viewport', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(1200, 800);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() => tester.view.resetPhysicalSize());
+      addTearDown(() => tester.view.resetDevicePixelRatio());
+
+      const screenSize = Size(1200, 800); // viewport is lg
+      ScreenUtilPlus.configure(data: const MediaQueryData(size: screenSize));
+
+      final GlobalKey key = GlobalKey();
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: MediaQuery(
+            data: const MediaQueryData(size: screenSize),
+            child: Scaffold(
+              body: Center(
+                child: SizedBox(
+                  width: 400, // xs (< 576), not lg
+                  height: 800,
+                  child: ResponsiveGrid(
+                    children: [
+                      ResponsiveGridItem(
+                        xs: 12,
+                        lg: 6,
+                        child: Container(key: key, color: Colors.red),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      final Size containerSize = tester.getSize(find.byKey(key));
+      // Container breakpoint is xs → span 12 → full 400, not lg span 6 → 200
+      expect(containerSize.width, 400);
+    });
+
+    testWidgets('large spacing does not collapse full-span items', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(400, 800);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() => tester.view.resetPhysicalSize());
+      addTearDown(() => tester.view.resetDevicePixelRatio());
+
+      const screenSize = Size(400, 800);
+      ScreenUtilPlus.configure(data: const MediaQueryData(size: screenSize));
+
+      final GlobalKey key = GlobalKey();
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: MediaQuery(
+            data: const MediaQueryData(size: screenSize),
+            child: Scaffold(
+              body: ResponsiveGrid(
+                spacing: 40,
+                children: [
+                  ResponsiveGridItem(
+                    xs: 12,
+                    child: Container(key: key, color: Colors.red),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(tester.getSize(find.byKey(key)).width, 400);
+    });
   });
 }
+

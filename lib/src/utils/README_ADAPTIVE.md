@@ -147,6 +147,21 @@ ResponsiveBuilder(
 )
 ```
 
+### LayoutScope
+
+Publishes parent constraints so nested responsive widgets adapt to the **container**, not the viewport:
+
+```dart
+LayoutScope(
+  child: ResponsiveBuilder(
+    xs: (_) => const CompactView(),
+    md: (_) => const ExpandedView(),
+  ),
+);
+```
+
+Nested scopes use the nearest ancestor. Outside any `LayoutScope`, APIs keep using `MediaQuery` viewport size.
+
 ### SizeClassBuilder
 
 Builds different widgets based on size classes:
@@ -305,4 +320,5 @@ class _DesktopLayout extends StatelessWidget {
   }
 }
 ```
+
 

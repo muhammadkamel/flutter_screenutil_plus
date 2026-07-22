@@ -36,15 +36,15 @@ class BreakpointResolutionBenchmark extends BenchmarkBase {
         final isMobile = sizeClasses.horizontal == SizeClass.compact;
 
         // Resolve generic breakpoints
-        final Breakpoint bp = const Breakpoints().getBreakpoint(size.width);
+        final Breakpoint bp = Breakpoints.bootstrap.getBreakpoint(size.width);
 
-        if (isDesktop || isTablet || isMobile || bp != null) {
-          count++;
-        }
+        count += (isDesktop || isTablet || isMobile ? 1 : 0) + bp.index;
       }
     }
     // Prevent dead-code elimination
-    if (count == 0) throw Exception();
+    if (count == 0) {
+      throw Exception();
+    }
   }
 }
 

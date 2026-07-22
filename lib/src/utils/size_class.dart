@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import '../extensions/context_extension.dart';
+import '../core/layout_scope.dart';
 
 /// Size class system similar to SwiftUI's size classes.
 ///
@@ -98,10 +98,9 @@ class SizeClasses {
 
 /// Extension on [BuildContext] to easily access size classes
 extension SizeClassExtension on BuildContext {
-  /// Gets the current size classes from MediaQuery
+  /// Gets the current size classes from the nearest [LayoutScope] or viewport.
   SizeClasses get sizeClasses {
-    final MediaQueryData mediaQuery = mediaQueryData ?? const MediaQueryData();
-    return SizeClasses.fromMediaQuery(mediaQuery);
+    return SizeClasses.fromSize(LayoutScope.sizeOf(this));
   }
 
   /// Gets the horizontal size class

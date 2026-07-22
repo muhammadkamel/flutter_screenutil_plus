@@ -9,6 +9,8 @@ This example demonstrates how to use the `flutter_screenutil_plus` package to cr
 - **TextStyle Extensions**: Using `.r`, `.withLineHeight()`, `.withAutoLineHeight()` for responsive text styles
 - **Responsive Widgets**: `RPadding`, `RSizedBox`, `RContainer`, and `RText` widgets
 - **Breakpoints & Size Classes**: CSS-like breakpoints and SwiftUI-like size classes
+- **LayoutScope**: Container-aware panes — responsive builders use local constraints, not only the viewport
+- **Learn LayoutScope**: Before (pure Flutter / MediaQuery bug) → After (LayoutScope fix) → full playground
 - **Adaptive Layouts**: `ResponsiveBuilder`, `AdaptiveContainer`, and adaptive values
 - **Screen Information**: Displaying screen metrics and scaling factors
 - **Shapes & Borders**: Responsive border radius and spacing
@@ -32,6 +34,23 @@ This example demonstrates how to use the `flutter_screenutil_plus` package to cr
    ```bash
    flutter run
    ```
+
+## LayoutScope: before vs after
+
+1. Open **Learn LayoutScope (Before / After)** on the home screen.
+2. **Before — MediaQuery only** (`layout_scope_problem_example.dart`): pure Flutter, no `flutter_screenutil_plus`. A narrow pane still picks a desktop layout because it reads `MediaQuery.size`.
+3. **After — LayoutScope** (`layout_scope_solution_example.dart`): same UI with `LayoutScope` + `ResponsiveBuilder` so the pane follows local width.
+4. Optionally open the full **LayoutScope Demo** for nested scopes and grids.
+
+```dart
+// After
+LayoutScope(
+  child: ResponsiveBuilder(
+    xs: (_) => CompactView(),
+    md: (_) => ExpandedView(),
+  ),
+);
+```
 
 ## Key Concepts
 
@@ -65,3 +84,5 @@ The app is initialized with `ScreenUtilInit` which sets the design size (360x690
 ## Design Size
 
 The example uses a design size of 360x690 dp, which is a common mobile phone screen size. All measurements in the app are based on this design size and will scale proportionally to different device screens.
+
+

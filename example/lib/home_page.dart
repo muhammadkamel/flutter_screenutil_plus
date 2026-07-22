@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
+import 'package:flutter_screenutil_plus_example/layout_scope_demo_page.dart';
+import 'package:flutter_screenutil_plus_example/layout_scope_learn_page.dart';
 import 'package:flutter_screenutil_plus_example/scope_demo_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -127,6 +129,54 @@ class _HomePageState extends State<HomePage> {
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.purple.shade600,
+                foregroundColor: Colors.white,
+                padding: EdgeInsets.symmetric(vertical: 12.h),
+              ),
+            ),
+          ),
+          8.verticalSpace,
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LayoutScopeLearnPage(),
+                  ),
+                );
+              },
+              icon: Icon(Icons.school, size: 18.sp),
+              label: Text(
+                'Learn LayoutScope (Before / After)',
+                style: TextStyle(fontSize: 14.sp),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.teal.shade700,
+                foregroundColor: Colors.white,
+                padding: EdgeInsets.symmetric(vertical: 12.h),
+              ),
+            ),
+          ),
+          8.verticalSpace,
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LayoutScopeDemoPage(),
+                  ),
+                );
+              },
+              icon: Icon(Icons.view_sidebar, size: 18.sp),
+              label: Text(
+                'View LayoutScope Demo',
+                style: TextStyle(fontSize: 14.sp),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.teal.shade600,
                 foregroundColor: Colors.white,
                 padding: EdgeInsets.symmetric(vertical: 12.h),
               ),

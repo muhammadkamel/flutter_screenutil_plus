@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+import '../core/layout_scope.dart';
 import '../extensions/context_extension.dart';
 import 'breakpoints.dart';
 import 'size_class.dart';
@@ -8,6 +9,9 @@ import 'size_class.dart';
 ///
 /// Provides methods to check breakpoints and size classes,
 /// making it easy to create adaptive UIs.
+///
+/// When a [LayoutScope] is an ancestor, width, height, breakpoint, and size
+/// classes are resolved from that scope's constraints instead of the viewport.
 class ResponsiveQuery {
   ResponsiveQuery._(this.context, this.breakpoints);
 
@@ -25,18 +29,22 @@ class ResponsiveQuery {
   /// The [MediaQueryData] from the context.
   MediaQueryData? get mediaQuery => context.mediaQueryData;
 
-  /// Gets the current screen width
-  double get width => mediaQuery?.size.width ?? 0;
+  /// Size used for breakpoint and size-class resolution.
+  ///
+  /// Prefers the nearest [LayoutScope]; otherwise uses the viewport size.
+  Size get size => LayoutScope.sizeOf(context);
 
-  /// Gets the current screen height
-  double get height => mediaQuery?.size.height ?? 0;
+  /// Gets the current width (layout scope or viewport).
+  double get width => size.width;
+
+  /// Gets the current height (layout scope or viewport).
+  double get height => size.height;
 
   /// Gets the current breakpoint
   Breakpoint get breakpoint => breakpoints.getBreakpoint(width);
 
   /// Gets the current size classes
-  SizeClasses get sizeClasses =>
-      SizeClasses.fromMediaQuery(mediaQuery ?? const MediaQueryData());
+  SizeClasses get sizeClasses => SizeClasses.fromSize(size);
 
   /// Checks if current width is at least the specified breakpoint
   bool isAtLeast(Breakpoint breakpoint) {

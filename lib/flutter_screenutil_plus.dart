@@ -44,6 +44,7 @@
 library;
 
 // Core classes
+export 'src/core/layout_scope.dart';
 export 'src/core/screen_util_plus.dart';
 export 'src/core/screen_util_plus_init.dart';
 export 'src/core/screen_util_plus_scope.dart';

@@ -4,6 +4,38 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+## [1.6.0] - 2026-07-23
+
+### Added
+
+- **LayoutScope**: Container-aware responsive metrics. Wrap a pane so `ResponsiveQuery`, builders, adaptive widgets, and size classes resolve from local constraints instead of the viewport. Nested scopes use the nearest ancestor; outside a scope, behavior is unchanged.
+- **LayoutScope golden tests**: Alchemist CI goldens covering container vs viewport breakpoints, nested scopes, and `ResponsiveGrid` under a narrow pane.
+- **LayoutScope example walkthrough**: Before (pure Flutter MediaQuery bug) and After (LayoutScope) pages under the example app’s Learn hub.
+- **Alchemist golden tests**: CI-stable golden coverage via `alchemist` ^0.14.0 for public widgets across phone, tablet, and desktop viewports.
+
+### Changed
+
+- **ResponsiveGrid**: Column spans and item widths now share one measurement source via an internal `LayoutScope`, so breakpoints match the grid's available width. Item width math keeps rows fitting when spacing is large relative to the container.
+
+### Migration
+
+No required code changes. Existing viewport-based APIs behave the same outside a `LayoutScope`.
+
+Opt in for container-aware panes:
+
+```dart
+LayoutScope(
+  child: ResponsiveBuilder(
+    xs: (_) => CompactView(),
+    md: (_) => ExpandedView(),
+  ),
+);
+```
+
+Widgets inside `ResponsiveGrid` now resolve breakpoints from the grid’s width (intentional fix).
+
 ## [1.5.0] - 2026-02-23
 
 ### Added
@@ -284,3 +316,8 @@ See the new `ScopeDemoPage` in the example app for a complete demonstration.
 
 - Fixed assertion error when trying to rebuild defunct elements
 - Fixed `sp` extension test by properly handling fontSizeResolver
+
+
+
+
+

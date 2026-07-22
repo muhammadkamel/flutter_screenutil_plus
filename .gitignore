@@ -86,3 +86,9 @@ coverage/
 
 # FVM Version Cache
 .fvm/
+
+# Alchemist golden failures / platform goldens (keep CI goldens)
+test/**/goldens/**/*
+test/**/failures/**/*
+!test/**/goldens/ci/
+!test/**/goldens/ci/**

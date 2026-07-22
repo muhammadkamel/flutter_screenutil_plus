@@ -88,8 +88,8 @@ class SUList extends StatelessWidget {
           child: Container(
             height: 50.h,
             color: index.isEven
-                ? Colors.red.withOpacity(0.1)
-                : Colors.green.withOpacity(0.1),
+                ? Colors.red.withValues(alpha: 0.1)
+                : Colors.green.withValues(alpha: 0.1),
             child: Row(
               children: [
                 SizedBox(width: 10.w),

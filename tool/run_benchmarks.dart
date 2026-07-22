@@ -1,12 +1,14 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+
 Future<void> main() async {
-  print('=======================================');
-  print('Starting ScreenUtilPlus Benchmark Suite');
-  print('=======================================');
+  debugPrint('=======================================');
+  debugPrint('Starting ScreenUtilPlus Benchmark Suite');
+  debugPrint('=======================================');
 
   // 1. Run Microbenchmarks
-  print(r'\n--- Running Microbenchmarks ---');
+  debugPrint(r'\n--- Running Microbenchmarks ---');
   final ProcessResult microScaling = await Process.run('flutter', [
     'test',
     'benchmark/micro/scaling_computation_benchmark.dart',
@@ -16,10 +18,10 @@ Future<void> main() async {
     'benchmark/micro/breakpoint_resolution_benchmark.dart',
   ]);
 
-  print(
+  debugPrint(
     '| Microbenchmark | Iterations | ScreenUtil Standard | ScreenUtilPlus | Improvement |',
   );
-  print('|---|---|---|---|---|');
+  debugPrint('|---|---|---|---|---|');
 
   final String scalingOutput =
       microScaling.stdout.toString() + microScaling.stderr.toString();
@@ -35,11 +37,11 @@ Future<void> main() async {
     final int supTime = int.parse(supMatch.group(1)!);
     final String improvement = ((suTime - supTime) / suTime * 100)
         .toStringAsFixed(1);
-    print(
+    debugPrint(
       '| Scaling Computation | 100K | $suTime us | $supTime us | $improvement% |',
     );
   } else {
-    print('| Scaling Computation | 100K | N/A | N/A | N/A |');
+    debugPrint('| Scaling Computation | 100K | N/A | N/A | N/A |');
   }
 
   final String breakpointOutput =
@@ -48,15 +50,15 @@ Future<void> main() async {
     r'\(RunTime\):\s+([\d.]+)\s+us',
   ).firstMatch(breakpointOutput);
   if (bpMatch != null) {
-    print(
+    debugPrint(
       '| Breakpoint Resolution | 1K | N/A (Standard lacks API) | ${bpMatch.group(1)} us | N/A |',
     );
   } else {
-    print('| Breakpoint Resolution | 1K | N/A | N/A | N/A |');
+    debugPrint('| Breakpoint Resolution | 1K | N/A | N/A | N/A |');
   }
 
   // 2. Run Integration Tests
-  print(r'\n--- Running Integration Tests ---');
+  debugPrint(r'\n--- Running Integration Tests ---');
   final tests = [
     'deep_tree_test.dart',
     'scrolling_test.dart',
@@ -66,7 +68,7 @@ Future<void> main() async {
   final Map<String, String> finalResults = {};
 
   for (final test in tests) {
-    print('Running $test...');
+    debugPrint('Running $test...');
     final ProcessResult result = await Process.run('flutter', [
       'test',
       '-d',
@@ -82,11 +84,11 @@ Future<void> main() async {
   }
 
   // 3. Print the Markdown Output
-  print(r'\n## Setup Overhead & Rebuild Performance');
-  print(
+  debugPrint(r'\n## Setup Overhead & Rebuild Performance');
+  debugPrint(
     '| Framework | Deep Tree Build (ms) | Scrolling Build (ms) | Orientation Rebuild (ms) |',
   );
-  print('|---|---|---|---|');
+  debugPrint('|---|---|---|---|');
 
   void printTableRow(String framework, String keyPrefix) {
     final String deepTree = finalResults['${keyPrefix}_deep_tree'] ?? 'N/A';
@@ -94,12 +96,12 @@ Future<void> main() async {
     final String orientation =
         finalResults['${keyPrefix}_orientation'] ?? 'N/A';
 
-    print('| $framework | $deepTree | $scrolling | $orientation |');
+    debugPrint('| $framework | $deepTree | $scrolling | $orientation |');
   }
 
   printTableRow('Standard Flutter', 'standard');
   printTableRow('flutter_screenutil', 'su');
   printTableRow('flutter_screenutil_plus', 'su_plus');
 
-  print(r'\nBenchmarks Completed!');
+  debugPrint(r'\nBenchmarks Completed!');
 }
