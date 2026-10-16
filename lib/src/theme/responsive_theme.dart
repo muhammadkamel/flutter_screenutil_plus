@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import '../../flutter_screenutil_plus.dart';
 
 /// Utility class for creating responsive themes.
