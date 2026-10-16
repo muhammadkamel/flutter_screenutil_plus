@@ -39,6 +39,13 @@ Then run:
 flutter pub get
 ```
 
+> **Requirements:** Flutter 3.47+ / Dart 3.13+. Material types (such as `ThemeData`
+> used by `ResponsiveTheme`) come from the standalone
+> [`material_ui`](https://pub.dev/packages/material_ui) package, so your app
+> should import `package:material_ui/material_ui.dart` instead of
+> `package:flutter/material.dart`. Run
+> `dart fix --apply --code=migrate_design_widgets` to migrate your imports.
+
 ## 🚀 Quick Start
 
 ### 1. Initialize the Library
@@ -47,6 +54,7 @@ Wrap your app with `ScreenUtilPlusInit`:
 
 ```dart
 import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
+import 'package:material_ui/material_ui.dart';
 
 void main() => runApp(MyApp());
 
@@ -487,7 +495,10 @@ ConditionalBuilder(
 
 ### Responsive Theme
 
-Automatically scale all text styles in your theme:
+Automatically scale all text styles in your theme. `ResponsiveTheme.fromTheme`
+accepts and returns `ThemeData` from `package:material_ui/material_ui.dart`; a
+`ThemeData` built with `package:flutter/material.dart` is a different type and
+will not compile here.
 
 ```dart
 ScreenUtilPlusInit(
@@ -724,8 +735,8 @@ This optimization is automatic and requires no code changes. The package will on
 ## 🎯 Complete Example
 
 ```dart
-import 'package:flutter/material.dart';
 import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
+import 'package:material_ui/material_ui.dart';
 
 void main() => runApp(MyApp());
 

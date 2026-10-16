@@ -6,6 +6,23 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Breaking Changes
+
+- **material_ui**: The package now depends on [`material_ui`](https://pub.dev/packages/material_ui) ^1.7.0 instead of the Material library bundled in the Flutter SDK. `ResponsiveTheme.fromTheme` accepts and returns `material_ui`'s `ThemeData`, which is a distinct type from `package:flutter/material.dart`'s `ThemeData`.
+- **SDK constraints**: Minimum supported versions are now Dart 3.13 and Flutter 3.47, as required by `material_ui`.
+- **equatable**: Upgraded to ^3.0.0. Apps that pin `equatable` ^2.x must upgrade it too.
+
+### Migration
+
+Migrate your app's Material imports to `material_ui`:
+
+```sh
+flutter pub add material_ui
+dart fix --apply --code=migrate_design_widgets
+```
+
+This replaces `import 'package:flutter/material.dart';` with `import 'package:material_ui/material_ui.dart';`, so the `ThemeData` you pass to `ResponsiveTheme.fromTheme` and hand to `MaterialApp` comes from the same library. Widgets that only use extensions such as `.w`, `.h`, `.sp` and `.r` need no changes.
+
 ## [1.6.0] - 2026-07-23
 
 ### Added

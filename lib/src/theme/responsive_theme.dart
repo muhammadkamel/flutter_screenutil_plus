@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+
 import '../../flutter_screenutil_plus.dart';
 
 /// Utility class for creating responsive themes.
@@ -9,6 +10,10 @@ class ResponsiveTheme {
   /// Creates a responsive [ThemeData] from the provided theme.
   ///
   /// All font sizes in [textTheme] will be scaled using `.sp`.
+  ///
+  /// [ThemeData] here is the `package:material_ui/material_ui.dart` type.
+  /// Apps must import Material from `material_ui` rather than
+  /// `package:flutter/material.dart` to pass their theme in.
   static ThemeData fromTheme(ThemeData theme) {
     return theme.copyWith(
       textTheme: _scaleTextTheme(theme.textTheme),
