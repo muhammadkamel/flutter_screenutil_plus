@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-10-17
+
 ### Breaking Changes
 
 - **material_ui**: The package now depends on [`material_ui`](https://pub.dev/packages/material_ui) ^1.7.0 instead of the Material library bundled in the Flutter SDK. `ResponsiveTheme.fromTheme` accepts and returns `material_ui`'s `ThemeData`, which is a distinct type from `package:flutter/material.dart`'s `ThemeData`.
