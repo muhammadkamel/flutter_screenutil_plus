@@ -14,15 +14,16 @@
 
 - 📱 **Responsive Scaling**: Automatic scaling of width, height, font size, and more
 - ⚡ **InheritedWidget-Based Scope**: Efficient, targeted rebuilds with `ScreenUtilPlusScope`
-- 🎯 **Context-Aware Extensions**: New `context.w()`, `context.h()`, `context.sp()` for optimal performance
+- 🎯 **Context-Aware Extensions**: `context.w()`, `context.h()`, `context.sp()` for optimal performance
 - 🎨 **CSS-like Breakpoints**: Media query-style breakpoints (Bootstrap, Tailwind, Material Design)
 - 📐 **SwiftUI-like Size Classes**: Compact/Regular size classes for adaptive layouts
-- 🪟 **LayoutScope (v1.6.0)**: Container-aware breakpoints for sidebars, split panes, and nested layouts
+- 🪟 **LayoutScope**: Container-aware breakpoints for sidebars, split panes, and nested layouts
+- 🔲 **ResponsiveGrid**: 12-column grid with per-breakpoint column spans
 - 🧩 **Adaptive Widgets**: Breakpoint-aware containers, text, and builders
 - 🚀 **Performance Optimized**: Intelligent rebuild detection with optional `autoRebuild: false`
 - 🎭 **Responsive Theme**: Automatic text style scaling in themes
 - 📦 **Zero Configuration**: Works out of the box with sensible defaults
-- 🧪 **Well Tested**: 99.2% code coverage with 619 tests
+- 🧪 **Well Tested**: Extensive unit, widget, and golden test suite
 
 ## 📦 Installation
 
@@ -94,21 +95,7 @@ Container(
 )
 ```
 
-### 2. Use Responsive Extensions
-
-```dart
-Container(
-  width: 100.w,   // Responsive width
-  height: 50.h,   // Responsive height
-  padding: EdgeInsets.all(16.r), // Responsive padding
-  child: Text(
-    'Hello World',
-    style: TextStyle(fontSize: 16.sp), // Responsive font
-  ),
-)
-```
-
-### 3. **NEW in v1.4.0**: Context-Aware Extensions (Recommended)
+### 3. Context-Aware Extensions (Recommended)
 
 For better performance with `autoRebuild: false`, use context-aware extensions:
 
@@ -124,16 +111,16 @@ Container(
 )
 ```
 
-## 🚀 Performance Optimization (v1.4.0)
+## ⚡ Performance Optimization
 
 ### InheritedWidget-Based Scope
 
-Version 1.4.0 introduces `ScreenUtilPlusScope` for efficient, targeted rebuilds:
+`ScreenUtilPlusScope` enables efficient, targeted rebuilds:
 
 ```dart
 ScreenUtilPlusInit(
   designSize: const Size(360, 690),
-  autoRebuild: false,  // 🎯 NEW: Disable automatic tree-wide rebuilds
+  autoRebuild: false,  // Disable automatic tree-wide rebuilds
   builder: (context, child) {
     return MaterialApp(
       home: child,
@@ -360,6 +347,22 @@ SimpleAdaptiveContainer(
 )
 ```
 
+### ResponsiveGrid
+
+A 12-column grid. Each item sets its column span per breakpoint; unset breakpoints fall back to the next smaller one (default: 12, full width). The grid resolves breakpoints from its own constraints.
+
+```dart
+ResponsiveGrid(
+  spacing: 16,
+  runSpacing: 16,
+  children: [
+    ResponsiveGridItem(xs: 12, md: 6, lg: 4, child: const ProductCard()),
+    ResponsiveGridItem(xs: 12, md: 6, lg: 4, child: const ProductCard()),
+    ResponsiveGridItem(xs: 12, md: 12, lg: 4, child: const ProductCard()),
+  ],
+)
+```
+
 ### Responsive Queries
 
 Get values based on breakpoints:
@@ -526,7 +529,7 @@ ScreenUtilPlusInit(
 | Property          | Type             | Default Value           | Description                                                                                                                                        |
 | ----------------- | ---------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
 | designSize        | Size             | Size(360,690)           | The size of the device screen in the design draft, in dp                                                                                           |
-| autoRebuild       | bool             | true                    | **NEW in v1.4.0**: When false, only widgets using context-aware extensions or `context.su` rebuild on screen changes (improves performance)        |
+| autoRebuild       | bool             | true                    | When false, only widgets using context-aware extensions or `context.su` rebuild on screen changes (improves performance)                           |
 | builder           | Function         | null                    | Return widget that uses the library in a property (ex: MaterialApp's theme)                                                                        |
 | child             | Widget           | null                    | A part of builder that its dependencies/properties don't use the library                                                                           |
 | rebuildFactor     | RebuildFactor    | RebuildFactors.size     | Function that takes old and new screen metrics and returns whether to rebuild or not when changes occur. See [RebuildFactors](#rebuild-factors)    |
@@ -534,11 +537,10 @@ ScreenUtilPlusInit(
 | minTextAdapt      | bool             | false                   | Whether to adapt the text according to the minimum of width and height                                                                             |
 | ensureScreenSize  | bool             | false                   | Whether to wait for screen size to be initialized before building (useful for web/desktop)                                                         |
 | fontSizeResolver  | FontSizeResolver | FontSizeResolvers.width | Function that specifies how font size should be adapted. See [FontSizeResolvers](#font-size-resolvers)                                             |
-| responsiveWidgets | Iterable<String> | null                    | List/Set of widget names that should be included in rebuilding tree. (See [How flutter_screenutil_plus marks a widget needs build](#rebuild-list)) |
 | enableScaleWH     | Function         | null                    | Function to enable/disable scaling of width and height                                                                                             |
 | enableScaleText   | Function         | null                    | Function to enable/disable scaling of text                                                                                                         |
 
-**Note : You must either provide builder, child or both.**
+**Note:** You must provide `builder`, `child`, or both.
 
 ### Rebuild Factors
 
@@ -571,36 +573,6 @@ You can also provide a custom function:
 
 ```dart
 fontSizeResolver: (fontSize, instance) => instance.setWidth(fontSize * 0.9)
-```
-
-### Rebuild List
-
-Starting from version 1.0.0, ScreenUtilInit won't rebuild the whole widget tree, instead it will mark widget needs build only if:
-
-- Widget is not a flutter widget (widgets are available in [Flutter Docs](https://docs.flutter.dev/reference/widgets))
-- Widget does not start with underscore (`_`)
-- Widget does not declare `SU` mixin
-- `responsiveWidgets` does not contains widget name
-
-If you have a widget that uses the library and doesn't meet these options you can either add `SU` mixin or add widget name in responsiveWidgets list.
-
-#### Using the SU Mixin
-
-To mark a custom widget for automatic rebuilding, use the `SU` mixin:
-
-```dart
-import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
-
-class MyCustomWidget extends StatelessWidget with SU {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 100.w,
-      height: 50.h,
-      child: Text('Responsive', style: TextStyle(fontSize: 16.sp)),
-    );
-  }
-}
 ```
 
 ### Enable or Disable Scaling
@@ -665,7 +637,7 @@ switch (deviceType) {
 
 | Extension                   | Description                   | Example                                           |
 | --------------------------- | ----------------------------- | ------------------------------------------------- |
-| **Context-Aware (v1.4.0)**  |                               |                                                   |
+| **Context-Aware**           |                               |                                                   |
 | `context.w(value)`          | Scale width                   | `context.w(100)`                                  |
 | `context.h(value)`          | Scale height                  | `context.h(50)`                                   |
 | `context.r(value)`          | Scale radius                  | `context.r(20)`                                   |
@@ -692,24 +664,25 @@ switch (deviceType) {
 
 #### Widgets
 
-| Widget                    | Description                       |
-| ------------------------- | --------------------------------- |
-| `ScreenUtilPlusInit`      | Initialize the library            |
+| Widget                    | Description                        |
+| ------------------------- | ---------------------------------- |
+| `ScreenUtilPlusInit`      | Initialize the library             |
 | `LayoutScope`             | Container-aware responsive metrics |
-| `RContainer`              | Responsive Container              |
-| `RPadding`                | Responsive Padding                |
-| `RSizedBox`               | Responsive SizedBox               |
-| `RText`                   | Responsive Text                   |
-| `AdaptiveContainer`       | Breakpoint-aware Container        |
-| `SimpleAdaptiveContainer` | Simplified adaptive container     |
-| `AdaptiveText`            | Breakpoint-aware Text             |
-| `ResponsiveBuilder`       | Builder for different breakpoints |
-| `SizeClassBuilder`        | Builder for size classes          |
-| `ConditionalBuilder`      | Conditional rendering             |
+| `ResponsiveGrid`          | 12-column breakpoint-aware grid    |
+| `RContainer`              | Responsive Container               |
+| `RPadding`                | Responsive Padding                 |
+| `RSizedBox`               | Responsive SizedBox                |
+| `RText`                   | Responsive Text                    |
+| `AdaptiveContainer`       | Breakpoint-aware Container         |
+| `SimpleAdaptiveContainer` | Simplified adaptive container      |
+| `AdaptiveText`            | Breakpoint-aware Text              |
+| `ResponsiveBuilder`       | Builder for different breakpoints  |
+| `SizeClassBuilder`        | Builder for size classes           |
+| `ConditionalBuilder`      | Conditional rendering              |
 
 ### Performance Optimizations
 
-Starting from version 1.1.1, the package includes intelligent change detection using Equatable to optimize rebuilds:
+The package includes intelligent change detection using Equatable to optimize rebuilds:
 
 - **Automatic change detection**: Only rebuilds registered elements when screen metrics actually change
 - **Value-based equality**: Uses Equatable to compare screen configuration state efficiently
@@ -767,7 +740,7 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
