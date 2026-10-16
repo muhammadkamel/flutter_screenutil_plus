@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Demo page showcasing the new ScreenUtilPlusScope features
 class ScopeDemoPage extends StatefulWidget {

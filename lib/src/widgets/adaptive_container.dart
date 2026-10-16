@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../utils/breakpoints.dart';
 import '../utils/responsive_query.dart';

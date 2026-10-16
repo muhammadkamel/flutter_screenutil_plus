@@ -1,10 +1,10 @@
 import 'dart:math' show max, min;
 
-import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
 import 'package:flutter_screenutil_plus/src/core/_constants.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 void main() {
   group('ScreenUtil - Basic Configuration', () {

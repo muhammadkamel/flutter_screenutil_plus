@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_screenutil_plus_example/layout_scope_demo_page.dart';
 import 'package:flutter_screenutil_plus_example/layout_scope_problem_example.dart';
 import 'package:flutter_screenutil_plus_example/layout_scope_solution_example.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Hub that walks developers through the LayoutScope problem and fix.
 class LayoutScopeLearnPage extends StatelessWidget {

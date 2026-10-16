@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Package default design size (`Size(360, 690)`).
 const Size goldenDesignSize = Size(360, 690);

@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
 import 'package:flutter_screenutil_plus_example/layout_scope_demo_page.dart';
 import 'package:flutter_screenutil_plus_example/layout_scope_learn_page.dart';
 import 'package:flutter_screenutil_plus_example/scope_demo_page.dart';
+import 'package:material_ui/material_ui.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
